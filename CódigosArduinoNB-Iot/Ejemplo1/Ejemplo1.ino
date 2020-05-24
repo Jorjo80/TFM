@@ -14,6 +14,7 @@ void loop() {
     Serial.write(mySerial.read());
   }
   if (Serial.available()) {
+    
     mySerial.write(Serial.read());
   }
 }
