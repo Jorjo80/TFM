@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include <PacketSerial.h>
+#include <Packetizer.h>
 
 byte ifup[] = {0x00, 0x00, 0x10, 0x08, 0x18};
 byte ifdown[] = {0x00, 0x00, 0x10, 0x07, 0x17};
@@ -26,7 +27,7 @@ role transition mechanisms (SED → MED, SED → FED, MED→ FED).
 */
 
 byte ReadJoinCred[] = {0x00, 0x00, 0x11, 0x17, 0x06};
-byte WriteJoinCred[] = {0x00, 0x07, 0x10, 0x17, 0x6d, 0x38,0x34,0x30,0x34,0x44,0x32,0x30,0x30,0x30,0x30,0x30,0x30,0x30,0x35,0x46,0x43}; //In order to write the Joiner Credential, add the packets after 0x6d
+byte WriteJoinCred[] = {0x00, 0x00, 0x10, 0x17, 0x06, 0x38, 0x34, 0x30, 0x34, 0x44, 0x32, 0x30, 0x30, 0x30, 0x30,0x30, 0x30, 0x30, 0x35, 0x46, 0x41}; //In order to write the Joiner Credential, add the packets after 0x6d
 
 
 
@@ -46,11 +47,13 @@ typedef enum
 }StuffingCode;
 
 
-PacketSerial myPacketSerial;
+PacketSerial_<COBS, 0, 512> myPacketSerial;
 SoftwareSerial mySoftwareSerial(10, 11); //Rx - TX
+
+
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
     mySoftwareSerial.begin(115200);
     myPacketSerial.setStream(&mySoftwareSerial);
     myPacketSerial.setPacketHandler(&onPacketReceived);
@@ -59,6 +62,7 @@ void setup()
 
 void loop()
 {
+  Packetizer::parse();
   myPacketSerial.update();
   if (myPacketSerial.overflow())
     {
@@ -74,37 +78,39 @@ void loop()
 
 void onPacketReceived(const uint8_t* buffer, size_t size)
 {
-  uint8_t tmpBuffer[size];
-  memcpy(tmpBuffer,buffer,size);
+  uint8_t tempBuffer[size];
+  memcpy(tempBuffer,buffer,size);
   Serial.print("Respuesta = ");
-  Serial.write(tmpBuffer,size);
+  Serial.print(" tamaño buffer es = ");
+  Serial.println(sizeof(tempBuffer));
+  for(int i = 0; i < sizeof(tempBuffer)/sizeof(tempBuffer[0]); i++)
+  {
+    Serial.print("0x");
+    Serial.print(tempBuffer[i],HEX);
+    Serial.print(" : ");
+  }
+  Serial.println();
 }
 
 void InicioFED()
 {
-  myPacketSerial.send(ComClear,sizeof(ComClear)/sizeof(ComClear[0]));
-  myPacketSerial.update();
+  /*myPacketSerial.send(ComClear,sizeof(ComClear)/sizeof(ComClear[0]));
   Serial.println("RealizadoClear");
-  delay(1000);
+  myPacketSerial.update();  
+  delay(3000);*/
   myPacketSerial.send(WriteChannel,sizeof(WriteChannel)/sizeof(WriteChannel[0]));
-  myPacketSerial.update();
   Serial.println("Escrito Canal");
+  while ( mySoftwareSerial.available()==0) {}
+  myPacketSerial.update(); 
   delay(1000);
   myPacketSerial.send(WriteRole,sizeof(WriteRole)/sizeof(WriteRole[0]));
+  Serial.println("WriteRole");
+  while ( mySoftwareSerial.available()==0){}
   myPacketSerial.update();
-  Serial.println("Seleccionado Role");
-  delay(1000);
-  myPacketSerial.send(WriteJoinCred,sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])); 
-  myPacketSerial.update();
-  Serial.println("Introducida Join Credential");
-  delay(1000);
+  delay(1000);  
   myPacketSerial.send(ifup,sizeof(ifup)/sizeof(ifup[0]));
-  myPacketSerial.update();
   Serial.println("IFUP");
-  delay(1000);
-  myPacketSerial.send(Status,sizeof(Status)/sizeof(Status[0]));
-  myPacketSerial.update();
-  Serial.println("Status");
-  delay(1000);
+  while ( mySoftwareSerial.available()==0){}
+  myPacketSerial.update(); 
   
 }
