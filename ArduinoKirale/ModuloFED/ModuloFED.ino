@@ -53,7 +53,7 @@ SoftwareSerial Modulo(10, 11); //Rx - TX
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Modulo.begin(115200);
   InterfazModulo.begin(115200);
   InterfazModulo.setStream(&Modulo);
@@ -87,7 +87,7 @@ void onPacketReceived(const uint8_t* buffer, size_t size)
   memcpy(tempBuffer, buffer, size);
   Serial.print("Respuesta = ");
   Serial.print(" tamaño buffer es = ");
-  Serial.println(variable);
+  Serial.println(size);
   for (int i = 0; i < size; i++)
   {
     Serial.print("0x");
@@ -109,20 +109,8 @@ void InicioFED()
   InterfazModulo.send(WriteChannel, sizeof(WriteChannel) / sizeof(WriteChannel[0]));
   Serial.println("Escrito Canal");
   while ( Modulo.available() == 0) {}
+  InterfazModulo.update();
   
-  while (Modulo.available() > 0)
-  {
-    if (Modulo.available() > 0)
-    {
-      char c = Modulo.read();
-      Serial.print(i);
-      i++;
-      Serial.println();
-      
-      Serial.print(c,HEX);
-    }
-  }
-  /*
     //while ( Modulo.available() > 0) {};
     InterfazModulo.send(WriteRole, sizeof(WriteRole) / sizeof(WriteRole[0]));
     Serial.println("Write Role");
@@ -166,7 +154,7 @@ void InicioFED()
     //
     // Ultimately you may need to just increase your recieve buffer via the
     // template parameters.
-    }*/
+    }
 }
 
 byte XORChecksum8(const byte *data, size_t dataLength)
