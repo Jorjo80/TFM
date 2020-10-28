@@ -1,5 +1,8 @@
+#include <SomeSerial.h>
+
 #include <SoftwareSerial.h>
 #include <PacketSerial.h>
+#include "cobs.h"
 
 
 byte ifup[] = {0x00, 0x00, 0x10, 0x08, 0x18};
@@ -53,7 +56,7 @@ SoftwareSerial Modulo(10, 11); //Rx - TX
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(115200, SERIAL_8N1);
   Modulo.begin(115200);
   InterfazModulo.begin(115200);
   InterfazModulo.setStream(&Modulo);
@@ -64,7 +67,7 @@ void setup()
 void loop()
 {
 
-  
+
   //InterfazModulo.update();
   if (InterfazModulo.overflow())
   {
@@ -78,10 +81,10 @@ void loop()
   }
 }
 
-void onPacketReceived(const uint8_t* buffer, size_t size)
+void onPacketReceived(const uint8_t *buffer, size_t size)
 {
   int variable = 5;
-  //size = sizeof(buffer);
+  size = sizeof(buffer);
   uint8_t tempBuffer[size];
 
   memcpy(tempBuffer, buffer, size);
@@ -91,7 +94,7 @@ void onPacketReceived(const uint8_t* buffer, size_t size)
   for (int i = 0; i < size; i++)
   {
     Serial.print("0x");
-    Serial.print(buffer[i], HEX);
+    Serial.print(tempBuffer[i], HEX);
     Serial.print(" : ");
   }
   Serial.println();
@@ -110,51 +113,20 @@ void InicioFED()
   Serial.println("Escrito Canal");
   while ( Modulo.available() == 0) {}
   InterfazModulo.update();
-  
-    //while ( Modulo.available() > 0) {};
-    InterfazModulo.send(WriteRole, sizeof(WriteRole) / sizeof(WriteRole[0]));
-    Serial.println("Write Role");
-    while ( Modulo.available() == 0) {}
-    InterfazModulo.update();
-    if (InterfazModulo.overflow())
-    {
-
-    Serial.println("You must increase buffer size");
-    // Send an alert via a pin (e.g. make an overflow LED) or return a
-    // user-defined packet to the sender.
-    //
-    // Ultimately you may need to just increase your recieve buffer via the
-    // template parameters.
-    }
-    InterfazModulo.send(WriteJoinCred, sizeof(WriteJoinCred) / sizeof(WriteJoinCred[0]));
-    Serial.println("Write Join Cred");
-    while ( Modulo.available() == 0) {}
-    InterfazModulo.update();
-    if (InterfazModulo.overflow())
-    {
-
-    Serial.println("You must increase buffer size");
-    // Send an alert via a pin (e.g. make an overflow LED) or return a
-    // user-defined packet to the sender.
-    //
-    // Ultimately you may need to just increase your recieve buffer via the
-    // template parameters.
-    }
-    //while ( Modulo.available() > 0) {};
-    InterfazModulo.send(ifup, sizeof(ifup) / sizeof(ifup[0]));
-    Serial.println("IFUP");
-    while ( Modulo.available() == 0) {}
-    InterfazModulo.update();
-    if (InterfazModulo.overflow())
-    {
-
-    Serial.println("You must increase buffer size");
-    // Send an alert via a pin (e.g. make an overflow LED) or return a
-    // user-defined packet to the sender.
-    //
-    // Ultimately you may need to just increase your recieve buffer via the
-    // template parameters.
-    }
+  delay(1000);
+  InterfazModulo.send(WriteRole, sizeof(WriteRole) / sizeof(WriteRole[0]));
+  Serial.println("Write Role");
+  while ( Modulo.available() == 0) {}
+  InterfazModulo.update();
+  delay(1000);
+  InterfazModulo.send(WriteJoinCred, sizeof(WriteJoinCred) / sizeof(WriteJoinCred[0]));
+  Serial.println("Write Join Cred");
+  while ( Modulo.available() == 0) {}
+  InterfazModulo.update();
+  InterfazModulo.send(ifup, sizeof(ifup) / sizeof(ifup[0]));
+  Serial.println("IFUP");
+  while ( Modulo.available() == 0) {}
+ InterfazModulo.update();
 }
 
 byte XORChecksum8(const byte *data, size_t dataLength)
