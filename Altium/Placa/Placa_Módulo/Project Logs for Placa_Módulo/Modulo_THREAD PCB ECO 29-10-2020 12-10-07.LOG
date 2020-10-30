@@ -1,0 +1,13 @@
+Change Component Designator: OldDesignator=KTWM102 NewDesignator=KTWM1
+Added Component: Designator=J1(MOLEX_105450-0101)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "WM12856CT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.tw/product-detail/en/molex/1054500101/WM12856CT-ND/5843891?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Molex"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "1054500101"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/1054500101/Molex/view-part/448528/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Class: Name=Designator
+Added Room: Name=Conectores
+Added Room: Name=Designator
+Added Room: Name=Modulo

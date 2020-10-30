@@ -1,11 +1,15 @@
 #include <Windows.h>
 #include <iostream>
 
+HANDLE m_hComm;
+unsigned long enviado = 0, enviando = 0, leidos = 0;
+uint8_t *buffer; //Guardado de respuestas
+uint8_t *cmd;
+
+
 
 void apertura_puerto()
 {
-	HANDLE m_hComm;
-
 	m_hComm = CreateFile((LPCWSTR)"COM11", GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
 	                     FILE_ATTRIBUTE_NORMAL, NULL);
 	if (m_hComm == (HANDLE)-1)
@@ -14,6 +18,40 @@ void apertura_puerto()
 	}
 }
 
+void configurar_puerto()
+{
+	DCB dcb;
+	dcb.DCBlength = sizeof(DCB);
+	GetCommState(m_hComm, &dcb);
+	dcb.BaudRate = CBR_115200;
+	dcb.ByteSize = 8;
+	dcb.Parity = EVENPARITY;
+	dcb.fParity = TRUE;
+	dcb.StopBits = ONESTOPBIT;
+
+	dcb.fBinary = TRUE;
+	SetCommState(m_hComm, &dcb);
+}
+
+void enviodatos()
+{
+	do
+	{
+		leidos = sizeof(buffer);
+		enviado = 0;
+		enviando = 0;
+		while(enviado != leidos)
+		{
+			WriteFile(m_hComm, &(buffer[enviado]), leidos - enviado, &enviando, NULL);
+			enviado += enviando;
+		}
+		
+	} while (leidos == 512);
+	char eof = 0;
+	WriteFile(m_hComm, &eof, 1, &enviando, NULL);
+	CloseHandle(m_hComm);
+	
+}
 
 int main()
 {

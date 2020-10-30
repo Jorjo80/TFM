@@ -1,0 +1,18 @@
+Removed Pin From Net: NetName=AGND Pin=KTWM1-4
+Removed Pin From Net: NetName=AGND Pin=KTWM1-7
+Removed Pin From Net: NetName=AVDD Pin=KTWM1-8
+Removed Pin From Net: NetName=AGND Pin=KTWM1-15
+Removed Pin From Net: NetName=AVDD Pin=KTWM1-16
+Removed Pin From Net: NetName=AGND Pin=KTWM1-17
+Removed Member From Class: ClassName=Modulo Member=KTWM1
+Added Component: Designator=KTWM102(KTWM102)
+Added Pin To Net: NetName=AGND Pin=KTWM102-4
+Added Pin To Net: NetName=AGND Pin=KTWM102-7
+Added Pin To Net: NetName=AVDD Pin=KTWM102-8
+Added Pin To Net: NetName=I41 Pin=KTWM102-13
+Added Pin To Net: NetName=I40 Pin=KTWM102-14
+Added Pin To Net: NetName=AGND Pin=KTWM102-15
+Added Pin To Net: NetName=AVDD Pin=KTWM102-16
+Added Pin To Net: NetName=AGND Pin=KTWM102-17
+Change Net Name : Old Net Name=AVDD New Net Name=3V3
+Added Member To Class: ClassName=Modulo Member=Component KTWM102

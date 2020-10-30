@@ -1,0 +1,12 @@
+Removed Pin From Net: NetName=NetKTWM1_14 Pin=QRX1-2
+Removed Pin From Net: NetName=NetKTWM1_13 Pin=QTX1-2
+Removed Pin From Net: NetName=NetKTWM1_14 Pin=R2-2
+Removed Pin From Net: NetName=NetKTWM1_13 Pin=R4-2
+Added Pin To Net: NetName=AGND Pin=KTWM1-4
+Added Pin To Net: NetName=AGND Pin=KTWM1-7
+Added Pin To Net: NetName=AVDD Pin=KTWM1-8
+Added Pin To Net: NetName=AGND Pin=KTWM1-15
+Added Pin To Net: NetName=AVDD Pin=KTWM1-16
+Added Pin To Net: NetName=AGND Pin=KTWM1-17
+Added Room: Name=Conectores
+Added Room: Name=Modulo

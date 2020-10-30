@@ -151,7 +151,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\KiHost\src\cmds.c" />
+    <ClCompile Include="..\..\KiHost\src\cobs.c" />
+    <ClCompile Include="..\..\KiHost\src\kbi.c" />
+    <ClCompile Include="..\..\KiHost\src\uart.c" />
     <ClCompile Include="LecturaPuertos.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\KiHost\include\cmds.h" />
+    <ClInclude Include="..\..\KiHost\include\cobs.h" />
+    <ClInclude Include="..\..\KiHost\include\kbi.h" />
+    <ClInclude Include="..\..\KiHost\include\uart.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
