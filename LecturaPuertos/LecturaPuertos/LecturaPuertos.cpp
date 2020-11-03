@@ -12,7 +12,7 @@ void apertura_puerto()
 {
 	m_hComm = CreateFile((LPCWSTR)"COM11", GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
 	                     FILE_ATTRIBUTE_NORMAL, NULL);
-	if (m_hComm == (HANDLE)-1)
+	if (m_hComm == INVALID_HANDLE_VALUE)
 	{
 		printf("Error abriendo puerto serie 11");
 	}

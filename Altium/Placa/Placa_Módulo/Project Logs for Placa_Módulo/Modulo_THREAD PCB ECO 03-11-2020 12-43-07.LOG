@@ -1,0 +1,189 @@
+Removed Pin From Net: NetName=D- Pin=J1-2
+Removed Pin From Net: NetName=D+ Pin=J1-3
+Removed Pin From Net: NetName=AGND Pin=J1-5
+Removed Pin From Net: NetName=AGND Pin=J1-S1
+Removed Pin From Net: NetName=AGND Pin=J1-S2
+Removed Pin From Net: NetName=AGND Pin=J1-S3
+Removed Pin From Net: NetName=AGND Pin=J1-S4
+Removed Pin From Net: NetName=3V3 Pin=KTWM1-8
+Removed Pin From Net: NetName=3V3 Pin=KTWM1-16
+Change Component Designator: OldDesignator=J1 NewDesignator=J
+Added Component: Designator=C1(C0805)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Chip Capacitor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "C0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "0.1u"; VariantName = "[No Variations]"
+Added Component: Designator=C2(C0805)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Chip Capacitor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "C0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "0.1u"; VariantName = "[No Variations]"
+Added Component: Designator=C3(C0805)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Chip Capacitor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "C0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "10u"; VariantName = "[No Variations]"
+Added Component: Designator=D1(DIOC200X125X110)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "160-1579-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.jp/product-detail/en/lite-on-inc/LTST-C170TBKT/160-1579-1-ND/564889?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Lite-On Inc."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "LTST-C170TBKT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "0805 Lite-On"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/LTST-C170TBKT/Lite-On%20Inc./view-part/217848/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=D2(DIOC200X125X110)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "160-1579-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.jp/product-detail/en/lite-on-inc/LTST-C170TBKT/160-1579-1-ND/564889?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Lite-On Inc."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "LTST-C170TBKT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "0805 Lite-On"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/LTST-C170TBKT/Lite-On%20Inc./view-part/217848/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=D3(DIOC200X125X110)
+Add component (AddParameter): Name = "Digi-Key_Part_Number"; Value = "160-1579-1-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Digi-Key_Purchase_URL"; Value = "https://www.digikey.jp/product-detail/en/lite-on-inc/LTST-C170TBKT/160-1579-1-ND/564889?utm_source=snapeda&utm_medium=aggregator&utm_campaign=symbol"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Lite-On Inc."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "LTST-C170TBKT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "0805 Lite-On"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/LTST-C170TBKT/Lite-On%20Inc./view-part/217848/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=P2(MHDR1X2)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "17-Jul-2002"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "Re-released for DXP Platform."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Added Component: Designator=R1(J1-0603)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Chip Resistor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "J1-0603"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "66.5"; VariantName = "[No Variations]"
+Added Component: Designator=R3(J1-0603)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Chip Resistor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "J1-0603"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "66.5"; VariantName = "[No Variations]"
+Added Component: Designator=R4(J1-0603)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Chip Resistor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "J1-0603"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "1K"; VariantName = "[No Variations]"
+Added Component: Designator=R6(J1-0603)
+Add component (AddParameter): Name = "LatestRevisionDate"; Value = "29-May-2009"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "LatestRevisionNote"; Value = "IPC-7351 Footprint Added."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageDescription"; Value = "Chip Resistor"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "PackageReference"; Value = "J1-0603"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Published"; Value = "8-Jun-2000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Publisher"; Value = "Altium Limited"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "2.49k"; VariantName = "[No Variations]"
+Added Component: Designator=U1(SON65P300X300X100-9N)
+Add component (AddParameter): Name = "Availability"; Value = "Unavailable"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "TPS2115ADRBR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Component: Designator=U2(SOT95P280X145-5N)
+Add component (AddParameter): Name = "Availability"; Value = "Good"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Check_prices"; Value = "https://www.snapeda.com/parts/LP5907QMFX-3.3Q1/Texas%20Instruments/view-part/559786/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = "Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "LP5907QMFX-3.3Q1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "SOT-23-5 Texas Instruments"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Purchase-URL"; Value = "https://pricing.snapeda.com/search/part/LP5907QMFX-3.3Q1/?ref=eda"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "SnapEDA_Link"; Value = "https://www.snapeda.com/parts/LP5907QMFX-3.3Q1/Texas%20Instruments/view-part/559786/?ref=snap"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=AGND Pin=C1-2
+Added Pin To Net: NetName=AGND Pin=C2-2
+Added Pin To Net: NetName=AGND Pin=C3-2
+Added Pin To Net: NetName=D+ Pin=J-2
+Added Pin To Net: NetName=D- Pin=J-3
+Added Pin To Net: NetName=DGND Pin=J-5
+Added Pin To Net: NetName=DGND Pin=J-S1
+Added Pin To Net: NetName=DGND Pin=J-S2
+Added Pin To Net: NetName=DGND Pin=J-S3
+Added Pin To Net: NetName=DGND Pin=J-S4
+Added Pin To Net: NetName=D+ Pin=KTWM1-9
+Added Pin To Net: NetName=D- Pin=KTWM1-10
+Added Pin To Net: NetName=AGND Pin=R3-2
+Added Pin To Net: NetName=DGND Pin=R4-2
+Added Pin To Net: NetName=AGND Pin=R6-1
+Added Pin To Net: NetName=AGND Pin=U1-3
+Added Pin To Net: NetName=AGND Pin=U1-5
+Added Pin To Net: NetName=3V3 Pin=U1-6
+Added Pin To Net: NetName=AGND Pin=U2-2
+Change Net Name : Old Net Name=3V3 New Net Name=AVDD
+Added Pin To Net: NetName=3V3 Pin=C3-1
+Added Pin To Net: NetName=3V3 Pin=D1-POS
+Added Pin To Net: NetName=3V3 Pin=D2-POS
+Added Pin To Net: NetName=3V3 Pin=KTWM1-8
+Added Pin To Net: NetName=3V3 Pin=KTWM1-16
+Added Pin To Net: NetName=3V3 Pin=U2-5
+Added Net: Name=3V3
+Added Pin To Net: NetName=5V Pin=C1-1
+Added Pin To Net: NetName=5V Pin=D3-POS
+Added Pin To Net: NetName=5V Pin=J-1
+Added Pin To Net: NetName=5V Pin=U1-8
+Added Net: Name=5V
+Added Pin To Net: NetName=NetD1_NEG Pin=D1-NEG
+Added Pin To Net: NetName=NetD1_NEG Pin=R1-1
+Added Net: Name=NetD1_NEG
+Added Pin To Net: NetName=NetD2_NEG Pin=D2-NEG
+Added Pin To Net: NetName=NetD2_NEG Pin=R3-1
+Added Net: Name=NetD2_NEG
+Added Pin To Net: NetName=NetD3_NEG Pin=D3-NEG
+Added Pin To Net: NetName=NetD3_NEG Pin=R4-1
+Added Net: Name=NetD3_NEG
+Added Pin To Net: NetName=NetKTWM1_5 Pin=KTWM1-5
+Added Pin To Net: NetName=NetKTWM1_5 Pin=P2-2
+Added Net: Name=NetKTWM1_5
+Added Pin To Net: NetName=NetKTWM1_6 Pin=KTWM1-6
+Added Pin To Net: NetName=NetKTWM1_6 Pin=P2-1
+Added Net: Name=NetKTWM1_6
+Added Pin To Net: NetName=NetKTWM1_12 Pin=KTWM1-12
+Added Pin To Net: NetName=NetKTWM1_12 Pin=R1-2
+Added Net: Name=NetKTWM1_12
+Added Pin To Net: NetName=NetR6_2 Pin=R6-2
+Added Pin To Net: NetName=NetR6_2 Pin=U1-4
+Added Net: Name=NetR6_2
+Added Pin To Net: NetName=PMUX Pin=U1-7
+Added Pin To Net: NetName=PMUX Pin=U2-1
+Added Pin To Net: NetName=PMUX Pin=U2-3
+Added Net: Name=PMUX
+Added Pin To Net: NetName=USB_Detect Pin=KTWM1-11
+Added Pin To Net: NetName=USB_Detect Pin=U1-1
+Added Net: Name=USB_Detect
+Added Member To Class: ClassName=Alimentacion Member=Component C1 Cap Pol3
+Added Member To Class: ClassName=Alimentacion Member=Component C2 Cap Pol3
+Added Member To Class: ClassName=Alimentacion Member=Component C3 Cap Pol3
+Added Member To Class: ClassName=Modulo Member=Component D1 LTST-C170TBKT
+Added Member To Class: ClassName=Alimentacion Member=Component D2 LTST-C170TBKT
+Added Member To Class: ClassName=USB Member=Component D3 LTST-C170TBKT
+Added Member To Class: ClassName=USB Member=Component J 2134441-2
+Added Member To Class: ClassName=Modulo Member=Component P2 MHDR1X2
+Added Member To Class: ClassName=Modulo Member=Component R1 ERJ-1GEF66R5C
+Added Member To Class: ClassName=Alimentacion Member=Component R3 ERJ-1GEF66R5C
+Added Member To Class: ClassName=USB Member=Component R4 ERJ-1GEF66R5C
+Added Member To Class: ClassName=Alimentacion Member=Component R6 ERJ-1GEF2491C
+Added Member To Class: ClassName=Alimentacion Member=Component U1 TPS2115ADRBR
+Added Member To Class: ClassName=Alimentacion Member=Component U2 LP5907QMFX-3.3Q1
+Added Room: Name=Alimentacion
+Added Room: Name=Conectores
+Added Room: Name=Modulo
+Added Room: Name=USB

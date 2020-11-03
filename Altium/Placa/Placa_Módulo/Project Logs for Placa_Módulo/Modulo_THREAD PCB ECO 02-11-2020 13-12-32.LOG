@@ -1,0 +1,20 @@
+Removed Pin From Net: NetName=D+ Pin=Q1_D+-2
+Removed Pin From Net: NetName=D- Pin=Q1_D--2
+Removed Pin From Net: NetName=D+ Pin=R1_D+-2
+Removed Pin From Net: NetName=D- Pin=R1_D--2
+Added Pin To Net: NetName=AGND Pin=J1-S1
+Added Pin To Net: NetName=AGND Pin=J1-S2
+Added Pin To Net: NetName=AGND Pin=J1-S3
+Added Pin To Net: NetName=AGND Pin=J1-S4
+Added Pin To Net: NetName=USB+ Pin=Q1_D+-2
+Added Pin To Net: NetName=USB+ Pin=R1_D+-2
+Added Net: Name=USB+
+Added Pin To Net: NetName=USB- Pin=Q1_D--2
+Added Pin To Net: NetName=USB- Pin=R1_D--2
+Added Net: Name=USB-
+Change Class Name : Old Net Name=Designator New Net Name=USB
+Added Room: Name=Conectores
+Added Room: Name=D+
+Added Room: Name=D-
+Added Room: Name=Modulo
+Added Room: Name=USB
