@@ -1,9 +1,0 @@
-﻿  cmds.c
-h:\jorge\upm\master\tfm\kihost\src\cmds.c(18): fatal error C1083: No se puede abrir el archivo incluir: 'cmds.h': No such file or directory
-  cobs.c
-h:\jorge\upm\master\tfm\kihost\src\cobs.c(17): fatal error C1083: No se puede abrir el archivo incluir: 'cobs.h': No such file or directory
-  kbi.c
-h:\jorge\upm\master\tfm\kihost\src\kbi.c(17): fatal error C1083: No se puede abrir el archivo incluir: 'kbi.h': No such file or directory
-  uart.c
-h:\jorge\upm\master\tfm\kihost\src\uart.c(17): fatal error C1083: No se puede abrir el archivo incluir: 'uart.h': No such file or directory
-  Generando código...

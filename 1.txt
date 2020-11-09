@@ -1,3 +1,0 @@
-- Diseño dongle al otro.
-- Mirar receptor,
-- Mirar si se podría router en cockie.

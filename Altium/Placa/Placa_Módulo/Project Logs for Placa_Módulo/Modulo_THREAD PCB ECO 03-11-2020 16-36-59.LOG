@@ -1,0 +1,8 @@
+Removed Pin From Net: NetName=NetKTWM1_6 Pin=P1-1
+Removed Pin From Net: NetName=NetKTWM1_5 Pin=P1-2
+Added Pin To Net: NetName=NetKTWM1_5 Pin=P1-1
+Added Pin To Net: NetName=NetKTWM1_6 Pin=P1-2
+Added Room: Name=Alimentacion
+Added Room: Name=Conectores
+Added Room: Name=Modulo
+Added Room: Name=USB

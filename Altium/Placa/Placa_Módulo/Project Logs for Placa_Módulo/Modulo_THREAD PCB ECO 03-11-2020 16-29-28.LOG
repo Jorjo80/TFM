@@ -1,0 +1,16 @@
+Removed Pin From Net: NetName=AGND Pin=P1-1
+Removed Pin From Net: NetName=NetKTWM1_3 Pin=P1-2
+Removed Pin From Net: NetName=NetKTWM1_6 Pin=P2-1
+Removed Pin From Net: NetName=NetKTWM1_5 Pin=P2-2
+Removed Member From Class: ClassName=Modulo Member=P2
+Change Component Footprint: Designator=P1 Old Footprint=MHDR1X2 New Footprint=HDR2X2
+Change Component Comment : Designator=P1 Old Comment=MHDR1X2 New Comment=Header 2X2
+Added Pin To Net: NetName=NetKTWM1_5 Pin=P1-1
+Added Pin To Net: NetName=NetKTWM1_6 Pin=P1-2
+Added Pin To Net: NetName=AGND Pin=P1-3
+Added Pin To Net: NetName=NetKTWM1_3 Pin=P1-4
+Added Member To Class: ClassName=Conectores Member=Component Conector I1 Cookie_Connector
+Added Room: Name=Alimentacion
+Added Room: Name=Conectores
+Added Room: Name=Modulo
+Added Room: Name=USB
