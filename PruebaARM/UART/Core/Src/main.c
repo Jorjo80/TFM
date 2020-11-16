@@ -18,10 +18,13 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include <H:\Jorge\UPM\master\TFM\PruebaARM\UART\MDK-ARM\cobs.h>
 
 /* USER CODE END Includes */
 
@@ -41,7 +44,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
-uint8_t c=0x32; //2 en ASCII
+uint8_t c = 0x32;
+
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -97,8 +101,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		HAL_UART_Transmit(&huart1, &c, 1, 1);
-		HAL_Delay(200);
+		HAL_UART_Transmit(&huart1, &c, 1,1);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -138,8 +141,8 @@ void SystemClock_Config(void)
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV8;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV4;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
   {
