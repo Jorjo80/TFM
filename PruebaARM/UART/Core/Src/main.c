@@ -44,7 +44,34 @@
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart1;
+
 uint8_t c = 0x32;
+uint8_t ifup[] = {0x00, 0x00, 0x10, 0x08, 0x18};
+uint8_t ifdown[] = {0x00, 0x00, 0x10, 0x07, 0x17};
+uint8_t ComClear[] = {0x00, 0x00, 0x10, 0x00, 0x10};
+uint8_t Reset[] = {0x00, 0x00, 0x10, 0x03, 0x13};
+uint8_t Status[] = {0x00, 0x00, 0x11, 0x05, 0x14}; //Look the answer in the KBI pdf
+uint8_t ReadChannel[] = {0x00, 0x00, 0x11, 0x12, 0x03};
+uint8_t WriteChannel[] = {0x00, 0x01, 0x10, 0x12, 0x0c, 0x0F}; //Channel 15 predefined, change last uint8_t to change channell between 11-26
+uint8_t ReadRole[] = {0x00, 0x00, 0x11, 0x19, 0x08};
+uint8_t WriteRole[] = {0x00, 1, 16, 25, 11, 3}; //FED, look the table below and change the last uint8_t
+
+/* //CKS for WriteRole
+  0 = Not Configured
+  1 = Router -- CKS = 09
+  2 = REED (Router Elegible End Device) -- CKS = 0A
+  3 = FED (Full End Device) -- CKS = OB
+  4 = MED (Minimal End Device) -- CKS = 0C
+  5 = SED (Sleepy End Device) CKS = 0D
+  6 = Leader -- CKS = 0E
+
+  Modifications conditions
+  Status must be none, except none - saved configuration. Also allowed when status is joined to trigger some
+  role transition mechanisms (SED ? MED, SED ? FED, MED? FED).
+*/
+
+uint8_t ReadJoinCred[] = {0x00, 0x00, 0x11, 0x17, 0x06};
+uint8_t WriteJoinCred[] = {0x00, 0x10, 0x10, 0x17, 0x69, 0x38, 0x34, 0x30, 0x34, 0x44, 0x32, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x35, 0x46, 0x43};
 
 /* USER CODE BEGIN PV */
 
@@ -54,6 +81,7 @@ uint8_t c = 0x32;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
+void InicioFed(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -93,7 +121,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+	InicioFed();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -102,6 +130,7 @@ int main(void)
   {
     /* USER CODE END WHILE */
 		HAL_UART_Transmit(&huart1, &c, 1,1);
+		HAL_Delay(200);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -155,6 +184,39 @@ void SystemClock_Config(void)
   * @param None
   * @retval None
   */
+
+void InicioFed(void)
+{
+	uint8_t *encodedbuffer;
+	uint8_t *receivebuffer;
+	uint8_t *decodedbuffer;
+	size_t encodedsize;
+	
+	
+	//Channel
+	encodedsize = encode(WriteChannel,sizeof(WriteChannel),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,10);
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer), decodedbuffer);
+	
+	//Role
+	encodedsize = encode(WriteRole,sizeof(WriteRole),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,10);
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
+	
+	//Join Credential
+	encodedsize = encode(WriteJoinCred,sizeof(WriteJoinCred),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,10);
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);	
+	
+	//IFUP
+	encodedsize = encode(ifup,sizeof(ifup),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,10);
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
+}
 static void MX_USART1_UART_Init(void)
 {
 
