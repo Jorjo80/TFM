@@ -129,8 +129,16 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		HAL_UART_Transmit(&huart1, &c, 1,1);
-		HAL_Delay(200);
+		uint8_t *encodedbuffer;
+		uint8_t *receivebuffer;
+		uint8_t *decodedbuffer;
+		size_t encodedsize;
+	
+	
+	//Channel
+			encodedsize = encode(WriteChannel,sizeof(WriteChannel)/sizeof(uint8_t),encodedbuffer);
+		HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,100);
+		HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -185,6 +193,7 @@ void SystemClock_Config(void)
   * @retval None
   */
 
+
 void InicioFed(void)
 {
 	uint8_t *encodedbuffer;
@@ -194,26 +203,26 @@ void InicioFed(void)
 	
 	
 	//Channel
-	encodedsize = encode(WriteChannel,sizeof(WriteChannel),encodedbuffer);
-	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,10);
+	encodedsize = encode(WriteChannel,sizeof(WriteChannel)/sizeof(uint8_t),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,100);
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer), decodedbuffer);
 	
 	//Role
-	encodedsize = encode(WriteRole,sizeof(WriteRole),encodedbuffer);
-	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,10);
+	encodedsize = encode(WriteRole,sizeof(WriteRole)/sizeof(uint8_t),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,100);
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
 	
 	//Join Credential
-	encodedsize = encode(WriteJoinCred,sizeof(WriteJoinCred),encodedbuffer);
-	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,10);
+	encodedsize = encode(WriteJoinCred,sizeof(WriteJoinCred)/sizeof(uint8_t),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,100);
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);	
 	
 	//IFUP
-	encodedsize = encode(ifup,sizeof(ifup),encodedbuffer);
-	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,10);
+	encodedsize = encode(ifup,sizeof(ifup)/sizeof(uint8_t),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,100);
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
 }

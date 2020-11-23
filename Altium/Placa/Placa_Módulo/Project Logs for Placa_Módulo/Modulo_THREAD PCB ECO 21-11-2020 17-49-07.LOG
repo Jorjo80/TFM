@@ -1,0 +1,15 @@
+Removed Pin From Net: NetName=5V Pin=D3-POS
+Removed Pin From Net: NetName=DGND Pin=R7-2
+Removed Member From Class: ClassName=Alimentacion Member=R4
+Removed Member From Class: ClassName=Modulo Member=R6
+Removed Member From Class: ClassName=USB Member=R6
+Removed Member From Class: ClassName=Modulo Member=R7
+Added Pin To Net: NetName=DGND Pin=D3-POS
+Added Pin To Net: NetName=5V Pin=R7-2
+Added Member To Class: ClassName=Alimentacion Member=Component C3 Cap Pol3
+Added Member To Class: ClassName=Modulo Member=Component R3 ERJ-1GEF66R5C
+Added Member To Class: ClassName=Modulo Member=Component R4 ERJ-1GEF66R5C
+Added Member To Class: ClassName=Alimentacion Member=Component R5 ERJ-1GEF2491C
+Added Member To Class: ClassName=Alimentacion Member=Component R6 ERJ-1GEF66R5C
+Added Member To Class: ClassName=USB Member=Component R7 ERJ-1GEF66R5C
+Added Member To Class: ClassName=Alimentacion Member=Component U2 LP5907QMFX-3.3Q1

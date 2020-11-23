@@ -1,0 +1,9 @@
+Removed Member From Class: ClassName=Alimentacion Member=R4
+Removed Member From Class: ClassName=Modulo Member=R6
+Change Component Footprint: Designator=C1 Old Footprint=C0805 New Footprint=J1-0603
+Change Component Footprint: Designator=C2 Old Footprint=C0805 New Footprint=J1-0603
+Change Component Footprint: Designator=C3 Old Footprint=C0805 New Footprint=J1-0603
+Change Component Footprint: Designator=C4 Old Footprint=C0805 New Footprint=J1-0603
+Added Member To Class: ClassName=Alimentacion Member=Component C3 Cap Pol3
+Added Member To Class: ClassName=Modulo Member=Component R3 ERJ-1GEF66R5C
+Added Member To Class: ClassName=Alimentacion Member=Component R5 ERJ-1GEF2491C
