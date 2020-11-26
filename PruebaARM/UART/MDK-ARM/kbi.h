@@ -85,7 +85,7 @@ kbi_socket_t kbi_sockets[KBI_MAX_SOCKETS];
 **                                                                         **
 ****************************************************************************/
 
-_Bool kbi_init(UART_HandleTypeDef huart1)
+_Bool kbi_init(UART_HandleTypeDef *huart1)
 {
 	uint8_t status;
 	status = uart_init(huart1);

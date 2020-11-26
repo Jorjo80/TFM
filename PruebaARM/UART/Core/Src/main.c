@@ -149,15 +149,13 @@ int main(void)
   /* USER CODE BEGIN 2 */
   uint8_t pld[ 18 ]; /* Generalistic payload variable */
 
-  if ( kbi_init(huart1 ) )
-    printf( "Module in port initialized correctly.\n" );
-  else
-    //progExit( EXIT_FAILURE, "Unable to init module port." );
+  kbi_init(&huart1);
+    //printf( "Module in port initialized correctly.\n" );
 
   if ( joinNetwork() )
     printf( "The device joined the Thread network successfully.\n" );
   else
-    progExit( EXIT_FAILURE, "The device could not join the Thread network." );
+    //progExit( EXIT_FAILURE, "The device could not join the Thread network." );
 
   /* Server code */
   if ( NET_ROLE == CMDS_ROLE_LEADER )
@@ -290,15 +288,15 @@ static _Bool joinNetwork()
   uint8_t pld[ 16 ];
 
   /* Clear existing configuration */
-  printf( "\nclear\n" );
+  //printf( "\nclear\n" );
   kbi_cmd( CMDS_FCCMD_WRITE, CMDS_CMD_CLEAR, NULL, 0 );
   pld[ 0 ] = CMDS_STATUS_NONE;
   pld[ 1 ] = CMDS_STATUS_NONE_NOT_CONFIG;
-  printf( "\nwait_for status none\n" );
+  //printf( "\nwait_for status none\n" );
   kbi_waitFor( CMDS_CMD_STATUS, pld, 2, 5 );
 
   /* OOB configuration */
-  printf( "\noob configuration\n" );
+  //printf( "\noob configuration\n" );
   kbi_cmd( CMDS_FCCMD_WRITE, CMDS_CMD_OOB_COMMISSIONING_MODE, NULL, 0 );
 
   pld[ 0 ] = NET_ROLE;
@@ -327,10 +325,10 @@ static _Bool joinNetwork()
            strlen( pld ) );
 
   /* Bring interface up */
-  printf( "\nifup\n" );
+  //printf( "\nifup\n" );
   kbi_cmd( CMDS_FCCMD_WRITE, CMDS_CMD_IFUP, NULL, 0 );
 
-  printf( "\nwait_for status joined\n" );
+  //printf( "\nwait_for status joined\n" );
   pld[ 0 ] = CMDS_STATUS_JOINED;
   if ( kbi_waitFor( CMDS_CMD_STATUS, pld, 1, 20 ) )
     return 1;
