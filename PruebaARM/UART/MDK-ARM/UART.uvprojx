@@ -413,6 +413,21 @@
               <FileType>5</FileType>
               <FilePath>.\cobs.h</FilePath>
             </File>
+            <File>
+              <FileName>uart.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\uart.h</FilePath>
+            </File>
+            <File>
+              <FileName>kbi.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\kbi.h</FilePath>
+            </File>
+            <File>
+              <FileName>cmds.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\cmds.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

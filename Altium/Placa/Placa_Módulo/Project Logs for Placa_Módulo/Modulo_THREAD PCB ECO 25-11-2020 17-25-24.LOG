@@ -1,0 +1,15 @@
+Added Component: Designator=U?(SOP65P640X120-8N)
+Add component (AddParameter): Name = "Availability"; Value = "Unavailable"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MF"; Value = ""; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "MP"; Value = "TPS2115APWR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Price"; Value = "None"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = ""; VariantName = "[No Variations]"
+Added Pin To Net: NetName=USB_Detect Pin=U?-1
+Added Pin To Net: NetName=DGND Pin=U?-3
+Added Pin To Net: NetName=NetR5_2 Pin=U?-4
+Added Pin To Net: NetName=DGND Pin=U?-5
+Added Pin To Net: NetName=DVDD Pin=U?-6
+Added Pin To Net: NetName=PMUX Pin=U?-7
+Added Pin To Net: NetName=HV Pin=U?-8
+Added Member To Class: ClassName=Alimentacion Member=Component U? TPS2115APWR
