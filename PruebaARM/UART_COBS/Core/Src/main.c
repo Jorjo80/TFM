@@ -102,6 +102,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 
+void InicioFed(void);
 void send(const uint8_t *, size_t);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
@@ -144,18 +145,15 @@ int main(void)
   MX_GPIO_Init();  
 	MX_USART1_UART_Init();
 	
-	
+	InicioFed();
 
   while (1)
   {
     /* USER CODE END WHILE */
 	
 	//Channel
-		uint8_t _encodeBuffer[getEncodedBufferSize(sizeof(WriteRole))];
-		size_t numEncoded = encode(WriteRole, sizeof(WriteRole), _encodeBuffer);
-	
-		HAL_UART_Transmit(&huart1, _encodeBuffer, sizeof(WriteRole), 1);
-		HAL_Delay(1000);
+		HAL_UART_Transmit(&huart1, &c, 1,1);
+		HAL_Delay(200);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -285,7 +283,39 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
+void InicioFed(void)
+{
+	uint8_t *encodedbuffer;
+	uint8_t *receivebuffer;
+	uint8_t *decodedbuffer;
+	size_t encodedsize;
+	
+	
+	//Channel
+	HAL_Delay(1000);
+	encodedsize = encode(WriteChannel,(sizeof(WriteChannel)+(sizeof(WriteChannel)/254)+1),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer), decodedbuffer);
+	
+	//Role
+	encodedsize = encode(WriteRole,sizeof(WriteRole),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
+	
+	//Join Credential
+	encodedsize = encode(WriteJoinCred,sizeof(WriteJoinCred),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);	
+	
+	//IFUP
+	encodedsize = encode(ifup,sizeof(ifup),encodedbuffer);
+	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
+}
 /* USER CODE END 4 */
 
 /**
