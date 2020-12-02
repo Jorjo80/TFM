@@ -147,4 +147,3 @@ _Bool kbi_waitFor(uint8_t cmd, uint8_t *pld, uint16_t len, uint16_t tout, UART_H
 	}
 	return 0;
 }
-

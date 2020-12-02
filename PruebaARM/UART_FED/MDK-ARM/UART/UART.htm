@@ -3,9 +3,9 @@
 <title>Static Call Graph - [UART\UART.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image UART\UART.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Mon Nov 30 17:31:40 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Dec 02 17:10:18 2020
 <BR><P>
-<H3>Maximum Stack Usage =       1008 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        912 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; joinNetwork &rArr; kbi_waitFor &rArr; kbi_cmd &rArr; cmds_send &rArr; cobs_encode
 <P>
@@ -416,7 +416,6 @@ Global Symbols
 <LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kbi_waitFor
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kbi_cmd
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cobs_encode
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmds_send
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;joinNetwork
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;hextobin
@@ -706,7 +705,7 @@ Global Symbols
 <P><STRONG><a name="[a3]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[82]"></a>cmds_send</STRONG> (Thumb, 146 bytes, Stack size 144 bytes, main.o(i.cmds_send))
-<BR><BR>[Stack]<UL><LI>Max Depth = 368<LI>Call Chain = cmds_send &rArr; cobs_encode
+<BR><BR>[Stack]<UL><LI>Max Depth = 272<LI>Call Chain = cmds_send &rArr; cobs_encode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cobs_encode
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
@@ -715,11 +714,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kbi_cmd
 </UL>
 
-<P><STRONG><a name="[85]"></a>cobs_encode</STRONG> (Thumb, 946 bytes, Stack size 224 bytes, main.o(i.cobs_encode))
-<BR><BR>[Stack]<UL><LI>Max Depth = 224<LI>Call Chain = cobs_encode
+<P><STRONG><a name="[85]"></a>cobs_encode</STRONG> (Thumb, 710 bytes, Stack size 128 bytes, main.o(i.cobs_encode))
+<BR><BR>[Stack]<UL><LI>Max Depth = 128<LI>Call Chain = cobs_encode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmds_send
 </UL>
@@ -730,7 +728,7 @@ Global Symbols
 <BR>[Address Reference Count : 1]<UL><LI> printfb.o(i.__0printf$bare)
 </UL>
 <P><STRONG><a name="[89]"></a>kbi_cmd</STRONG> (Thumb, 152 bytes, Stack size 160 bytes, main.o(i.kbi_cmd))
-<BR><BR>[Stack]<UL><LI>Max Depth = 528<LI>Call Chain = kbi_cmd &rArr; cmds_send &rArr; cobs_encode
+<BR><BR>[Stack]<UL><LI>Max Depth = 432<LI>Call Chain = kbi_cmd &rArr; cmds_send &rArr; cobs_encode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cmds_send
@@ -751,7 +749,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[8b]"></a>kbi_waitFor</STRONG> (Thumb, 154 bytes, Stack size 160 bytes, main.o(i.kbi_waitFor))
-<BR><BR>[Stack]<UL><LI>Max Depth = 688<LI>Call Chain = kbi_waitFor &rArr; kbi_cmd &rArr; cmds_send &rArr; cobs_encode
+<BR><BR>[Stack]<UL><LI>Max Depth = 592<LI>Call Chain = kbi_waitFor &rArr; kbi_cmd &rArr; cmds_send &rArr; cobs_encode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kbi_cmd
@@ -762,7 +760,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 254 bytes, Stack size 152 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 1008<LI>Call Chain = main &rArr; joinNetwork &rArr; kbi_waitFor &rArr; kbi_cmd &rArr; cmds_send &rArr; cobs_encode
+<BR><BR>[Stack]<UL><LI>Max Depth = 912<LI>Call Chain = main &rArr; joinNetwork &rArr; kbi_waitFor &rArr; kbi_cmd &rArr; cmds_send &rArr; cobs_encode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 <LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
@@ -807,7 +805,7 @@ Local Symbols
 </UL>
 
 <P><STRONG><a name="[88]"></a>joinNetwork</STRONG> (Thumb, 1006 bytes, Stack size 168 bytes, main.o(i.joinNetwork))
-<BR><BR>[Stack]<UL><LI>Max Depth = 856<LI>Call Chain = joinNetwork &rArr; kbi_waitFor &rArr; kbi_cmd &rArr; cmds_send &rArr; cobs_encode
+<BR><BR>[Stack]<UL><LI>Max Depth = 760<LI>Call Chain = joinNetwork &rArr; kbi_waitFor &rArr; kbi_cmd &rArr; cmds_send &rArr; cobs_encode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;kbi_waitFor

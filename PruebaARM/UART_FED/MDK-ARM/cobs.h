@@ -1,3 +1,5 @@
+#ifndef __INCLUDE_COBS_H
+#define __INCLUDE_COBS_H
 
 #include <inttypes.h>
 #include "main.h"
@@ -20,10 +22,10 @@
 ****************************************************************************/
 
 /* Encoded byte output function. */
-typedef void ( *cobs_byteOut_t )(UART_HandleTypeDef , uint8_t );
+typedef void ( *cobs_byteOut_t )(UART_HandleTypeDef *, uint8_t *, uint16_t , uint32_t );
 
 /* Encoded byte input function. */
-typedef uint8_t ( *cobs_byteIn_t )(UART_HandleTypeDef , uint8_t *);
+typedef uint8_t ( *cobs_byteIn_t )(UART_HandleTypeDef *, uint8_t *, uint16_t Size, uint32_t Timeout  );
 
 /****************************************************************************
 **                                                                         **
@@ -40,7 +42,7 @@ typedef uint8_t ( *cobs_byteIn_t )(UART_HandleTypeDef , uint8_t *);
  *
  * @return         Length of the encoded message.
  */
-int16_t cobs_encode( uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_HandleTypeDef huart1);
+int16_t cobs_encode( uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_HandleTypeDef huart1 );
 
 /**
  * @brief Decode a UART message byte per byte.
@@ -54,8 +56,11 @@ int16_t cobs_encode( uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_Ha
  *                 -2: Port timeout.
  *                 >0: Length of the decoded message.
  */
-int16_t cobs_decode( uint8_t *buff, uint16_t len, cobs_byteIn_t input, UART_HandleTypeDef huart1);
+int16_t cobs_decode( uint8_t *buff, uint16_t len, cobs_byteIn_t input, UART_HandleTypeDef huart1 );
 
+
+#ifndef COBS_C_SRC
+#define COBS_C_SRC
 
  /****************************************************************************
  **                                                                         **
@@ -105,7 +110,7 @@ struct usart_rx_s
 	struct cobs_rx_s cobs; /* COBS data. */
 };
 
-/****************************************************************************
+/***************************0*************************************************
 **                                                                         **
 **                            GLOBAL VARIABLES                             **
 **                                                                         **
@@ -352,7 +357,7 @@ int16_t cobs_encode(uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_Han
 		{
 			/* First zero as start delimiter */
 			debug_tx(0x00, 1, outIdx == usart_txPkt.totBytes);
-			output(huart1, 0x00);
+			output(&huart1, 0x00,1,100);
 			outIdx++;
 		}
 		else if ((usart_txPkt.cobs.pos[usart_txPkt.cobs.codePos] ==
@@ -361,7 +366,7 @@ int16_t cobs_encode(uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_Han
 		{
 			debug_tx(usart_txPkt.cobs.code[usart_txPkt.cobs.codePos], 0,
 				outIdx == usart_txPkt.totBytes);
-			output(huart1, usart_txPkt.cobs.code[usart_txPkt.cobs.codePos]);
+			output(&huart1, &usart_txPkt.cobs.code[usart_txPkt.cobs.codePos], 1, 100);
 			usart_txPkt.cobs.codePos++;
 			outIdx++;
 		}
@@ -375,7 +380,7 @@ int16_t cobs_encode(uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_Han
 				if (data != 0)
 				{
 					debug_tx(data, 0, outIdx == usart_txPkt.totBytes);
-					output(huart1, data);
+					output(&huart1, &data, sizeof(data), 100);
 					outIdx++;
 				}
 			}
@@ -392,7 +397,7 @@ int16_t cobs_decode(uint8_t *buff, uint16_t len, cobs_byteIn_t input, UART_Handl
 	uint8_t inByte = 0;
 	uint8_t numChar = 0;
 
-	numChar = input(huart1, &inByte);
+	numChar = input(&huart1, &inByte,1,1);
 	if (numChar == 0)
 		goto timeout;
 
@@ -524,3 +529,13 @@ static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last)
 	else
 		printf(":");
 }
+
+#endif /* !COBS_C_SRC */
+
+/****************************************************************************
+**                                                                         **
+**                                   EOF                                   **
+**                                                                         **
+****************************************************************************/
+
+#endif /* !__INCLUDE_COBS_H */
