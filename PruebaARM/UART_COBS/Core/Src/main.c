@@ -102,8 +102,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 
+void send(uint8_t *buffer, size_t size);
 void InicioFed(void);
-void send(const uint8_t *, size_t);
+
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
 /* USER CODE BEGIN PFP */
@@ -143,7 +144,18 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();  
-	MX_USART1_UART_Init();
+	huart1.Instance = USART1;
+  huart1.Init.BaudRate = 115200;
+  huart1.Init.WordLength = UART_WORDLENGTH_8B;
+  huart1.Init.StopBits = UART_STOPBITS_1;
+  huart1.Init.Parity = UART_PARITY_NONE;
+  huart1.Init.Mode = UART_MODE_TX_RX;
+  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart1) != HAL_OK)
+  {
+    Error_Handler();
+  }
 	
 	InicioFed();
 
@@ -230,26 +242,9 @@ static void hextobin( const char *str, uint8_t *dst, size_t len )
   };
 }
 
-void send(const uint8_t* buffer, size_t size)
-{
-	if(buffer == NULL || size == 0) return;
-	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
-	size_t numEncoded = encode(buffer, size, _encodeBuffer);
-	
-	HAL_UART_Transmit(&huart1, _encodeBuffer, numEncoded, 1);
-	
-}
 
 static void MX_USART1_UART_Init(void)
 {
-
-  /* USER CODE BEGIN USART1_Init 0 */
-
-  /* USER CODE END USART1_Init 0 */
-
-  /* USER CODE BEGIN USART1_Init 1 */
-
-  /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
@@ -262,10 +257,6 @@ static void MX_USART1_UART_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN USART1_Init 2 */
-
-  /* USER CODE END USART1_Init 2 */
-
 }
 
 /**
@@ -293,20 +284,20 @@ void InicioFed(void)
 	
 	//Channel
 	HAL_Delay(1000);
-	encodedsize = encode(WriteChannel,(sizeof(WriteChannel)+(sizeof(WriteChannel)/254)+1),encodedbuffer);
-	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
+	
+	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])));
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer), decodedbuffer);
 	
 	//Role
-	encodedsize = encode(WriteRole,sizeof(WriteRole),encodedbuffer);
-	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
+	HAL_Delay(100);
+	send(WriteRole,(sizeof(WriteRole)/sizeof(WriteRole[0])));
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
 	
 	//Join Credential
-	encodedsize = encode(WriteJoinCred,sizeof(WriteJoinCred),encodedbuffer);
-	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
+	
+	send(WriteChannel,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])));
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);	
 	
@@ -315,6 +306,13 @@ void InicioFed(void)
 	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
+}
+
+void send(uint8_t *buffer, size_t size)
+{
+	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
+	size_t numEncoded = encode(buffer, size, _encodeBuffer);
+	HAL_UART_Transmit(&huart1,_encodeBuffer,numEncoded,1000);
 }
 /* USER CODE END 4 */
 
