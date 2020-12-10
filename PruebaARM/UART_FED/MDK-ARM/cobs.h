@@ -358,6 +358,7 @@ int16_t cobs_encode(uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_Han
 			/* First zero as start delimiter */
 			debug_tx(0x00, 1, outIdx == usart_txPkt.totBytes);
 			output(&huart1, 0x00,1,100);
+			HAL_Delay(10);
 			outIdx++;
 		}
 		else if ((usart_txPkt.cobs.pos[usart_txPkt.cobs.codePos] ==
@@ -367,6 +368,7 @@ int16_t cobs_encode(uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_Han
 			debug_tx(usart_txPkt.cobs.code[usart_txPkt.cobs.codePos], 0,
 				outIdx == usart_txPkt.totBytes);
 			output(&huart1, &usart_txPkt.cobs.code[usart_txPkt.cobs.codePos], 1, 100);
+			HAL_Delay(10);
 			usart_txPkt.cobs.codePos++;
 			outIdx++;
 		}
@@ -381,6 +383,7 @@ int16_t cobs_encode(uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_Han
 				{
 					debug_tx(data, 0, outIdx == usart_txPkt.totBytes);
 					output(&huart1, &data, sizeof(data), 100);
+					HAL_Delay(10);
 					outIdx++;
 				}
 			}

@@ -332,7 +332,7 @@ void cmds_send(uint8_t typ, uint8_t cmd, uint8_t *pld, uint16_t pldLen, UART_Han
 #endif /* DEBUG_CMDS */
 
 	/* Encode frame and send to UART */
-	cobs_encode(cmds_tx_buf.frame_a, frameLen, uart_sendChar, huart1);
+	cobs_encode(cmds_tx_buf.frame_a, frameLen, HAL_UART_Transmit, huart1);
 }
 
 /***************************************************************************/
@@ -346,7 +346,7 @@ int16_t cmds_recv(UART_HandleTypeDef huart1)
 	/* Receive the response */
 	do
 	{
-		result = cobs_decode(cmds_rx_buf.frame_a, sizeof(cmds_buffer_t),uart_recvChar, huart1);
+		result = cobs_decode(cmds_rx_buf.frame_a, sizeof(cmds_buffer_t),HAL_UART_Receive, huart1);
 	} while (result == 0);
 
 	/* Verify checksum */
