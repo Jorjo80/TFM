@@ -102,8 +102,9 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART1_UART_Init(void);
 
-void send(uint8_t *buffer, size_t size);
-void InicioFed(void);
+static void send(uint8_t *buffer, size_t size);
+static void receive(uint8_t *buffer, size_t size);
+static void InicioFed(void);
 
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
@@ -144,18 +145,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();  
-	huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
-  huart1.Init.WordLength = UART_WORDLENGTH_8B;
-  huart1.Init.StopBits = UART_STOPBITS_1;
-  huart1.Init.Parity = UART_PARITY_NONE;
-  huart1.Init.Mode = UART_MODE_TX_RX;
-  huart1.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart1.Init.OverSampling = UART_OVERSAMPLING_16;
-  if (HAL_UART_Init(&huart1) != HAL_OK)
-  {
-    Error_Handler();
-  }
+	MX_USART1_UART_Init();
 	
 	InicioFed();
 
@@ -274,7 +264,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-void InicioFed(void)
+static  void InicioFed(void)
 {
 	uint8_t *encodedbuffer;
 	uint8_t *receivebuffer;
@@ -307,7 +297,16 @@ void InicioFed(void)
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
 }
 
-void send(uint8_t *buffer, size_t size)
+static void send(uint8_t *buffer, size_t size)
+{
+	uint8_t PacketMarker = 0;
+	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
+	size_t numEncoded = encode(buffer, size, _encodeBuffer);
+	HAL_UART_Transmit(&huart1,_encodeBuffer,numEncoded,1000);
+	HAL_UART_Transmit(&huart1,&PacketMarker,sizeof(PacketMarker),1000);
+}
+
+static void receive(uint8_t *buffer, size_t size)
 {
 	uint8_t PacketMarker = 0;
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];

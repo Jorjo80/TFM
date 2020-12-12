@@ -3,7 +3,7 @@
 <title>Static Call Graph - [UART\UART.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image UART\UART.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sat Dec 12 13:33:07 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sat Dec 12 15:08:00 2020
 <BR><P>
 <H3>Maximum Stack Usage =        176 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -613,17 +613,6 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[7b]"></a>InicioFed</STRONG> (Thumb, 150 bytes, Stack size 16 bytes, main.o(i.InicioFed))
-<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = InicioFed &rArr; send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive
-<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;decode
-</UL>
-<BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
 <P><STRONG><a name="[3]"></a>MemManage_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.MemManage_Handler))
 <BR><BR>[Calls]<UL><LI><a href="#[3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MemManage_Handler
 </UL>
@@ -693,6 +682,26 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 </UL>
+<P>
+<H3>
+Local Symbols
+</H3>
+<P><STRONG><a name="[7b]"></a>InicioFed</STRONG> (Thumb, 150 bytes, Stack size 16 bytes, main.o(i.InicioFed))
+<BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = InicioFed &rArr; send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+</UL>
+<BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive
+<LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;decode
+</UL>
+<BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+</UL>
+
+<P><STRONG><a name="[7d]"></a>decode</STRONG> (Thumb, 74 bytes, Stack size 20 bytes, main.o(i.decode))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = decode
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
+</UL>
 
 <P><STRONG><a name="[7c]"></a>send</STRONG> (Thumb, 120 bytes, Stack size 24 bytes, main.o(i.send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
@@ -700,15 +709,6 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
-</UL>
-<P>
-<H3>
-Local Symbols
-</H3>
-<P><STRONG><a name="[7d]"></a>decode</STRONG> (Thumb, 74 bytes, Stack size 20 bytes, main.o(i.decode))
-<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = decode
 </UL>
 <BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
 </UL>
