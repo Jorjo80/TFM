@@ -302,17 +302,18 @@ void InicioFed(void)
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);	
 	
 	//IFUP
-	encodedsize = encode(ifup,sizeof(ifup),encodedbuffer);
-	HAL_UART_Transmit(&huart1,encodedbuffer,encodedsize,1);
+	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
 	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
 	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
 }
 
 void send(uint8_t *buffer, size_t size)
 {
+	uint8_t PacketMarker = 0;
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
 	size_t numEncoded = encode(buffer, size, _encodeBuffer);
 	HAL_UART_Transmit(&huart1,_encodeBuffer,numEncoded,1000);
+	HAL_UART_Transmit(&huart1,&PacketMarker,sizeof(PacketMarker),1000);
 }
 /* USER CODE END 4 */
 
