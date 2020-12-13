@@ -105,6 +105,7 @@ static void MX_USART1_UART_Init(void);
 static void send(uint8_t *buffer, size_t size);
 static void receive(uint8_t *buffer, size_t size);
 static void InicioFed(void);
+static void uptate(void);
 
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
@@ -308,13 +309,17 @@ static void send(uint8_t *buffer, size_t size)
 
 static void receive(uint8_t *buffer, size_t size)
 {
+	
 	uint8_t PacketMarker = 0;
-	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
-	size_t numEncoded = encode(buffer, size, _encodeBuffer);
-	HAL_UART_Transmit(&huart1,_encodeBuffer,numEncoded,1000);
-	HAL_UART_Transmit(&huart1,&PacketMarker,sizeof(PacketMarker),1000);
+	
+	uint8_t *receivebuffer;
+	uint8_t *decodedbuffer;
+	
+	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
+	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
+
 }
-/* USER CODE END 4 */
+
 
 /**
   * @brief  This function is executed in case of error occurrence.
