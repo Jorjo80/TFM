@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 //#include <time.h>
 
@@ -155,7 +156,7 @@ int main(void)
     /* USER CODE END WHILE */
 	
 	//Channel
-		//HAL_UART_Transmit(&huart1, &c, 1,1);
+		
 		HAL_Delay(200);
     /* USER CODE BEGIN 3 */
   }
