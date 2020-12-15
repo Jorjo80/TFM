@@ -52,6 +52,7 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint8_t c = 0x32;
+size_t ReceiveBufferSize = 512;
 uint8_t ifup[] = {0x00, 0x00, 0x10, 0x08, 0x18};
 uint8_t ifdown[] = {0x00, 0x00, 0x10, 0x07, 0x17};
 uint8_t ComClear[] = {0x00, 0x00, 0x10, 0x00, 0x10};
@@ -106,7 +107,7 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 static void send(uint8_t *buffer, size_t size);
-static void receive(uint8_t *buffer, size_t size);
+static void receive();
 static void InicioFed(void);
 static void uptate(void);
 
@@ -312,38 +313,24 @@ static void hextobin( const char *str, uint8_t *dst, size_t len )
 
 static  void InicioFed(void)
 {
-	uint8_t *encodedbuffer;
-	uint8_t *receivebuffer;
-	uint8_t *decodedbuffer;
-	size_t encodedsize;
-	
-	
 	//Channel
 	HAL_Delay(1000);
 	
 	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
-	decode(receivebuffer,sizeof(receivebuffer)+1, decodedbuffer);
-	HAL_UART_Transmit(&huart2,decodedbuffer,sizeof(decodedbuffer),1000);
+	receive();
 	
 	
 	//Role
 	HAL_Delay(100);
 	send(WriteRole,(sizeof(WriteRole)/sizeof(WriteRole[0])));
-	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
-	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
-	HAL_UART_Transmit(&huart2,decodedbuffer,sizeof(decodedbuffer),1000);
+	receive();
 	//Join Credential
 	
 	send(WriteChannel,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])));
-	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
-	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);	
-	HAL_UART_Transmit(&huart2,decodedbuffer,sizeof(decodedbuffer),1000);
+	receive();
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
-	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
-	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
-	HAL_UART_Transmit(&huart2,decodedbuffer,sizeof(decodedbuffer),1000);
+	receive();
 }
 
 static void send(uint8_t *buffer, size_t size)
@@ -355,16 +342,18 @@ static void send(uint8_t *buffer, size_t size)
 	HAL_UART_Transmit(&huart1,&PacketMarker,sizeof(PacketMarker),1000);
 }
 
-static void receive(uint8_t *buffer, size_t size)
+static void receive()
 {
 	
 	uint8_t PacketMarker = 0;
 	
-	uint8_t *receivebuffer;
-	uint8_t *decodedbuffer;
+	uint8_t receivebuffer[ReceiveBufferSize];
+	uint8_t decodedbuffer[ReceiveBufferSize];
+	uint8_t numdecoded;
 	
-	HAL_UART_Receive(&huart1, receivebuffer,512,1000);
-	decode(receivebuffer,sizeof(receivebuffer),decodedbuffer);
+	HAL_UART_Receive(&huart1, receivebuffer,ReceiveBufferSize,1000);
+	numdecoded=decode(receivebuffer,ReceiveBufferSize,decodedbuffer);
+	printf(decodedbuffer + "\n\r");
 
 }
 /* USER CODE END 4 */
