@@ -39,6 +39,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -98,7 +99,19 @@ uint8_t WriteJoinCred[] = {0x00, 0x10, 0x10, 0x17, 0x69, 0x38, 0x34, 0x30, 0x34,
 #define TEST_DURATION 30
 	
 /* USER CODE END PV */
+	
+#define RX_DATA 512
+uint8_t cadena[3];
+uint8_t receiveBuffer[RX_DATA];
+volatile int indice = 0;
 
+int __io_putchar(int ch)
+{
+	HAL_UART_Transmit(&huart2,(uint8_t*)&ch, 1,100);
+	return ch;
+}	
+	
+	
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -127,7 +140,7 @@ static void hextobin( const char *str, uint8_t *dst, size_t len );
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -152,16 +165,16 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+	HAL_UART_Receive_IT(&huart1, cadena, 1);
+
   /* USER CODE END 2 */
-	InicioFed();
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-		send(ReadRole,(sizeof(ReadRole)/sizeof(ReadRole[0])));
-		receive();
-		HAL_Delay(1000);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -363,6 +376,28 @@ static void receive()
 
 }
 /* USER CODE END 4 */
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  /* Prevent unused argument(s) compilation warning */
+  //UNUSED(huart);
+	if(huart->Instance == USART1)
+	{
+		uint8_t dato = cadena[0];
+		receiveBuffer[indice++] = dato;
+		if(indice >= RX_DATA)
+		{
+			
+		}
+		
+	}
+	HAL_UART_Receive_IT(&huart1, cadena, 1);
+  /* NOTE: This function should not be modified, when the callback is needed,
+           the HAL_UART_RxCpltCallback could be implemented in the user file
+   */
+}
+
 
 /**
   * @brief  This function is executed in case of error occurrence.
