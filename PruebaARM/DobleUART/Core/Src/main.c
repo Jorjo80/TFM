@@ -159,7 +159,9 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+		send(ReadRole,(sizeof(ReadRole)/sizeof(ReadRole[0])));
+		receive();
+		HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -315,22 +317,23 @@ static  void InicioFed(void)
 {
 	//Channel
 	HAL_Delay(1000);
-	
+	//printf("Channel\n\r");
 	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	receive();
+	//receive();
 	
 	
 	//Role
 	HAL_Delay(100);
+	//printf("Role\n\r");
 	send(WriteRole,(sizeof(WriteRole)/sizeof(WriteRole[0])));
-	receive();
+	//receive();
 	//Join Credential
 	
 	send(WriteChannel,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])));
-	receive();
+	//receive();
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
-	receive();
+	//receive();
 }
 
 static void send(uint8_t *buffer, size_t size)
@@ -349,11 +352,14 @@ static void receive()
 	
 	uint8_t receivebuffer[ReceiveBufferSize];
 	uint8_t decodedbuffer[ReceiveBufferSize];
-	uint8_t numdecoded;
-	
-	HAL_UART_Receive(&huart1, receivebuffer,ReceiveBufferSize,1000);
-	numdecoded=decode(receivebuffer,ReceiveBufferSize,decodedbuffer);
-	printf(decodedbuffer + "\n\r");
+	size_t numdecoded;
+	do
+	{
+		HAL_UART_Receive(&huart1, receivebuffer,ReceiveBufferSize,1000);
+		numdecoded=decode(receivebuffer,ReceiveBufferSize,decodedbuffer);
+		
+	}while(numdecoded == 0);
+	HAL_UART_Transmit(&huart2, receivebuffer,ReceiveBufferSize,1000);
 
 }
 /* USER CODE END 4 */
