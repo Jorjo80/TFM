@@ -153,10 +153,15 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\UART\../Core/Src/main.c\receive\numdecoded</ItemText>
+          <ItemText>decodedbuffer</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>i</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
           <WinNumber>1</WinNumber>
           <ItemText>numdecoded</ItemText>
         </Ww>
@@ -165,24 +170,14 @@
         <Ww>
           <count>0</count>
           <WinNumber>2</WinNumber>
-          <ItemText>numdecoded,0x0A</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>2</WinNumber>
           <ItemText>decodedbuffer</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>2</WinNumber>
-          <ItemText>receivebuffer</ItemText>
         </Ww>
       </WatchWindow2>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>0</SubType>
-          <ItemText>decodedbuffer</ItemText>
+          <ItemText>i</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>

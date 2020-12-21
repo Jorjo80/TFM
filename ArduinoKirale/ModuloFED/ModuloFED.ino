@@ -1,7 +1,7 @@
-#include <SomeSerial.h>
+#include <PacketSerial.h>
 
 #include <SoftwareSerial.h>
-#include <PacketSerial.h>
+
 #include "cobs.h"
 
 
@@ -109,22 +109,19 @@ void InicioFED()
     delay(1000);*/
   //Modulo.write(WriteChannel, sizeof(WriteChannel) / sizeof(WriteChannel[0]));
   int i = 0;
-  InterfazModulo.send(WriteChannel, sizeof(WriteChannel) / sizeof(WriteChannel[0]));
   Serial.println("Escrito Canal");
-  while ( Modulo.available() == 0) {}
+  InterfazModulo.send(WriteChannel, sizeof(WriteChannel) / sizeof(WriteChannel[0]));  
   InterfazModulo.update();
   delay(1000);
-  InterfazModulo.send(WriteRole, sizeof(WriteRole) / sizeof(WriteRole[0]));
   Serial.println("Write Role");
-  while ( Modulo.available() == 0) {}
+  InterfazModulo.send(WriteRole, sizeof(WriteRole) / sizeof(WriteRole[0]));  
   InterfazModulo.update();
   delay(1000);
+   Serial.println("Write Join Cred");
   InterfazModulo.send(WriteJoinCred, sizeof(WriteJoinCred) / sizeof(WriteJoinCred[0]));
-  Serial.println("Write Join Cred");
-  while ( Modulo.available() == 0) {}
   InterfazModulo.update();
-  InterfazModulo.send(ifup, sizeof(ifup) / sizeof(ifup[0]));
   Serial.println("IFUP");
+  InterfazModulo.send(ifup, sizeof(ifup) / sizeof(ifup[0]));  
   while ( Modulo.available() == 0) {}
  InterfazModulo.update();
 }

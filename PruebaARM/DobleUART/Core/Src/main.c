@@ -52,7 +52,7 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-uint8_t c = 0x32;
+uint8_t a = 0x32;
 size_t ReceiveBufferSize = 512;
 uint8_t ifup[] = {0x00, 0x00, 0x10, 0x08, 0x18};
 uint8_t ifdown[] = {0x00, 0x00, 0x10, 0x07, 0x17};
@@ -100,16 +100,17 @@ uint8_t WriteJoinCred[] = {0x00, 0x10, 0x10, 0x17, 0x69, 0x38, 0x34, 0x30, 0x34,
 	
 /* USER CODE END PV */
 	
-#define RX_DATA 512
+#define RX_SIZE 512
+uint8_t PacketMarker = 0;
 uint8_t cadena[3];
-uint8_t receiveBuffer[RX_DATA];
+uint8_t receiveBuffer[RX_SIZE];
 volatile int indice = 0;
 
-int __io_putchar(int ch)
+/*int __io_putchar(int ch)
 {
 	HAL_UART_Transmit(&huart2,(uint8_t*)&ch, 1,100);
 	return ch;
-}	
+}*/
 	
 	
 /* Private function prototypes -----------------------------------------------*/
@@ -165,16 +166,17 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-	HAL_UART_Receive_IT(&huart1, cadena, 1);
+	//HAL_UART_Receive_IT(&huart1, cadena, 1);
 
   /* USER CODE END 2 */
-
+	InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-
+		HAL_UART_Transmit(&huart2, &a,1,10);
+		HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -328,51 +330,63 @@ static void hextobin( const char *str, uint8_t *dst, size_t len )
 
 static  void InicioFed(void)
 {
-	//Channel
+	//Clear
 	HAL_Delay(1000);
+	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
+	HAL_Delay(1000);
+	
+	
+	//Channel	
 	//printf("Channel\n\r");
 	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	//receive();
+	receive();
 	
 	
 	//Role
 	HAL_Delay(100);
 	//printf("Role\n\r");
 	send(WriteRole,(sizeof(WriteRole)/sizeof(WriteRole[0])));
-	//receive();
+	receive();
 	//Join Credential
 	
 	send(WriteChannel,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])));
-	//receive();
+	receive();
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
-	//receive();
+	receive();
 }
 
 static void send(uint8_t *buffer, size_t size)
 {
-	uint8_t PacketMarker = 0;
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
 	size_t numEncoded = encode(buffer, size, _encodeBuffer);
-	HAL_UART_Transmit(&huart1,_encodeBuffer,numEncoded,1000);
 	HAL_UART_Transmit(&huart1,&PacketMarker,sizeof(PacketMarker),1000);
+	HAL_UART_Transmit(&huart1,_encodeBuffer,numEncoded,1000);
+	
 }
 
 static void receive()
 {
 	
-	uint8_t PacketMarker = 0;
 	
-	uint8_t receivebuffer[ReceiveBufferSize];
-	uint8_t decodedbuffer[ReceiveBufferSize];
+	
+	uint8_t receivebuffer[512];
+	
 	size_t numdecoded;
-	do
+	int i=0;
+	uint8_t c;
+	char d[] = "\n\r";
+	while(HAL_UART_Receive(&huart1, &c,1,1) == HAL_OK)
 	{
-		HAL_UART_Receive(&huart1, receivebuffer,ReceiveBufferSize,1000);
-		numdecoded=decode(receivebuffer,ReceiveBufferSize,decodedbuffer);
-		
-	}while(numdecoded == 0);
-	HAL_UART_Transmit(&huart2, receivebuffer,ReceiveBufferSize,1000);
+		receivebuffer[i]=c;
+		i++;
+	}
+	uint8_t x= '\0';
+	uint8_t decodedbuffer[i];
+	decode(receivebuffer,i,decodedbuffer);
+	HAL_UART_Transmit(&huart2, decodedbuffer,i,10);
+	HAL_UART_Transmit(&huart2, &x,1,10);
+	
 
 }
 /* USER CODE END 4 */
@@ -386,9 +400,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	{
 		uint8_t dato = cadena[0];
 		receiveBuffer[indice++] = dato;
-		if(indice >= RX_DATA)
+		if(indice >= RX_SIZE)
 		{
-			
+			indice = 0;
+		}
+		if(indice >= RX_SIZE)
+		{
+			indice = 0;
 		}
 		
 	}
