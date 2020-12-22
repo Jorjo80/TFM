@@ -29,7 +29,9 @@ uart\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 uart\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 uart\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 uart\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-uart\main.o: H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\cobs2.h
+uart\main.o: H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\encode.h
 uart\main.o: G:\TFM\programacion\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 uart\main.o: G:\TFM\programacion\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 uart\main.o: G:\TFM\programacion\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+uart\main.o: H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\decode.h
+uart\main.o: G:\TFM\programacion\Keil_v5\ARM\ARMCC\Bin\..\include\inttypes.h

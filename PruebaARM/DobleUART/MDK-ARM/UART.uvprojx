@@ -394,11 +394,6 @@
           <GroupName>Application/User/Core</GroupName>
           <Files>
             <File>
-              <FileName>cobs2.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\cobs2.h</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>
@@ -412,6 +407,16 @@
               <FileName>stm32f4xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
+            </File>
+            <File>
+              <FileName>decode.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\decode.h</FilePath>
+            </File>
+            <File>
+              <FileName>encode.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\encode.h</FilePath>
             </File>
           </Files>
         </Group>

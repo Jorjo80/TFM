@@ -22,11 +22,12 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\cobs2.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\encode.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\decode.h"
 
 //#include <time.h>
 
@@ -82,21 +83,12 @@ uint8_t ReadJoinCred[] = {0x00, 0x00, 0x11, 0x17, 0x06};
 uint8_t WriteJoinCred[] = {0x00, 0x10, 0x10, 0x17, 0x69, 0x38, 0x34, 0x30, 0x34, 0x44, 0x32, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x35, 0x46, 0x43};
 
 	
-	/* Network out of band parameters */
-#define NET_ROLE CMDS_ROLE_FED
 
-#define NET_CHANNEL CMDS_CHANNEL_15
-#define NET_PANID "1234"
-#define NET_NAME "KBI Network"
-#define NET_PREFIX "FD00:0DB8:0000:0000::"
-#define NET_KEY "00112233445566778899aabbccddeeff"
-#define NET_EXT_PANID "000db80000000000"
-#define NET_COMM_CRED "KIRALE"
+	
+#define FRAME_HEADER_LEN 5
+#define FRAME_PAYLOAD_MAX_LEN 1268
 
-/* Application parameters */
-#define SERVER_UDP_PORT 7485
-#define CLIENT_UDP_PAYLOAD "Hello, world!"
-#define TEST_DURATION 30
+
 	
 /* USER CODE END PV */
 	
@@ -121,9 +113,8 @@ static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 static void send(uint8_t *buffer, size_t size);
-static void receive();
+static void receive(void);
 static void InicioFed(void);
-static void uptate(void);
 
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
@@ -365,26 +356,24 @@ static void send(uint8_t *buffer, size_t size)
 	
 }
 
-static void receive()
+uint8_t uart_recvChar(uint8_t *byte) {
+	return HAL_UART_Receive(&huart1, byte,1,1);
+}
+
+static void receive(void)
 {
-	
-	
-	
-	uint8_t receivebuffer[512];
-	
-	size_t numdecoded;
 	int i=0;
-	uint8_t c;
-	char d[] = "\n\r";
-	while(HAL_UART_Receive(&huart1, &c,1,1) == HAL_OK)
-	{
-		receivebuffer[i]=c;
-		i++;
-	}
+	int16_t  result;
 	uint8_t x= '\0';
-	uint8_t decodedbuffer[i];
-	decode(receivebuffer,i,decodedbuffer);
-	HAL_UART_Transmit(&huart2, decodedbuffer,i,10);
+	uint8_t decodedbuffer[FRAME_HEADER_LEN + FRAME_PAYLOAD_MAX_LEN];
+	
+	do
+	{
+		result = cobs_decode(decodedbuffer,1300, uart_recvChar);
+		i++;
+	}while(result == 0);
+	
+	HAL_UART_Transmit(&huart2, decodedbuffer,result,10);
 	HAL_UART_Transmit(&huart2, &x,1,10);
 	
 
