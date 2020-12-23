@@ -115,7 +115,7 @@ static void MX_USART2_UART_Init(void);
 static void send(uint8_t *buffer, size_t size);
 static void receive(void);
 static void InicioFed(void);
-
+uint8_t uart_recvChar(uint8_t *byte);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
 /* USER CODE END PFP */
@@ -166,7 +166,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		HAL_UART_Transmit(&huart2, &a,1,10);
+		send(Status,(sizeof(Status)/sizeof(Status[0])));
+		receive();
 		HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
@@ -327,6 +328,7 @@ static  void InicioFed(void)
 	HAL_Delay(1000);
 	
 	
+	
 	//Channel	
 	//printf("Channel\n\r");
 	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])));
@@ -334,17 +336,23 @@ static  void InicioFed(void)
 	
 	
 	//Role
-	HAL_Delay(100);
+	HAL_Delay(1000);
 	//printf("Role\n\r");
 	send(WriteRole,(sizeof(WriteRole)/sizeof(WriteRole[0])));
 	receive();
-	//Join Credential
 	
+	//Join Credential
+	HAL_Delay(1000);
 	send(WriteChannel,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])));
 	receive();
+
+	HAL_Delay(1000);
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
 	receive();
+	char *t = "\nejecutando ifup\n";
+	HAL_UART_Transmit(&huart2, t,16,10);
+	HAL_Delay(10000);
 }
 
 static void send(uint8_t *buffer, size_t size)
@@ -356,25 +364,34 @@ static void send(uint8_t *buffer, size_t size)
 	
 }
 
-uint8_t uart_recvChar(uint8_t *byte) {
-	return HAL_UART_Receive(&huart1, byte,1,1);
+uint8_t uart_recvChar(uint8_t *byte) 
+{
+	return (*byte);
 }
 
-static void receive(void)
+static void receive()
 {
+	
+	//HAL_Delay(10);	
+	uint8_t receivebuffer[512];	
+	size_t result;
 	int i=0;
-	int16_t  result;
-	uint8_t x= '\0';
-	uint8_t decodedbuffer[FRAME_HEADER_LEN + FRAME_PAYLOAD_MAX_LEN];
-	
-	do
+	uint8_t c;
+	char d[] = "\n\r";
+	while(HAL_UART_Receive(&huart1, &c,1,1) == HAL_OK)
 	{
-		result = cobs_decode(decodedbuffer,1300, uart_recvChar);
+		receivebuffer[i]=c;
 		i++;
-	}while(result == 0);
-	
-	HAL_UART_Transmit(&huart2, decodedbuffer,result,10);
-	HAL_UART_Transmit(&huart2, &x,1,10);
+	}
+	uint8_t decodedbuffer[i*2 +1];
+	/*do
+	{
+		result=cobs_decode(decodedbuffer,i*2 +1,uart_recvChar,(*receivebuffer)++);
+		
+	}while(result == 0);*/
+	decode(receivebuffer,i,decodedbuffer);
+	HAL_UART_Transmit(&huart2, decodedbuffer,i+1,10);
+	//HAL_UART_Transmit(&huart2, &x,1,10);
 	
 
 }

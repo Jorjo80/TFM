@@ -42,7 +42,7 @@ static size_t encode(const uint8_t* buffer, size_t size, uint8_t* encodedBuffer)
 /// \param decodedBuffer The target buffer for the decoded bytes.
 /// \returns The number of bytes written to the \p decodedBuffer.
 /// \warning decodedBuffer must have a minimum capacity of size.
-/*static size_t decode(const uint8_t* encodedBuffer, size_t size, uint8_t* decodedBuffer)
+static size_t decode(const uint8_t* encodedBuffer, size_t size, uint8_t* decodedBuffer)
 {
 		if (size == 0)
 				return 0;
@@ -75,7 +75,7 @@ static size_t encode(const uint8_t* buffer, size_t size, uint8_t* encodedBuffer)
 		}
 
 		return write_index;
-}*/
+}
 
 /// \brief Get the maximum encoded buffer size for an unencoded buffer size.
 /// \param unencodedBufferSize The size of the buffer to be encoded.

@@ -84,11 +84,11 @@ static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last);
 #define debug_rx( ... ) ( void ) 0
 #endif /* DEBUG_COBS*/
 
-int16_t cobs_decode(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
+int16_t cobs_decode(uint8_t *buff, uint16_t len, cobs_byteIn_t input,uint8_t encoded)
 {
 	uint8_t inByte = 0;
 	uint8_t numChar = 0;
-
+	inByte = encoded;
 	numChar = input(&inByte);
 	if (numChar == 0)
 		goto timeout;
