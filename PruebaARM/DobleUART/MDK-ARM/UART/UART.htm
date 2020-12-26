@@ -3,9 +3,9 @@
 <title>Static Call Graph - [UART\UART.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image UART\UART.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Dec 23 17:26:49 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Sat Dec 26 19:56:51 2020
 <BR><P>
-<H3>Maximum Stack Usage =        608 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        616 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 main &rArr; InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 <P>
@@ -640,7 +640,6 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
 </UL>
 
 <P><STRONG><a name="[7a]"></a>HAL_UART_TxCpltCallback</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_hal_uart.o(i.HAL_UART_TxCpltCallback))
@@ -723,7 +722,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 146 bytes, Stack size 8 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 608<LI>Call Chain = main &rArr; InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<BR><BR>[Stack]<UL><LI>Max Depth = 616<LI>Call Chain = main &rArr; InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
 <LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
@@ -745,19 +744,18 @@ Global Symbols
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[86]"></a>InicioFed</STRONG> (Thumb, 140 bytes, Stack size 8 bytes, main.o(i.InicioFed))
-<BR><BR>[Stack]<UL><LI>Max Depth = 600<LI>Call Chain = InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[86]"></a>InicioFed</STRONG> (Thumb, 114 bytes, Stack size 8 bytes, main.o(i.InicioFed))
+<BR><BR>[Stack]<UL><LI>Max Depth = 608<LI>Call Chain = InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
-<LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<BR>[Calls]<UL><LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[88]"></a>receive</STRONG> (Thumb, 142 bytes, Stack size 536 bytes, main.o(i.receive))
-<BR><BR>[Stack]<UL><LI>Max Depth = 592<LI>Call Chain = receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[88]"></a>receive</STRONG> (Thumb, 166 bytes, Stack size 544 bytes, main.o(i.receive))
+<BR><BR>[Stack]<UL><LI>Max Depth = 600<LI>Call Chain = receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive
@@ -768,7 +766,7 @@ Local Symbols
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
 </UL>
 
-<P><STRONG><a name="[87]"></a>send</STRONG> (Thumb, 118 bytes, Stack size 24 bytes, main.o(i.send))
+<P><STRONG><a name="[87]"></a>send</STRONG> (Thumb, 136 bytes, Stack size 24 bytes, main.o(i.send))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = send &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit

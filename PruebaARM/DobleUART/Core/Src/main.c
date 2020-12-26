@@ -60,6 +60,7 @@ uint8_t ifdown[] = {0x00, 0x00, 0x10, 0x07, 0x17};
 uint8_t ComClear[] = {0x00, 0x00, 0x10, 0x00, 0x10};
 uint8_t Reset[] = {0x00, 0x00, 0x10, 0x03, 0x13};
 uint8_t Status[] = {0x00, 0x00, 0x11, 0x05, 0x14}; //Look the answer in the KBI pdf
+uint8_t Uptime[] = {0x00, 0x00, 0x11, 0x02, 0x13};
 uint8_t ReadChannel[] = {0x00, 0x00, 0x11, 0x12, 0x03};
 uint8_t WriteChannel[] = {0x00, 0x01, 0x10, 0x12, 0x08, 0x0B}; //Channel 15 predefined, change last uint8_t to change channell between 11-26
 uint8_t ReadRole[] = {0x00, 0x00, 0x11, 0x19, 0x08};
@@ -168,7 +169,9 @@ int main(void)
     /* USER CODE END WHILE */
 		send(Status,(sizeof(Status)/sizeof(Status[0])));
 		receive();
-		HAL_Delay(1000);
+		HAL_Delay(5000);
+		
+		
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -325,7 +328,7 @@ static  void InicioFed(void)
 	//Clear
 	HAL_Delay(1000);
 	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
-	HAL_Delay(1000);
+	HAL_Delay(3000);
 	
 	
 	
@@ -334,25 +337,25 @@ static  void InicioFed(void)
 	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])));
 	receive();
 	
+	//Join Credential
+	HAL_Delay(1000);
+	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])));
+	receive();
 	
 	//Role
 	HAL_Delay(1000);
 	//printf("Role\n\r");
-	send(WriteRole,(sizeof(WriteRole)/sizeof(WriteRole[0])));
+  send(WriteRole,(sizeof(WriteRole)/sizeof(WriteRole[0])));
 	receive();
 	
-	//Join Credential
-	HAL_Delay(1000);
-	send(WriteChannel,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])));
-	receive();
+	
+	
 
 	HAL_Delay(1000);
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
 	receive();
-	char *t = "\nejecutando ifup\n";
-	HAL_UART_Transmit(&huart2, t,16,10);
-	HAL_Delay(10000);
+	HAL_Delay(5000);
 }
 
 static void send(uint8_t *buffer, size_t size)
@@ -360,7 +363,7 @@ static void send(uint8_t *buffer, size_t size)
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
 	size_t numEncoded = encode(buffer, size, _encodeBuffer);
 	HAL_UART_Transmit(&huart1,&PacketMarker,sizeof(PacketMarker),1000);
-	HAL_UART_Transmit(&huart1,_encodeBuffer,numEncoded,1000);
+	HAL_UART_Transmit(&huart1,_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
 	
 }
 
@@ -374,11 +377,11 @@ static void receive()
 	
 	//HAL_Delay(10);	
 	uint8_t receivebuffer[512];	
-	size_t result;
+	uint8_t result;
 	int i=0;
 	uint8_t c;
 	char d[] = "\n\r";
-	while(HAL_UART_Receive(&huart1, &c,1,1) == HAL_OK)
+	while(HAL_UART_Receive(&huart1, &c,1,1000) == HAL_OK)
 	{
 		receivebuffer[i]=c;
 		i++;
@@ -389,8 +392,8 @@ static void receive()
 		result=cobs_decode(decodedbuffer,i*2 +1,uart_recvChar,(*receivebuffer)++);
 		
 	}while(result == 0);*/
-	decode(receivebuffer,i,decodedbuffer);
-	HAL_UART_Transmit(&huart2, decodedbuffer,i+1,10);
+	result=decode(receivebuffer,i*2 +1,decodedbuffer);
+	HAL_UART_Transmit(&huart2, decodedbuffer,i*2 +1,10);
 	//HAL_UART_Transmit(&huart2, &x,1,10);
 	
 
