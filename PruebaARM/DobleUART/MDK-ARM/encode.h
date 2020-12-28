@@ -1,4 +1,4 @@
-#include "main.h"
+#include <inttypes.h>
 
 static size_t encode(const uint8_t* buffer, size_t size, uint8_t* encodedBuffer)
 {

@@ -423,6 +423,11 @@
               <FileType>5</FileType>
               <FilePath>.\decoce2.h</FilePath>
             </File>
+            <File>
+              <FileName>Comandos.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Comandos.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

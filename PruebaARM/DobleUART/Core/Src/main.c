@@ -23,11 +23,12 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\encode.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\decode.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\comandos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\decode.h"
 
 //#include <time.h>
 
@@ -53,35 +54,6 @@ UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-uint8_t a = 0x32;
-size_t ReceiveBufferSize = 512;
-uint8_t ifup[] = {0x00, 0x00, 0x10, 0x08, 0x18};
-uint8_t ifdown[] = {0x00, 0x00, 0x10, 0x07, 0x17};
-uint8_t ComClear[] = {0x00, 0x00, 0x10, 0x00, 0x10};
-uint8_t Reset[] = {0x00, 0x00, 0x10, 0x03, 0x13};
-uint8_t Status[] = {0x00, 0x00, 0x11, 0x05, 0x14}; //Look the answer in the KBI pdf
-uint8_t Uptime[] = {0x00, 0x00, 0x11, 0x02, 0x13};
-uint8_t ReadChannel[] = {0x00, 0x00, 0x11, 0x12, 0x03};
-uint8_t WriteChannel[] = {0x00, 0x01, 0x10, 0x12, 0x08, 0x0B}; //Channel 15 predefined, change last uint8_t to change channell between 11-26
-uint8_t ReadRole[] = {0x00, 0x00, 0x11, 0x19, 0x08};
-uint8_t WriteRole[] = {0x00, 1, 16, 25, 11, 3}; //FED, look the table below and change the last uint8_t
-
-/* //CKS for WriteRole
-  0 = Not Configured
-  1 = Router -- CKS = 09
-  2 = REED (Router Elegible End Device) -- CKS = 0A
-  3 = FED (Full End Device) -- CKS = OB
-  4 = MED (Minimal End Device) -- CKS = 0C
-  5 = SED (Sleepy End Device) CKS = 0D
-  6 = Leader -- CKS = 0E
-
-  Modifications conditions
-  Status must be none, except none - saved configuration. Also allowed when status is joined to trigger some
-  role transition mechanisms (SED ? MED, SED ? FED, MED? FED).
-*/
-
-uint8_t ReadJoinCred[] = {0x00, 0x00, 0x11, 0x17, 0x06};
-uint8_t WriteJoinCred[] = {0x00, 0x10, 0x10, 0x17, 0x69, 0x38, 0x34, 0x30, 0x34, 0x44, 0x32, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x35, 0x46, 0x43};
 
 	
 
@@ -92,7 +64,8 @@ uint8_t WriteJoinCred[] = {0x00, 0x10, 0x10, 0x17, 0x69, 0x38, 0x34, 0x30, 0x34,
 
 	
 /* USER CODE END PV */
-	
+uint8_t a = 0x32;
+size_t ReceiveBufferSize = 512;
 #define RX_SIZE 512
 uint8_t PacketMarker = 0;
 uint8_t cadena[3];
@@ -116,6 +89,7 @@ static void MX_USART2_UART_Init(void);
 static void send(uint8_t *buffer, size_t size);
 static void receive(void);
 static void InicioFed(void);
+static void XOR_CKS(uint8_t *frame);
 uint8_t uart_recvChar(uint8_t *byte);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
@@ -169,8 +143,10 @@ int main(void)
     /* USER CODE END WHILE */
 		send(Status,(sizeof(Status)/sizeof(Status[0])));
 		receive();
+		HAL_Delay(1000);
+		send(ThreadVersion,(sizeof(ThreadVersion)/sizeof(ThreadVersion[0])));
+		receive();
 		HAL_Delay(5000);
-		
 		
     /* USER CODE BEGIN 3 */
   }
@@ -321,6 +297,16 @@ static void hextobin( const char *str, uint8_t *dst, size_t len )
     i1             = ( ( uint8_t ) str[ pos + 1 ] & 0x1F ) ^ 0x10;
     dst[ pos / 2 ] = ( uint8_t )( hashmap[ i0 ] << 4 ) | hashmap[ i1 ];
   };
+}
+
+static void XOR_CKS(uint8_t *frame)
+{
+	uint8_t cks = 0;
+	for(int i=0; i<((sizeof(frame))/(sizeof(frame[0])));i++)
+	{
+		if(i != CKS_POS)
+			cks ^= frame[i];
+	}
 }
 
 static  void InicioFed(void)
