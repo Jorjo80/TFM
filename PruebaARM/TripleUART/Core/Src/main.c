@@ -22,9 +22,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\encode.h"
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\decode.h"
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\DobleUART\MDK-ARM\comandos.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\encode.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\decode.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\comandos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -74,8 +74,9 @@ static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
-static void send(uint8_t *buffer, size_t size);
-static void receive(void);
+static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo);
+static void receive(UART_HandleTypeDef modulo);
+static void InicioLeader(void);
 static void InicioFed(void);
 static void XOR_CKS(uint8_t *frame);
 uint8_t uart_recvChar(uint8_t *byte);
@@ -124,13 +125,16 @@ int main(void)
 	//HAL_UART_Receive_IT(&huart1, cadena, 1);
 
   /* USER CODE END 2 */
-
+	InicioLeader();
+	InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
-
+		send(Status,(sizeof(Status)/sizeof(Status[0])), huart1);
+		receive(huart1);
+		HAL_Delay(5000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -329,43 +333,85 @@ static  void InicioFed(void)
 {
 	//Clear
 	HAL_Delay(1000);
-	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
+	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])), huart1);
 	HAL_Delay(3000);
 	
 	
 	
 	//Channel	
 	//printf("Channel\n\r");
-	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	receive();
+	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), huart1);
+	receive(huart1);
 	
 	//Join Credential
 	HAL_Delay(1000);
-	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])));
-	receive();
+	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), huart1);
+	receive(huart1);
 	
 	//Role
 	HAL_Delay(1000);
 	//printf("Role\n\r");
-  send(WriteRole,(sizeof(WriteRole)/sizeof(WriteRole[0])));
-	receive();
-	
-	
+  send(RoleFed,(sizeof(RoleFed)/sizeof(RoleFed[0])), huart1);
+	receive(huart1);	
 	
 
 	HAL_Delay(1000);
 	//IFUP
-	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
-	receive();
+	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), huart1);
+	receive(huart1);
 	HAL_Delay(5000);
 }
 
-static void send(uint8_t *buffer, size_t size)
+
+static  void InicioLeader(void)
+{
+	//Clear
+	HAL_Delay(1000);
+	send(ComClear,(sizeof(ComClear)/sizeof(ComClear[0])), huart3);
+	HAL_Delay(3000);
+	
+	
+	
+	//Channel	
+	//printf("Channel\n\r");
+	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), huart3);
+	receive(huart3);
+	
+	//Join Credential
+	HAL_Delay(1000);
+	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), huart3);
+	receive(huart3);
+	
+	//Role
+	HAL_Delay(1000);
+	//printf("Role\n\r");
+  send(RoleLeader,(sizeof(RoleLeader)/sizeof(RoleLeader[0])), huart3);
+	receive(huart3);
+		
+
+	HAL_Delay(1000);
+	//IFUP
+	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), huart3);
+	receive(huart3);
+	HAL_Delay(5000);
+	
+	send(CommissionerOn, (sizeof(CommissionerOn)/sizeof(CommissionerOn[0])),huart3);
+	receive(huart3);
+	HAL_Delay(1000);
+	
+	send(AddJoiner, (sizeof(AddJoiner)/sizeof(AddJoiner[0])),huart3);
+	receive(huart3);
+	HAL_Delay(1000);
+}
+
+
+
+static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo)
 {
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
 	size_t numEncoded = encode(buffer, size, _encodeBuffer);
-	HAL_UART_Transmit(&huart1,&PacketMarker,sizeof(PacketMarker),1000);
-	HAL_UART_Transmit(&huart1,_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
+	HAL_UART_Transmit(&modulo,&PacketMarker,sizeof(PacketMarker),1000);
+	HAL_UART_Transmit(&modulo,_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
 	
 }
 
@@ -374,7 +420,7 @@ uint8_t uart_recvChar(uint8_t *byte)
 	return (*byte);
 }
 
-static void receive()
+static void receive(UART_HandleTypeDef modulo)
 {
 	
 	//HAL_Delay(10);	
@@ -383,17 +429,19 @@ static void receive()
 	int i=0;
 	uint8_t c;
 	char d[] = "\n\r";
-	while(HAL_UART_Receive(&huart1, &c,1,1000) == HAL_OK)
+	while(HAL_UART_Receive(&modulo, &c,1,1000) == HAL_OK)
 	{
 		receivebuffer[i]=c;
 		i++;
 	}
 	uint8_t decodedbuffer[i*2 +1];
+	
 	/*do
 	{
 		result=cobs_decode(decodedbuffer,i*2 +1,uart_recvChar,(*receivebuffer)++);
 		
 	}while(result == 0);*/
+	
 	result=decode(receivebuffer,i*2 +1,decodedbuffer);
 	HAL_UART_Transmit(&huart2, decodedbuffer,i*2 +1,10);
 	//HAL_UART_Transmit(&huart2, &x,1,10);
