@@ -34,6 +34,7 @@
 
 /* USER CODE END Includes */
 
+
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 
@@ -57,8 +58,6 @@ UART_HandleTypeDef huart3;
 /* USER CODE BEGIN PV */
 
 	
-
-	
 #define FRAME_HEADER_LEN 5
 #define FRAME_PAYLOAD_MAX_LEN 1268
 
@@ -78,7 +77,8 @@ static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo);
 static void receive(UART_HandleTypeDef modulo);
 static void InicioLeader(void);
 static void InicioFed(void);
-static void XOR_CKS(uint8_t *frame);
+uint8_t *unite( uint8_t *buff1, uint8_t *buff2);
+static uint8_t XOR_CKS(uint8_t *frame);
 uint8_t uart_recvChar(uint8_t *byte);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
@@ -129,10 +129,24 @@ int main(void)
 	InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	HAL_Delay(1000);
+	
+	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),huart3);
+	receive(huart3);
+	HAL_Delay(200);
+	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),huart1);
+	receive(huart1);
+	HAL_Delay(1000);
+	
+	//SendHello[CKS_POS]=XOR_CKS(SendHello);
+	
   while (1)
   {
     /* USER CODE END WHILE */
 		send(Status,(sizeof(Status)/sizeof(Status[0])), huart1);
+		receive(huart1);
+		HAL_Delay(1000);
+		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), huart1);
 		receive(huart1);
 		HAL_Delay(5000);
     /* USER CODE BEGIN 3 */
@@ -319,7 +333,7 @@ static void hextobin( const char *str, uint8_t *dst, size_t len )
   };
 }
 
-static void XOR_CKS(uint8_t *frame)
+static uint8_t XOR_CKS(uint8_t *frame)
 {
 	uint8_t cks = 0;
 	for(int i=0; i<((sizeof(frame))/(sizeof(frame[0])));i++)
@@ -327,6 +341,7 @@ static void XOR_CKS(uint8_t *frame)
 		if(i != CKS_POS)
 			cks ^= frame[i];
 	}
+	return cks;
 }
 
 static  void InicioFed(void)
@@ -359,7 +374,11 @@ static  void InicioFed(void)
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), huart1);
 	receive(huart1);
-	HAL_Delay(5000);
+	HAL_Delay(10000);
+	
+	send(WriteIPFed, sizeof(WriteIPFed)/sizeof(WriteIPFed[0]),huart1);
+	receive(huart1);
+	HAL_Delay(1000);
 }
 
 
@@ -393,11 +412,18 @@ static  void InicioLeader(void)
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), huart3);
 	receive(huart3);
-	HAL_Delay(5000);
+	HAL_Delay(7000);
+	
+	send(WriteIPLeader, sizeof(WriteIPLeader)/sizeof(WriteIPLeader[0]),huart3);
+	receive(huart3);
+	HAL_Delay(1000);
+	
 	
 	send(CommissionerOn, (sizeof(CommissionerOn)/sizeof(CommissionerOn[0])),huart3);
 	receive(huart3);
 	HAL_Delay(1000);
+	
+	
 	
 	send(AddJoiner, (sizeof(AddJoiner)/sizeof(AddJoiner[0])),huart3);
 	receive(huart3);
@@ -405,7 +431,7 @@ static  void InicioLeader(void)
 }
 
 
-
+//Sending the command to the huart selected
 static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo)
 {
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
@@ -420,6 +446,8 @@ uint8_t uart_recvChar(uint8_t *byte)
 	return (*byte);
 }
 
+
+
 static void receive(UART_HandleTypeDef modulo)
 {
 	
@@ -428,7 +456,7 @@ static void receive(UART_HandleTypeDef modulo)
 	uint8_t result;
 	int i=0;
 	uint8_t c;
-	char d[] = "\n\r";
+	
 	while(HAL_UART_Receive(&modulo, &c,1,1000) == HAL_OK)
 	{
 		receivebuffer[i]=c;
@@ -445,10 +473,8 @@ static void receive(UART_HandleTypeDef modulo)
 	result=decode(receivebuffer,i*2 +1,decodedbuffer);
 	HAL_UART_Transmit(&huart2, decodedbuffer,i*2 +1,10);
 	//HAL_UART_Transmit(&huart2, &x,1,10);
-	
 
 }
-/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.
