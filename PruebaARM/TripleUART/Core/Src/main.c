@@ -56,7 +56,20 @@ UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
+uint8_t a = 0x32;
+size_t ReceiveBufferSize = 512;
+#define RX_SIZE 512
+uint8_t cadena[3];
+uint8_t receiveFed[RX_SIZE];
+uint8_t receiveLeader[RX_SIZE];
+volatile int indice1 = 0;
+volatile int indice2 = 0;
 
+/*int __io_putchar(int ch)
+{
+	HAL_UART_Transmit(&huart2,(uint8_t*)&ch, 1,100);
+	return ch;
+}*/
 	
 #define FRAME_HEADER_LEN 5
 #define FRAME_PAYLOAD_MAX_LEN 1268
@@ -480,6 +493,44 @@ static void receive(UART_HandleTypeDef modulo)
   * @brief  This function is executed in case of error occurrence.
   * @retval None
   */
+
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  /* Prevent unused argument(s) compilation warning */
+  //UNUSED(huart);
+	if(huart->Instance == USART1)
+	{
+		uint8_t datoA = cadena[0];
+		receiveFed[indice1++] = datoA;
+		if(indice1 >= RX_SIZE)
+		{
+			indice1 = 0;
+		}
+		if(indice1 >= RX_SIZE)
+		{
+			indice1 = 0;
+		}
+		HAL_UART_Receive_IT(&huart1, cadena, 1);
+	}
+	if(huart->Instance == USART3)
+	{
+		uint8_t datoB = cadena[0];
+		receiveLeader[indice2++] = datoB;
+		if(indice2 >= RX_SIZE)
+		{
+			indice2 = 0;
+		}
+		if(indice2 >= RX_SIZE)
+		{
+			indice2 = 0;
+		}
+		
+		HAL_UART_Receive_IT(&huart3, cadena, 1);
+	}  
+}
+
+
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
