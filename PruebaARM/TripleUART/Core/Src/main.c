@@ -23,8 +23,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\encode.h"
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\decode.h"
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\comandos.h"
+//#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\decode.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\Comandos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -151,7 +151,7 @@ int main(void)
 	receive(huart1);
 	HAL_Delay(1000);
 	
-	//SendHello[CKS_POS]=XOR_CKS(SendHello);
+	SendHello[CKS_POS]=XOR_CKS(SendHello);
 	
   while (1)
   {
@@ -352,8 +352,9 @@ static uint8_t XOR_CKS(uint8_t *frame)
 	for(int i=0; i<((sizeof(frame))/(sizeof(frame[0])));i++)
 	{
 		if(i != CKS_POS)
-			cks ^= frame[i];
+			cks = cks^frame[i];
 	}
+	frame[CKS_POS] = cks;
 	return cks;
 }
 
@@ -556,4 +557,3 @@ void assert_failed(uint8_t *file, uint32_t line)
 }
 #endif /* USE_FULL_ASSERT */
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

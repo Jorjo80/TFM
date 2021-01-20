@@ -4,7 +4,7 @@
 #define CMD_READ 0x11
 #define CMD_DELETE 0x12
 
-#define CKS_POS 5
+#define CKS_POS 4
 
 uint8_t PacketMarker = 0;
 
