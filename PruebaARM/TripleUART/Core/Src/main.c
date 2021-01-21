@@ -151,7 +151,7 @@ int main(void)
 	receive(huart1);
 	HAL_Delay(1000);
 	
-	SendHello[CKS_POS]=XOR_CKS(SendHello);
+	
 	
   while (1)
   {
@@ -352,7 +352,7 @@ static uint8_t XOR_CKS(uint8_t *frame)
 	for(int i=0; i<((sizeof(frame))/(sizeof(frame[0])));i++)
 	{
 		if(i != CKS_POS)
-			cks = cks^frame[i];
+			cks = cks ^ frame[i];
 	}
 	frame[CKS_POS] = cks;
 	return cks;
@@ -409,6 +409,7 @@ static  void InicioLeader(void)
 	//printf("Channel\n\r");
 	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), huart3);
 	receive(huart3);
+	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), huart2);
 	
 	//Join Credential
 	HAL_Delay(1000);
@@ -420,6 +421,7 @@ static  void InicioLeader(void)
 	//printf("Role\n\r");
   send(RoleLeader,(sizeof(RoleLeader)/sizeof(RoleLeader[0])), huart3);
 	receive(huart3);
+	send(RoleLeader,(sizeof(RoleLeader)/sizeof(RoleLeader[0])), huart2);
 		
 
 	HAL_Delay(1000);
@@ -449,6 +451,13 @@ static  void InicioLeader(void)
 static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo)
 {
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
+	uint8_t cks = 0x00;
+	for(int i=0; i<=((sizeof(buffer))/(sizeof(buffer[0])));i++)
+	{
+		if(i != CKS_POS)
+			cks ^= buffer[i];
+	}
+	buffer[CKS_POS] = cks;
 	size_t numEncoded = encode(buffer, size, _encodeBuffer);
 	HAL_UART_Transmit(&modulo,&PacketMarker,sizeof(PacketMarker),1000);
 	HAL_UART_Transmit(&modulo,_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
