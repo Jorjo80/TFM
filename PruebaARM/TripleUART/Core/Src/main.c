@@ -19,7 +19,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\encode.h"
@@ -64,6 +63,10 @@ uint8_t receiveFed[RX_SIZE];
 uint8_t receiveLeader[RX_SIZE];
 volatile int indice1 = 0;
 volatile int indice2 = 0;
+size_t CMD_Len;
+//NETWORK CONFIG
+
+uint8_t IPFed[]= {0xab, 0xcd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x34, 0x12};
 
 /*int __io_putchar(int ch)
 {
@@ -90,8 +93,8 @@ static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo);
 static void receive(UART_HandleTypeDef modulo);
 static void InicioLeader(void);
 static void InicioFed(void);
-uint8_t *unite( uint8_t *buff1, uint8_t *buff2);
-static uint8_t XOR_CKS(uint8_t *frame);
+void unite( uint8_t *buff1, uint8_t *buff2, uint8_t *out);
+static uint8_t XOR_CKS(uint8_t *frame,size_t size);
 uint8_t uart_recvChar(uint8_t *byte);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
@@ -346,17 +349,20 @@ static void hextobin( const char *str, uint8_t *dst, size_t len )
   };
 }
 
-static uint8_t XOR_CKS(uint8_t *frame)
+static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 {
 	uint8_t cks = 0;
-	for(int i=0; i<((sizeof(frame))/(sizeof(frame[0])));i++)
+	for(int i=0; i<size;i++)
 	{
 		if(i != CKS_POS)
-			cks = cks ^ frame[i];
+			cks ^= frame[i];
+		else
+			cks=cks;
 	}
-	frame[CKS_POS] = cks;
 	return cks;
+	
 }
+
 
 static  void InicioFed(void)
 {
@@ -390,7 +396,9 @@ static  void InicioFed(void)
 	receive(huart1);
 	HAL_Delay(10000);
 	
-	send(WriteIPFed, sizeof(WriteIPFed)/sizeof(WriteIPFed[0]),huart1);
+	uint8_t *SetIP;
+	unite(WriteIP,IPFed, SetIP);
+	send(SetIP, sizeof(SetIP)/sizeof(SetIP[0]),huart1);
 	receive(huart1);
 	HAL_Delay(1000);
 }
@@ -451,13 +459,8 @@ static  void InicioLeader(void)
 static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo)
 {
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
-	uint8_t cks = 0x00;
-	for(int i=0; i<=((sizeof(buffer))/(sizeof(buffer[0])));i++)
-	{
-		if(i != CKS_POS)
-			cks ^= buffer[i];
-	}
-	buffer[CKS_POS] = cks;
+
+	buffer[CKS_POS]=XOR_CKS(buffer, size);
 	size_t numEncoded = encode(buffer, size, _encodeBuffer);
 	HAL_UART_Transmit(&modulo,&PacketMarker,sizeof(PacketMarker),1000);
 	HAL_UART_Transmit(&modulo,_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
@@ -476,7 +479,7 @@ static void receive(UART_HandleTypeDef modulo)
 	
 	//HAL_Delay(10);	
 	uint8_t receivebuffer[512];	
-	uint8_t result;
+	//uint8_t result;
 	int i=0;
 	uint8_t c;
 	
@@ -493,7 +496,7 @@ static void receive(UART_HandleTypeDef modulo)
 		
 	}while(result == 0);*/
 	
-	result=decode(receivebuffer,i*2 +1,decodedbuffer);
+	decode(receivebuffer,i*2 +1,decodedbuffer);
 	HAL_UART_Transmit(&huart2, decodedbuffer,i*2 +1,10);
 	//HAL_UART_Transmit(&huart2, &x,1,10);
 
@@ -540,6 +543,21 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 	}  
 }
 
+void unite(uint8_t *buff1, uint8_t *buff2, uint8_t *out)
+{
+	size_t size1 = (sizeof(buff1)/sizeof(buff1[0]));
+	size_t size2 = (sizeof(buff2)/sizeof(buff2[0]));
+	
+	for(int i = 0; i<size1;i++)
+	{
+		out[i] = buff1[i];
+	}
+	for(int i = size1, p=0; i<(size1 + size2); i++, p++)
+	{
+		out[i] = buff2[p];
+	}
+		
+}
 
 void Error_Handler(void)
 {
