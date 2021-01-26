@@ -22,7 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\encode.h"
-//#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\decode.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\decode.h"
 #include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\Comandos.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,7 +95,7 @@ static void InicioLeader(void);
 static void InicioFed(void);
 void unite( uint8_t *buff1, uint8_t *buff2, uint8_t *out);
 static uint8_t XOR_CKS(uint8_t *frame,size_t size);
-uint8_t uart_recvChar(uint8_t *byte);
+uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
 /* USER CODE END PFP */
@@ -141,7 +141,7 @@ int main(void)
 	//HAL_UART_Receive_IT(&huart1, cadena, 1);
 
   /* USER CODE END 2 */
-	InicioLeader();
+	//InicioLeader();
 	InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -467,8 +467,9 @@ static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo)
 	
 }
 
-uint8_t uart_recvChar(uint8_t *byte) 
+uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo) 
 {
+	HAL_UART_Receive(modulo, byte,1,1000);
 	return (*byte);
 }
 
@@ -479,25 +480,26 @@ static void receive(UART_HandleTypeDef modulo)
 	
 	//HAL_Delay(10);	
 	uint8_t receivebuffer[512];	
-	//uint8_t result;
+	uint8_t result;
 	int i=0;
 	uint8_t c;
 	
-	while(HAL_UART_Receive(&modulo, &c,1,1000) == HAL_OK)
+	/*while(HAL_UART_Receive(&modulo, &c,1,1000) == HAL_OK)
 	{
 		receivebuffer[i]=c;
 		i++;
-	}
-	uint8_t decodedbuffer[i*2 +1];
-	
-	/*do
+	}*/
+	//size_t RXSIZE = sizeof(receivebuffer)/sizeof(receivebuffer[0]);
+	uint8_t decodedbuffer[100];
+	int t = 0;
+	do
 	{
-		result=cobs_decode(decodedbuffer,i*2 +1,uart_recvChar,(*receivebuffer)++);
-		
-	}while(result == 0);*/
+		result=cobs_decode(decodedbuffer,100,uart_recvChar, &modulo);
+		t++;
+	}while(result == 0);
 	
-	decode(receivebuffer,i*2 +1,decodedbuffer);
-	HAL_UART_Transmit(&huart2, decodedbuffer,i*2 +1,10);
+	//decode(receivebuffer,RXSIZE,decodedbuffer);
+	HAL_UART_Transmit(&huart2, decodedbuffer,result,10);
 	//HAL_UART_Transmit(&huart2, &x,1,10);
 
 }
