@@ -399,16 +399,6 @@
               <FilePath>.\decode.h</FilePath>
             </File>
             <File>
-              <FileName>encode.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\encode.h</FilePath>
-            </File>
-            <File>
-              <FileName>decoce2.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\decoce2.h</FilePath>
-            </File>
-            <File>
               <FileName>Comandos.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Comandos.h</FilePath>
@@ -429,9 +419,14 @@
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>Transmission.h</FileName>
+              <FileName>COBS_propio.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\Transmission.h</FilePath>
+              <FilePath>.\COBS_propio.h</FilePath>
+            </File>
+            <File>
+              <FileName>COBS_Kirale.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\COBS_Kirale.h</FilePath>
             </File>
           </Files>
         </Group>

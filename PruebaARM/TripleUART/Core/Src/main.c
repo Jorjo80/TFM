@@ -21,8 +21,8 @@
 #include "main.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\encode.h"
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\decode.h"
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS_propio.h" //Primer COBS usado, falla en algunos casos la decodificación
+#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS_Kirale.h"
 #include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\Comandos.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -396,11 +396,11 @@ static  void InicioFed(void)
 	receive(huart1);
 	HAL_Delay(10000);
 	
-	uint8_t *SetIP;
+	/*uint8_t *SetIP;
 	unite(WriteIP,IPFed, SetIP);
 	send(SetIP, sizeof(SetIP)/sizeof(SetIP[0]),huart1);
 	receive(huart1);
-	HAL_Delay(1000);
+	HAL_Delay(1000);*/
 }
 
 
@@ -480,7 +480,7 @@ static void receive(UART_HandleTypeDef modulo)
 	
 	//HAL_Delay(10);	
 	uint8_t receivebuffer[512];	
-	uint8_t result;
+	int16_t result;
 	int i=0;
 	uint8_t c;
 	
