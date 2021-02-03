@@ -21,7 +21,7 @@
 #include "main.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS_propio.h" //Primer COBS usado, falla en algunos casos la decodificación
+
 #include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS_Kirale.h"
 #include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\Comandos.h"
 #include <stdio.h>
@@ -89,13 +89,14 @@ static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
-static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo);
-static void receive(UART_HandleTypeDef modulo);
+static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef *modulo);
+static void receive(UART_HandleTypeDef *modulo);
 static void InicioLeader(void);
 static void InicioFed(void);
 void unite( uint8_t *buff1, uint8_t *buff2, uint8_t *out);
 static uint8_t XOR_CKS(uint8_t *frame,size_t size);
 uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo);
+void uart_sendChar(uint8_t byte, UART_HandleTypeDef *modulo);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
 /* USER CODE END PFP */
@@ -141,17 +142,17 @@ int main(void)
 	//HAL_UART_Receive_IT(&huart1, cadena, 1);
 
   /* USER CODE END 2 */
-	//InicioLeader();
+	InicioLeader();
 	InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	HAL_Delay(1000);
 	
-	/*send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),huart3);
-	receive(huart3);
-	HAL_Delay(200);*/
-	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),huart1);
-	receive(huart1);
+	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),&huart3);
+	receive(&huart3);
+	HAL_Delay(200);
+	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),&huart1);
+	receive(&huart1);
 	HAL_Delay(1000);
 	
 	
@@ -159,11 +160,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-		send(Status,(sizeof(Status)/sizeof(Status[0])), huart1);
-		receive(huart1);
+		send(Status,(sizeof(Status)/sizeof(Status[0])), &huart1);
+		receive(&huart1);
 		HAL_Delay(1000);
-		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), huart1);
-		receive(huart1);
+		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
+		receive(&huart1);
 		HAL_Delay(5000);
     /* USER CODE BEGIN 3 */
   }
@@ -368,32 +369,32 @@ static  void InicioFed(void)
 {
 	//Clear
 	HAL_Delay(1000);
-	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])), huart1);
+	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])), &huart1);
 	HAL_Delay(3000);
 	
 	
 	
 	//Channel	
 	//printf("Channel\n\r");
-	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), huart1);
-	receive(huart1);
+	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), &huart1);
+	receive(&huart1);
 	
 	//Join Credential
 	HAL_Delay(1000);
-	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), huart1);
-	receive(huart1);
+	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), &huart1);
+	receive(&huart1);
 	
 	//Role
 	HAL_Delay(1000);
 	//printf("Role\n\r");
-  send(RoleFed,(sizeof(RoleFed)/sizeof(RoleFed[0])), huart1);
-	receive(huart1);	
+  send(RoleFed,(sizeof(RoleFed)/sizeof(RoleFed[0])), &huart1);
+	receive(&huart1);	
 	
 
 	HAL_Delay(1000);
 	//IFUP
-	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), huart1);
-	receive(huart1);
+	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), &huart1);
+	receive(&huart1);
 	HAL_Delay(10000);
 	
 	/*uint8_t *SetIP;
@@ -408,63 +409,68 @@ static  void InicioLeader(void)
 {
 	//Clear
 	HAL_Delay(1000);
-	send(ComClear,(sizeof(ComClear)/sizeof(ComClear[0])), huart3);
+	send(ComClear,(sizeof(ComClear)/sizeof(ComClear[0])), &huart3);
 	HAL_Delay(3000);
 	
 	
 	
 	//Channel	
 	//printf("Channel\n\r");
-	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), huart3);
-	receive(huart3);
-	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), huart2);
+	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), &huart3);
+	receive(&huart3);
+	
 	
 	//Join Credential
 	HAL_Delay(1000);
-	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), huart3);
-	receive(huart3);
+	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), &huart3);
+	receive(&huart3);
 	
 	//Role
 	HAL_Delay(1000);
 	//printf("Role\n\r");
-  send(RoleLeader,(sizeof(RoleLeader)/sizeof(RoleLeader[0])), huart3);
-	receive(huart3);
-	send(RoleLeader,(sizeof(RoleLeader)/sizeof(RoleLeader[0])), huart2);
+  send(RoleLeader,(sizeof(RoleLeader)/sizeof(RoleLeader[0])), &huart3);
+	receive(&huart3);
+
 		
 
 	HAL_Delay(1000);
 	//IFUP
-	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), huart3);
-	receive(huart3);
+	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), &huart3);
+	receive(&huart3);
 	HAL_Delay(7000);
 	
-	send(WriteIPLeader, sizeof(WriteIPLeader)/sizeof(WriteIPLeader[0]),huart3);
-	receive(huart3);
+	send(WriteIPLeader, sizeof(WriteIPLeader)/sizeof(WriteIPLeader[0]),&huart3);
+	receive(&huart3);
 	HAL_Delay(1000);
 	
 	
-	send(CommissionerOn, (sizeof(CommissionerOn)/sizeof(CommissionerOn[0])),huart3);
-	receive(huart3);
+	send(CommissionerOn, (sizeof(CommissionerOn)/sizeof(CommissionerOn[0])),&huart3);
+	receive(&huart3);
 	HAL_Delay(1000);
 	
 	
 	
-	send(AddJoiner, (sizeof(AddJoiner)/sizeof(AddJoiner[0])),huart3);
-	receive(huart3);
+	send(AddJoiner, (sizeof(AddJoiner)/sizeof(AddJoiner[0])),&huart3);
+	receive(&huart3);
 	HAL_Delay(1000);
 }
 
 
 //Sending the command to the huart selected
-static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo)
+static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef *modulo)
 {
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
 
 	buffer[CKS_POS]=XOR_CKS(buffer, size);
 	size_t numEncoded = encode(buffer, size, _encodeBuffer);
-	HAL_UART_Transmit(&modulo,&PacketMarker,sizeof(PacketMarker),1000);
-	HAL_UART_Transmit(&modulo,_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
-	
+	HAL_UART_Transmit(modulo,&PacketMarker,sizeof(PacketMarker),1000);
+	HAL_UART_Transmit(modulo,_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
+	//cobs_encode(buffer,size,uart_sendChar, modulo);	
+}
+
+void uart_sendChar(uint8_t byte, UART_HandleTypeDef *modulo)
+{
+	HAL_UART_Transmit(modulo,&byte,1,1000);
 }
 
 uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo) 
@@ -475,26 +481,15 @@ uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo)
 
 
 
-static void receive(UART_HandleTypeDef modulo)
+static void receive(UART_HandleTypeDef *modulo)
 {
 	
-	//HAL_Delay(10);	
-	uint8_t receivebuffer[512];	
 	int16_t result;
-	int i=0;
-	uint8_t c;
-	
-	/*while(HAL_UART_Receive(&modulo, &c,1,1000) == HAL_OK)
-	{
-		receivebuffer[i]=c;
-		i++;
-	}*/
-	//size_t RXSIZE = sizeof(receivebuffer)/sizeof(receivebuffer[0]);
-	uint8_t decodedbuffer[100];
+	uint8_t decodedbuffer[512];
 	int t = 0;
 	do
 	{
-		result=cobs_decode(decodedbuffer,100,uart_recvChar, &modulo);
+		result=cobs_decode(decodedbuffer,512,uart_recvChar, modulo);
 		t++;
 	}while(result == 0);
 	

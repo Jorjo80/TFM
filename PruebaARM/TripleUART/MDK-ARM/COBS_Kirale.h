@@ -24,7 +24,7 @@
 ****************************************************************************/
 
 /* Encoded byte output function. */
-typedef void ( *cobs_byteOut_t )( uint8_t );
+typedef void ( *cobs_byteOut_t )( uint8_t c, UART_HandleTypeDef *m );
 
 /* Encoded byte input function. */
 typedef uint8_t ( *cobs_byteIn_t )( uint8_t *c , UART_HandleTypeDef *m);
@@ -83,6 +83,303 @@ static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last);
 #define debug_tx( ... ) ( void ) 0
 #define debug_rx( ... ) ( void ) 0
 #endif /* DEBUG_COBS*/
+
+// COBS ENCODE PROPIO
+static size_t getEncodedBufferSize(size_t unencodedBufferSize)
+{
+		return unencodedBufferSize + unencodedBufferSize / 254 + 1;
+}
+
+static size_t encode(const uint8_t* buffer, size_t size, uint8_t* encodedBuffer)
+{
+		size_t read_index  = 0;
+		size_t write_index = 1;
+		size_t code_index  = 0;
+		uint8_t code       = 1;
+
+		while (read_index < size)
+		{
+				if (buffer[read_index] == 0)
+				{
+						encodedBuffer[code_index] = code;
+						code = 1;
+						code_index = write_index++;
+						read_index++;
+				}
+				else
+				{
+						encodedBuffer[write_index++] = buffer[read_index++];
+						code++;
+
+						if (code == 0xFF)
+						{
+								encodedBuffer[code_index] = code;
+								code = 1;
+								code_index = write_index++;
+						}
+				}
+		}
+
+		encodedBuffer[code_index] = code;
+
+		return write_index;
+}
+
+// COBS KIRALE
+
+int16_t cobs_encode(uint8_t *buff, uint16_t len, cobs_byteOut_t output, UART_HandleTypeDef *modulo)
+{
+	struct usart_tx_s usart_txPkt;
+	uint8_t *         tmpPtr = buff;
+	uint8_t *         lastZeroPtr = NULL;
+	uint8_t *         codePtr = NULL;
+	uint16_t          codePos = 0;
+	uint16_t          code = 0x01;
+	uint8_t           numZeroes = 0;
+	int16_t           outIdx = 0;
+
+	/* Initialize COBS structure. */
+	memset(&usart_txPkt, 0, sizeof(struct usart_tx_s));
+	codePtr = usart_txPkt.cobs.code;
+
+	/*
+	 * proBytes = number of encoded bytes
+	 * length   = Number of in data bytes to encode
+	 */
+	while (usart_txPkt.proBytes < len)
+	{
+		if (*tmpPtr == 0)
+		{
+			numZeroes++;
+			if ((numZeroes == 2) && (code != 0x01))
+			{
+				if ((code + 0xDF) <= 0xFE)
+				{
+					/* The (n-E0) data bytes, plus two trailing zeroes. */
+					code += 0xDF;
+					numZeroes = 0;
+				}
+				else
+				{
+					/* The (n-1) data bytes followed by a single zero. */
+					numZeroes = 1;
+				}
+
+				*codePtr = code;
+				usart_txPkt.totBytes++;
+				if (codePtr == usart_txPkt.cobs.code + usart_txPkt.cobs.codePos)
+				{
+					usart_txPkt.cobs.pos[usart_txPkt.cobs.codePos] = codePos;
+					usart_txPkt.cobs.codePos++;
+				}
+
+				/* Reset counters. */
+				codePtr = tmpPtr;
+				codePos = usart_txPkt.proBytes;
+				code = 0x01;
+			}
+			else if (numZeroes == 0x0F)
+			{
+				/* We have reached maximun number of zeroes in a row. */
+				code = numZeroes + 0xD0;
+				codePtr = lastZeroPtr;
+				*codePtr = code;
+				usart_txPkt.totBytes++;
+
+				/* Reset counters. */
+				codePtr = tmpPtr;
+				codePos = usart_txPkt.proBytes;
+				numZeroes = 0;
+				code = 0x01;
+			}
+			else if ((codePtr ==
+				usart_txPkt.cobs.code + usart_txPkt.cobs.codePos) &&
+				(code == 0x01) && (numZeroes == 1))
+			{
+				codePtr = tmpPtr;
+				codePos = usart_txPkt.proBytes;
+			}
+
+			lastZeroPtr = tmpPtr;
+		}
+		else if (numZeroes)
+		{
+			/* Finish previous block. */
+			if (numZeroes < 3)
+			{
+				if (code == 0x01)
+				{
+					if (numZeroes == 2)
+					{
+						/* The (n-E0) data bytes, plus two trailing zeroes. */
+						code += 0xDF;
+					}
+					else
+					{
+						/* The (n-1) data bytes followed by a single zero. */
+						/* Nothing to do. */
+					}
+
+					*codePtr = code;
+					usart_txPkt.totBytes++;
+
+					if (codePtr != lastZeroPtr)
+					{
+						codePtr = lastZeroPtr;
+						codePos = usart_txPkt.proBytes - 1;
+					}
+					else
+					{
+						/* Add aditional byte. */
+						codePtr = usart_txPkt.cobs.code + usart_txPkt.cobs.codePos;
+						codePos = usart_txPkt.proBytes;
+					}
+				}
+				else
+				{
+					/* The (n-1) data bytes followed by a single zero. */
+					*codePtr = code;
+					usart_txPkt.totBytes++;
+
+					if (codePtr == usart_txPkt.cobs.code + usart_txPkt.cobs.codePos)
+					{
+						usart_txPkt.cobs.pos[usart_txPkt.cobs.codePos] = codePos;
+						usart_txPkt.cobs.codePos++;
+					}
+
+					codePtr = lastZeroPtr;
+					codePos = usart_txPkt.proBytes - 1;
+				}
+			}
+			else
+			{
+				/* A run of (n-D0) zeroes. */
+				code = numZeroes + 0xD0;
+				*codePtr = code;
+				usart_txPkt.totBytes++;
+				codePtr = lastZeroPtr;
+				codePos = usart_txPkt.proBytes - 1;
+			}
+
+			/* Reset counters. */
+			numZeroes = 0;
+			code = 0x02;
+			usart_txPkt.totBytes++;
+		}
+		else
+		{
+			/* Increment code. */
+			code++;
+			if (code == 0xD0)
+			{
+				/*
+				 * We have reached the maximum number of bytes not followed by a
+				 * zero.
+				 */
+				*codePtr = 0xD0;
+				usart_txPkt.totBytes++;
+				if (codePtr == usart_txPkt.cobs.code + usart_txPkt.cobs.codePos)
+				{
+					usart_txPkt.cobs.pos[usart_txPkt.cobs.codePos] = codePos;
+					usart_txPkt.cobs.codePos++;
+				}
+
+				/* Add aditional byte.*/
+				codePtr = usart_txPkt.cobs.code + usart_txPkt.cobs.codePos;
+				codePos = usart_txPkt.proBytes + 1;
+
+				/* Reset counters. */
+				code = 0x01;
+			}
+
+			usart_txPkt.totBytes++;
+		}
+
+		/* Increment pointers. */
+		tmpPtr++;
+		usart_txPkt.proBytes++;
+	}
+
+	/* Finish message. */
+	numZeroes++;
+	if (numZeroes == 2)
+	{
+		if ((code + 0xDF) <= 0xFE)
+		{
+			/* The (n-E0) data bytes, plus two trailing zeroes. */
+			code += 0xDF;
+		}
+		else
+		{
+			/* The (n-1) data bytes followed by a single zero. */
+			*codePtr = code;
+			usart_txPkt.totBytes++;
+			if (codePtr == usart_txPkt.cobs.code + usart_txPkt.cobs.codePos)
+			{
+				usart_txPkt.cobs.pos[usart_txPkt.cobs.codePos] = codePos;
+				usart_txPkt.cobs.codePos++;
+			}
+
+			codePtr = lastZeroPtr;
+			code = 0x01;
+		}
+	}
+	else if (numZeroes > 2)
+	{
+		/* A run of zeroes. */
+		code = numZeroes + 0xD0;
+	}
+
+	*codePtr = code;
+	usart_txPkt.totBytes++;
+	if (codePtr == usart_txPkt.cobs.code + usart_txPkt.cobs.codePos)
+		usart_txPkt.cobs.pos[usart_txPkt.cobs.codePos] = codePos;
+
+	/* Send out encoded bytes through the callback */
+	usart_txPkt.proBytes = 0;
+	usart_txPkt.cobs.codePos = 0;
+	while (outIdx < usart_txPkt.totBytes + 1)
+	{
+		if (outIdx == 0)
+		{
+			/* First zero as start delimiter */
+			debug_tx(0x00, 1, outIdx == usart_txPkt.totBytes);
+			output(0x00, modulo);
+			outIdx++;
+		}
+		else if ((usart_txPkt.cobs.pos[usart_txPkt.cobs.codePos] ==
+			usart_txPkt.proBytes) &&
+			(usart_txPkt.cobs.code[usart_txPkt.cobs.codePos] != 0))
+		{
+			debug_tx(usart_txPkt.cobs.code[usart_txPkt.cobs.codePos], 0,
+				outIdx == usart_txPkt.totBytes);
+			output(usart_txPkt.cobs.code[usart_txPkt.cobs.codePos], modulo);
+			usart_txPkt.cobs.codePos++;
+			outIdx++;
+		}
+		else
+		{
+			uint8_t data = 0;
+
+			while (data == 0)
+			{
+				data = buff[usart_txPkt.proBytes++];
+				if (data != 0)
+				{
+					debug_tx(data, 0, outIdx == usart_txPkt.totBytes);
+					output(data,modulo);
+					outIdx++;
+				}
+			}
+		}
+	}
+
+	return (outIdx);
+}
+
+
+
+
 
 int16_t cobs_decode(uint8_t *buff, uint16_t len, cobs_byteIn_t input, UART_HandleTypeDef *modulo)
 {
