@@ -147,9 +147,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	HAL_Delay(1000);
 	
-	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),huart3);
+	/*send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),huart3);
 	receive(huart3);
-	HAL_Delay(200);
+	HAL_Delay(200);*/
 	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),huart1);
 	receive(huart1);
 	HAL_Delay(1000);
@@ -470,7 +470,7 @@ static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef modulo)
 uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo) 
 {
 	HAL_UART_Receive(modulo, byte,1,1000);
-	return (*byte);
+	return 1;
 }
 
 

@@ -3,7 +3,7 @@
 <title>Static Call Graph - [UART\UART.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image UART\UART.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Jan 27 19:19:57 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Feb 03 18:00:58 2021
 <BR><P>
 <H3>Maximum Stack Usage =        576 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -747,7 +747,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 </UL>
 
-<P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 894 bytes, Stack size 264 bytes, main.o(i.main))
+<P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 712 bytes, Stack size 264 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 576<LI>Call Chain = main &rArr; InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
@@ -767,8 +767,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 </UL>
 
-<P><STRONG><a name="[5f]"></a>uart_recvChar</STRONG> (Thumb, 24 bytes, Stack size 16 bytes, main.o(i.uart_recvChar))
-<BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = uart_recvChar &rArr; HAL_UART_Receive &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[5f]"></a>uart_recvChar</STRONG> (Thumb, 22 bytes, Stack size 8 bytes, main.o(i.uart_recvChar))
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = uart_recvChar &rArr; HAL_UART_Receive &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Receive
 </UL>

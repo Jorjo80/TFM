@@ -709,14 +709,14 @@ Image Symbol Table
     i.cobs_decode                            0x0800175c   Section        0  main.o(i.cobs_decode)
     i.free                                   0x08001864   Section        0  malloc.o(i.free)
     i.main                                   0x080018b4   Section        0  main.o(i.main)
-    i.malloc                                 0x08001c4c   Section        0  malloc.o(i.malloc)
-    i.receive                                0x08001cb8   Section        0  main.o(i.receive)
-    receive                                  0x08001cb9   Thumb Code    40  main.o(i.receive)
-    i.send                                   0x08001ce8   Section        0  main.o(i.send)
-    send                                     0x08001ce9   Thumb Code   164  main.o(i.send)
-    i.uart_recvChar                          0x08001d90   Section        0  main.o(i.uart_recvChar)
-    .constdata                               0x08001da8   Section       16  system_stm32f4xx.o(.constdata)
-    .constdata                               0x08001db8   Section        8  system_stm32f4xx.o(.constdata)
+    i.malloc                                 0x08001b94   Section        0  malloc.o(i.malloc)
+    i.receive                                0x08001c00   Section        0  main.o(i.receive)
+    receive                                  0x08001c01   Thumb Code    40  main.o(i.receive)
+    i.send                                   0x08001c30   Section        0  main.o(i.send)
+    send                                     0x08001c31   Thumb Code   164  main.o(i.send)
+    i.uart_recvChar                          0x08001cd8   Section        0  main.o(i.uart_recvChar)
+    .constdata                               0x08001cee   Section       16  system_stm32f4xx.o(.constdata)
+    .constdata                               0x08001cfe   Section        8  system_stm32f4xx.o(.constdata)
     .data                                    0x20000000   Section      106  main.o(.data)
     usart_rxPkt                              0x2000002e   Data           8  main.o(.data)
     .data                                    0x2000006c   Section       12  stm32f4xx_hal.o(.data)
@@ -893,13 +893,13 @@ Image Symbol Table
     __scatterload_zeroinit                   0x0800174f   Thumb Code    14  handlers.o(i.__scatterload_zeroinit)
     cobs_decode                              0x0800175d   Thumb Code   258  main.o(i.cobs_decode)
     free                                     0x08001865   Thumb Code    76  malloc.o(i.free)
-    main                                     0x080018b5   Thumb Code   894  main.o(i.main)
-    malloc                                   0x08001c4d   Thumb Code    92  malloc.o(i.malloc)
-    uart_recvChar                            0x08001d91   Thumb Code    24  main.o(i.uart_recvChar)
-    AHBPrescTable                            0x08001da8   Data          16  system_stm32f4xx.o(.constdata)
-    APBPrescTable                            0x08001db8   Data           8  system_stm32f4xx.o(.constdata)
-    Region$$Table$$Base                      0x08001dc0   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08001de0   Number         0  anon$$obj.o(Region$$Table)
+    main                                     0x080018b5   Thumb Code   712  main.o(i.main)
+    malloc                                   0x08001b95   Thumb Code    92  malloc.o(i.malloc)
+    uart_recvChar                            0x08001cd9   Thumb Code    22  main.o(i.uart_recvChar)
+    AHBPrescTable                            0x08001cee   Data          16  system_stm32f4xx.o(.constdata)
+    APBPrescTable                            0x08001cfe   Data           8  system_stm32f4xx.o(.constdata)
+    Region$$Table$$Base                      0x08001d08   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08001d28   Number         0  anon$$obj.o(Region$$Table)
     PacketMarker                             0x20000000   Data           1  main.o(.data)
     cadena                                   0x20000001   Data           3  main.o(.data)
     indice1                                  0x20000004   Data           4  main.o(.data)
@@ -935,9 +935,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000189
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00001e64, Max: 0x00100000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00001dac, Max: 0x00100000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00001de0, Max: 0x00100000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00001d28, Max: 0x00100000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1018,33 +1018,34 @@ Memory Map of the image
     0x0800174e   0x0800174e   0x0000000e   Code   RO         1957    i.__scatterload_zeroinit  mc_w.l(handlers.o)
     0x0800175c   0x0800175c   0x00000108   Code   RO           17    i.cobs_decode       main.o
     0x08001864   0x08001864   0x00000050   Code   RO         1901    i.free              mc_w.l(malloc.o)
-    0x080018b4   0x080018b4   0x00000398   Code   RO           18    i.main              main.o
-    0x08001c4c   0x08001c4c   0x0000006c   Code   RO         1902    i.malloc            mc_w.l(malloc.o)
-    0x08001cb8   0x08001cb8   0x00000030   Code   RO           19    i.receive           main.o
-    0x08001ce8   0x08001ce8   0x000000a8   Code   RO           20    i.send              main.o
-    0x08001d90   0x08001d90   0x00000018   Code   RO           21    i.uart_recvChar     main.o
-    0x08001da8   0x08001da8   0x00000010   Data   RO         1857    .constdata          system_stm32f4xx.o
-    0x08001db8   0x08001db8   0x00000008   Data   RO         1858    .constdata          system_stm32f4xx.o
-    0x08001dc0   0x08001dc0   0x00000020   Data   RO         1953    Region$$Table       anon$$obj.o
+    0x080018b4   0x080018b4   0x000002e0   Code   RO           18    i.main              main.o
+    0x08001b94   0x08001b94   0x0000006c   Code   RO         1902    i.malloc            mc_w.l(malloc.o)
+    0x08001c00   0x08001c00   0x00000030   Code   RO           19    i.receive           main.o
+    0x08001c30   0x08001c30   0x000000a8   Code   RO           20    i.send              main.o
+    0x08001cd8   0x08001cd8   0x00000016   Code   RO           21    i.uart_recvChar     main.o
+    0x08001cee   0x08001cee   0x00000010   Data   RO         1857    .constdata          system_stm32f4xx.o
+    0x08001cfe   0x08001cfe   0x00000008   Data   RO         1858    .constdata          system_stm32f4xx.o
+    0x08001d06   0x08001d06   0x00000002   PAD
+    0x08001d08   0x08001d08   0x00000020   Data   RO         1953    Region$$Table       anon$$obj.o
 
 
-    Execution Region RW_IRAM2 (Exec base: 0x10000000, Load base: 0x08001e64, Size: 0x00000000, Max: 0x00010000, ABSOLUTE)
+    Execution Region RW_IRAM2 (Exec base: 0x10000000, Load base: 0x08001dac, Size: 0x00000000, Max: 0x00010000, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08001de0, Size: 0x00000b48, Max: 0x00020000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08001d28, Size: 0x00000b48, Max: 0x00020000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08001de0   0x0000006a   Data   RW           24    .data               main.o
-    0x2000006a   0x08001e4a   0x00000002   PAD
-    0x2000006c   0x08001e4c   0x0000000c   Data   RW         1624    .data               stm32f4xx_hal.o
-    0x20000078   0x08001e58   0x00000004   Data   RW         1859    .data               system_stm32f4xx.o
-    0x2000007c   0x08001e5c   0x00000004   Data   RW         1949    .data               mc_w.l(mvars.o)
-    0x20000080   0x08001e60   0x00000004   Data   RW         1950    .data               mc_w.l(mvars.o)
+    0x20000000   0x08001d28   0x0000006a   Data   RW           24    .data               main.o
+    0x2000006a   0x08001d92   0x00000002   PAD
+    0x2000006c   0x08001d94   0x0000000c   Data   RW         1624    .data               stm32f4xx_hal.o
+    0x20000078   0x08001da0   0x00000004   Data   RW         1859    .data               system_stm32f4xx.o
+    0x2000007c   0x08001da4   0x00000004   Data   RW         1949    .data               mc_w.l(mvars.o)
+    0x20000080   0x08001da8   0x00000004   Data   RW         1950    .data               mc_w.l(mvars.o)
     0x20000084        -       0x000004c0   Zero   RW           23    .bss                main.o
-    0x20000544   0x08001e64   0x00000004   PAD
+    0x20000544   0x08001dac   0x00000004   PAD
     0x20000548        -       0x00000200   Zero   RW            2    HEAP                startup_stm32f407xx.o
     0x20000748        -       0x00000400   Zero   RW            1    STACK               startup_stm32f407xx.o
 
@@ -1056,7 +1057,7 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-      2516         80          0        106       1216     667358   main.o
+      2330         78          0        106       1216     667338   main.o
         36          8        392          0       1536        844   startup_stm32f407xx.o
        180         28          0         12          0       9473   stm32f4xx_hal.o
        198         14          0          0          0      34011   stm32f4xx_hal_cortex.o
@@ -1069,9 +1070,9 @@ Image component sizes
         28          6         24          4          0       1179   system_stm32f4xx.o
 
     ----------------------------------------------------------------------
-      6690        316        448        124       2756     739705   Object Totals
+      6504        314        450        124       2756     739685   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-        12          0          0          2          4          0   (incl. Padding)
+        12          0          2          2          4          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -1116,15 +1117,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      7200        352        448        132       2756     735581   Grand Totals
-      7200        352        448        132       2756     735581   ELF Image Totals
-      7200        352        448        132          0          0   ROM Totals
+      7014        350        450        132       2756     735561   Grand Totals
+      7014        350        450        132       2756     735561   ELF Image Totals
+      7014        350        450        132          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 7648 (   7.47kB)
+    Total RO  Size (Code + RO Data)                 7464 (   7.29kB)
     Total RW  Size (RW Data + ZI Data)              2888 (   2.82kB)
-    Total ROM Size (Code + RO Data + RW Data)       7780 (   7.60kB)
+    Total ROM Size (Code + RO Data + RW Data)       7596 (   7.42kB)
 
 ==============================================================================
 
