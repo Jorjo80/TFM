@@ -56,17 +56,21 @@ UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
 uint8_t a = 0x32;
-size_t ReceiveBufferSize = 512;
+
 #define RX_SIZE 512
 uint8_t cadena[3];
 uint8_t receiveFed[RX_SIZE];
 uint8_t receiveLeader[RX_SIZE];
+
+uint8_t sizeInterrupt1=5;
+uint8_t sizeInterrupt2=5;
+
 volatile int indice1 = 0;
 volatile int indice2 = 0;
 size_t CMD_Len;
 //NETWORK CONFIG
 
-uint8_t IPFed[]= {0xab, 0xcd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x34, 0x12};
+//uint8_t IPFed[]= {0xab, 0xcd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x34, 0x12};
 
 /*int __io_putchar(int ch)
 {
@@ -96,6 +100,7 @@ static void InicioFed(void);
 void unite( uint8_t *buff1, uint8_t *buff2, uint8_t *out);
 static uint8_t XOR_CKS(uint8_t *frame,size_t size);
 uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo);
+uint8_t uart_recvChar2(uint8_t *byte, uint8_t *m);
 void uart_sendChar(uint8_t byte, UART_HandleTypeDef *modulo);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
@@ -150,7 +155,7 @@ int main(void)
 	
 	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),&huart3);
 	receive(&huart3);
-	HAL_Delay(200);
+	HAL_Delay(1000);
 	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),&huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
@@ -397,11 +402,11 @@ static  void InicioFed(void)
 	receive(&huart1);
 	HAL_Delay(10000);
 	
-	/*uint8_t *SetIP;
-	unite(WriteIP,IPFed, SetIP);
-	send(SetIP, sizeof(SetIP)/sizeof(SetIP[0]),huart1);
-	receive(huart1);
-	HAL_Delay(1000);*/
+	//uint8_t *SetIP;
+	//unite(WriteIP,IPFed, SetIP);
+	send(WriteIP, sizeof(WriteIP)/sizeof(WriteIP[0]),&huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
 }
 
 
@@ -479,7 +484,11 @@ uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo)
 	return 1;
 }
 
-
+uint8_t uart_recvChar2(uint8_t *byte, uint8_t *m) 
+{
+	byte = m;
+	return 1;
+}
 
 static void receive(UART_HandleTypeDef *modulo)
 {
@@ -509,31 +518,50 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
   /* Prevent unused argument(s) compilation warning */
   //UNUSED(huart);
+	
+	uint8_t decoded1[512];
+	uint8_t decoded3[512];
+	int16_t result;
+	
 	if(huart->Instance == USART1)
 	{
 		uint8_t datoA = cadena[0];
+		uint8_t datoTamano	= cadena[0];
+		if(indice1 == 1)
+		{
+			cobs_decodeInt(&datoTamano,1,uart_recvChar2, &datoTamano);
+			sizeInterrupt1 = 5+ datoTamano;
+		}
 		receiveFed[indice1++] = datoA;
-		if(indice1 >= RX_SIZE)
+		if(indice1 >= sizeInterrupt1)
 		{
+			for(int i = 0; i<sizeInterrupt1;i++)
+			{
+				result=cobs_decodeInt(decoded1,512, uart_recvChar2, receiveFed);
+			}
+			HAL_UART_Transmit(&huart2, decoded1,sizeInterrupt1,1);
 			indice1 = 0;
+			for(int p = 0; p>=sizeInterrupt1;p++)
+			{
+				decoded1[p] = 0;
+				receiveFed[p] = 0;
+			}
 		}
-		if(indice1 >= RX_SIZE)
-		{
-			indice1 = 0;
-		}
+
 		HAL_UART_Receive_IT(&huart1, cadena, 1);
 	}
 	if(huart->Instance == USART3)
 	{
 		uint8_t datoB = cadena[0];
-		receiveLeader[indice2++] = datoB;
-		if(indice2 >= RX_SIZE)
+		if(indice1 == 1)
 		{
-			indice2 = 0;
+			sizeInterrupt2 = 5 + datoB;
 		}
-		if(indice2 >= RX_SIZE)
+		receiveLeader[indice2++] = datoB;
+		if(indice2 >= sizeInterrupt2)
 		{
 			indice2 = 0;
+			
 		}
 		
 		HAL_UART_Receive_IT(&huart3, cadena, 1);
