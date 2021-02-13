@@ -153,7 +153,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 	HAL_Delay(1000);
 	
-	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),&huart3);
+	send(OpenSocket2, (sizeof(OpenSocket2)/sizeof(OpenSocket2[0])),&huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),&huart1);
@@ -169,7 +169,7 @@ int main(void)
 		receive(&huart1);
 		HAL_Delay(1000);
 		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
-		receive(&huart1);
+		receive(&huart3);
 		HAL_Delay(5000);
     /* USER CODE BEGIN 3 */
   }
@@ -378,7 +378,6 @@ static  void InicioFed(void)
 	HAL_Delay(3000);
 	
 	
-	
 	//Channel	
 	//printf("Channel\n\r");
 	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), &huart1);
@@ -400,11 +399,15 @@ static  void InicioFed(void)
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), &huart1);
 	receive(&huart1);
-	HAL_Delay(10000);
+	HAL_Delay(12000);
 	
 	//uint8_t *SetIP;
 	//unite(WriteIP,IPFed, SetIP);
 	send(WriteIP, sizeof(WriteIP)/sizeof(WriteIP[0]),&huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
+	
+	send(route, sizeof(route)/sizeof(route[0]),&huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 }
@@ -416,7 +419,6 @@ static  void InicioLeader(void)
 	HAL_Delay(1000);
 	send(ComClear,(sizeof(ComClear)/sizeof(ComClear[0])), &huart3);
 	HAL_Delay(3000);
-	
 	
 	
 	//Channel	
