@@ -160,7 +160,9 @@ int main(void)
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	
+	send(route, sizeof(route)/sizeof(route[0]),&huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
 	
   while (1)
   {
@@ -170,7 +172,8 @@ int main(void)
 		HAL_Delay(1000);
 		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
 		receive(&huart3);
-		HAL_Delay(5000);
+		//receive(&huart3);
+		HAL_Delay(8000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -377,21 +380,50 @@ static  void InicioFed(void)
 	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])), &huart1);
 	HAL_Delay(3000);
 	
+	send(OOB, sizeof(OOB)/sizeof(OOB[0]), &huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
+	//Role
+	
+	//printf("Role\n\r");
+  send(RoleFed,(sizeof(RoleFed)/sizeof(RoleFed[0])), &huart1);
+	receive(&huart1);
+	HAL_Delay(1000);	
+	
 	
 	//Channel	
 	//printf("Channel\n\r");
 	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), &huart1);
 	receive(&huart1);
+	HAL_Delay(1000);
+	
+	send(PanID, sizeof(PanID)/sizeof(PanID[0]), &huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
+	
+	send(NetName, sizeof(NetName)/sizeof(NetName[0]), &huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
+	
+	send(MeshLocPrefix, sizeof(MeshLocPrefix)/sizeof(MeshLocPrefix[0]), &huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
+	
+	send(MasterKey, sizeof(MasterKey)/sizeof(MasterKey[0]), &huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
+	
+	send(ExtendPanID, sizeof(ExtendPanID)/sizeof(ExtendPanID[0]), &huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
+	
+	send(ComCred, sizeof(ComCred)/sizeof(ComCred[0]),&huart1);
+	receive(&huart1);
+	HAL_Delay(1000);
 	
 	//Join Credential
 	HAL_Delay(1000);
 	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), &huart1);
-	receive(&huart1);
-	
-	//Role
-	HAL_Delay(1000);
-	//printf("Role\n\r");
-  send(RoleFed,(sizeof(RoleFed)/sizeof(RoleFed[0])), &huart1);
 	receive(&huart1);	
 	
 
@@ -407,9 +439,7 @@ static  void InicioFed(void)
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(route, sizeof(route)/sizeof(route[0]),&huart1);
-	receive(&huart1);
-	HAL_Delay(1000);
+	
 }
 
 
@@ -420,27 +450,54 @@ static  void InicioLeader(void)
 	send(ComClear,(sizeof(ComClear)/sizeof(ComClear[0])), &huart3);
 	HAL_Delay(3000);
 	
-	
-	//Channel	
-	//printf("Channel\n\r");
-	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), &huart3);
+	send(OOB, sizeof(OOB)/sizeof(OOB[0]), &huart3);
 	receive(&huart3);
-	
-	
-	//Join Credential
 	HAL_Delay(1000);
-	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), &huart3);
-	receive(&huart3);
 	
 	//Role
 	HAL_Delay(1000);
 	//printf("Role\n\r");
   send(RoleLeader,(sizeof(RoleLeader)/sizeof(RoleLeader[0])), &huart3);
 	receive(&huart3);
-
-		
-
 	HAL_Delay(1000);
+	
+	//Channel	
+	//printf("Channel\n\r");
+	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), &huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	send(PanID, sizeof(PanID)/sizeof(PanID[0]), &huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	send(NetName, sizeof(NetName)/sizeof(NetName[0]), &huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	send(MeshLocPrefix, sizeof(MeshLocPrefix)/sizeof(MeshLocPrefix[0]), &huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	send(MasterKey, sizeof(MasterKey)/sizeof(MasterKey[0]), &huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	send(ExtendPanID, sizeof(ExtendPanID)/sizeof(ExtendPanID[0]), &huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	//Join Credential
+
+	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), &huart3);
+	receive(&huart3);	
+	HAL_Delay(1000);
+	
+	send(ComCred, sizeof(ComCred)/sizeof(ComCred[0]),&huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), &huart3);
 	receive(&huart3);
