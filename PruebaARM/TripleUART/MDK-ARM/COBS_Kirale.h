@@ -506,6 +506,22 @@ finished:
 **                                                                         **
 ****************************************************************************/
 
+
+/**
+ * @brief Decode a UART message byte per byte.
+ *
+ * @param[out]     buff:  Pointer to the decoded message.
+ * @param[in]      len:   Length limit of buff.
+ * @param[in]      input: Pointer to encoded byte input callback (UART rx).
+ *
+ * @return          0: Decode not finished.
+ *                 -1: Decode error.
+ *                 -2: Port timeout.
+ *                 >0: Length of the decoded message.
+ */
+
+
+
 int16_t cobs_decodeInt(uint8_t *buff, uint16_t len, cobs_byteIn_t2 input, uint8_t *input_buff)
 {
 	uint8_t inByte = 0;

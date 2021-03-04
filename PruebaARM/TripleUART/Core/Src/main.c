@@ -173,7 +173,7 @@ int main(void)
 		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
 		receive(&huart3);
 		//receive(&huart3);
-		HAL_Delay(8000);
+		HAL_Delay(5000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -337,41 +337,8 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-static void hextobin( const char *str, uint8_t *dst, size_t len )
-{
-  uint8_t pos, i0, i1;
 
-  /* Mapping of ASCII characters to hex values */
-  const uint8_t hashmap[] = {
-      0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, // 01234567
-      0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // 89:;<=>?
-      0x00, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, // @ABCDEFG
-      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // HIJKLMNO
-  };
-
-  for ( pos = 0; ( ( pos < ( len * 2 ) ) && ( pos < strlen( str ) ) );
-        pos += 2 )
-  {
-    i0             = ( ( uint8_t ) str[ pos + 0 ] & 0x1F ) ^ 0x10;
-    i1             = ( ( uint8_t ) str[ pos + 1 ] & 0x1F ) ^ 0x10;
-    dst[ pos / 2 ] = ( uint8_t )( hashmap[ i0 ] << 4 ) | hashmap[ i1 ];
-  };
-}
-
-static uint8_t XOR_CKS(uint8_t *frame, size_t size)
-{
-	uint8_t cks = 0;
-	for(int i=0; i<size;i++)
-	{
-		if(i != CKS_POS)
-			cks ^= frame[i];
-		else
-			cks=cks;
-	}
-	return cks;
-	
-}
-
+//JoinNetworks Functions
 
 static  void InicioFed(void)
 {
@@ -431,14 +398,13 @@ static  void InicioFed(void)
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), &huart1);
 	receive(&huart1);
-	HAL_Delay(12000);
+	HAL_Delay(5000);
 	
 	//uint8_t *SetIP;
 	//unite(WriteIP,IPFed, SetIP);
 	send(WriteIP, sizeof(WriteIP)/sizeof(WriteIP[0]),&huart1);
 	receive(&huart1);
-	HAL_Delay(1000);
-	
+	HAL_Delay(1000);	
 	
 }
 
@@ -520,7 +486,20 @@ static  void InicioLeader(void)
 }
 
 
-//Sending the command to the huart selected
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Trasnmision Functions
+
+
+//////////////////////////////
+
+// SEND
+// Sending the command to the huart selected
+// Buffer --> The command to send, HEX packets
+// Size --> The size of the packet
+
+//////////////////////////////
+
 static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef *modulo)
 {
 	uint8_t _encodeBuffer[getEncodedBufferSize(size)];
@@ -532,33 +511,23 @@ static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef *modulo)
 	//cobs_encode(buffer,size,uart_sendChar, modulo);	
 }
 
-void uart_sendChar(uint8_t byte, UART_HandleTypeDef *modulo)
-{
-	HAL_UART_Transmit(modulo,&byte,1,1000);
-}
+//////////////////////////////
 
-uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo) 
-{
-	HAL_UART_Receive(modulo, byte,1,1000);
-	return 1;
-}
+// RECEIVE
+// Receiving the response from the Kirale Module via UART to the HOST
 
-uint8_t uart_recvChar2(uint8_t *byte, uint8_t *m) 
-{
-	byte = m;
-	return 1;
-}
+
+//////////////////////////////
 
 static void receive(UART_HandleTypeDef *modulo)
 {
 	
-	int16_t result;
-	uint8_t decodedbuffer[512];
-	int t = 0;
+	int16_t result; // The variable result will stored the num of bytes decoded by the cobs_decode function
+	uint8_t decodedbuffer[512]; //The variable where the decoded buffer will be stored. If bigger responses are expected increment its size.
 	do
 	{
+		//Receiving the Response and decoding byte to byte.
 		result=cobs_decode(decodedbuffer,512,uart_recvChar, modulo);
-		t++;
 	}while(result == 0);
 	
 	//decode(receivebuffer,RXSIZE,decodedbuffer);
@@ -567,11 +536,31 @@ static void receive(UART_HandleTypeDef *modulo)
 
 }
 
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+// Adaption of the Rx Function for the cobs_decode
+// byte --> where the readed byte will be stored and used lately in the decode function
+// Return the number of the readed bytes
 
+uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo) 
+{
+	
+	HAL_UART_Receive(modulo, byte,1,1000);
+	uint8_t returned = sizeof(byte)/sizeof(byte[0]);
+	return returned;
+}
+
+void uart_sendChar(uint8_t byte, UART_HandleTypeDef *modulo)
+{
+	HAL_UART_Transmit(modulo,&byte,1,1000);
+}
+
+
+uint8_t uart_recvChar2(uint8_t *byte, uint8_t *m) 
+{
+	byte = m;
+	return 1;
+}
+
+// RX interruptions
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
@@ -626,6 +615,54 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 		HAL_UART_Receive_IT(&huart3, cadena, 1);
 	}  
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// HELP FUNCTIONS
+
+
+// CONVERSION HEX TO BIN
+
+// *str --> Hex string 
+
+static void hextobin( const char *str, uint8_t *dst, size_t len )
+{
+  uint8_t pos, i0, i1;
+
+  /* Mapping of ASCII characters to hex values */
+  const uint8_t hashmap[] = {
+      0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, // 01234567
+      0x08, 0x09, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // 89:;<=>?
+      0x00, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x00, // @ABCDEFG
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // HIJKLMNO
+  };
+
+  for ( pos = 0; ( ( pos < ( len * 2 ) ) && ( pos < strlen( str ) ) );
+        pos += 2 )
+  {
+    i0             = ( ( uint8_t ) str[ pos + 0 ] & 0x1F ) ^ 0x10;
+    i1             = ( ( uint8_t ) str[ pos + 1 ] & 0x1F ) ^ 0x10;
+    dst[ pos / 2 ] = ( uint8_t )( hashmap[ i0 ] << 4 ) | hashmap[ i1 ];
+  };
+}
+
+static uint8_t XOR_CKS(uint8_t *frame, size_t size)
+{
+	uint8_t cks = 0;
+	for(int i=0; i<size;i++)
+	{
+		if(i != CKS_POS)
+			cks ^= frame[i];
+		else
+			cks=cks;
+	}
+	return cks;
+	
+}
+
+
 
 void unite(uint8_t *buff1, uint8_t *buff2, uint8_t *out)
 {
