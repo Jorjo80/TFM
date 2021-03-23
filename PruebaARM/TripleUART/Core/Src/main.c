@@ -104,6 +104,12 @@ uint8_t uart_recvChar2(uint8_t *byte, uint8_t *m);
 void uart_sendChar(uint8_t byte, UART_HandleTypeDef *modulo);
 static void hextobin( const char *str, uint8_t *dst, size_t len );
 
+
+/// NET CONFIG VARIABLES ///
+
+uint8_t channel = 0x0B;
+uint8_t PANID[] = {0x12, 0x34}; // PAN ID = 0x1234
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -147,21 +153,21 @@ int main(void)
 	//HAL_UART_Receive_IT(&huart1, cadena, 1);
 
   /* USER CODE END 2 */
-	InicioLeader();
+	//InicioLeader();
 	InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	HAL_Delay(1000);
 	
-	send(OpenSocket2, (sizeof(OpenSocket2)/sizeof(OpenSocket2[0])),&huart3);
+	/*send(OpenSocket2, (sizeof(OpenSocket2)/sizeof(OpenSocket2[0])),&huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),&huart1);
 	receive(&huart1);
-	HAL_Delay(1000);
+	HAL_Delay(1000);*/
 	
-	send(route, sizeof(route)/sizeof(route[0]),&huart3);
-	receive(&huart3);
+	/*send(route, sizeof(route)/sizeof(route[0]),&huart3);
+	receive(&huart3);*/
 	HAL_Delay(1000);
 	
   while (1)
@@ -172,7 +178,6 @@ int main(void)
 		HAL_Delay(1000);
 		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
 		receive(&huart3);
-		//receive(&huart3);
 		HAL_Delay(5000);
     /* USER CODE BEGIN 3 */
   }
@@ -353,18 +358,31 @@ static  void InicioFed(void)
 	//Role
 	
 	//printf("Role\n\r");
-  send(RoleFed,(sizeof(RoleFed)/sizeof(RoleFed[0])), &huart1);
+	/*for(int i = 0; i<sizeof(RoleFed); i++)
+	{
+		pld[i]=RoleFed[i];
+	}
+	pld[sizeof(RoleFed)]= 0x04;*/
+	
+	
+	uint8_t cmdRole[sizeof(WriteRole)+sizeof(med)];
+	unite(WriteRole, &med, cmdRole);	
+  send(cmdRole,(sizeof(cmdRole)/sizeof(cmdRole[0])), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);	
 	
 	
 	//Channel	
 	//printf("Channel\n\r");
-	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), &huart1);
+	uint8_t cmdChannel[sizeof(WriteChannel)+sizeof(channel)];
+	unite(WriteChannel, &channel, cmdChannel);
+	send(cmdChannel,(sizeof(cmdChannel)/sizeof(cmdChannel[0])), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(PanID, sizeof(PanID)/sizeof(PanID[0]), &huart1);
+	uint8_t cmdWPANID[sizeof(WritePANID)+sizeof(PANID)];
+	unite(WritePANID, PANID, cmdWPANID);
+	send(cmdWPANID, sizeof(cmdWPANID)/sizeof(cmdWPANID[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
@@ -423,17 +441,26 @@ static  void InicioLeader(void)
 	//Role
 	HAL_Delay(1000);
 	//printf("Role\n\r");
-  send(RoleLeader,(sizeof(RoleLeader)/sizeof(RoleLeader[0])), &huart3);
+	
+	uint8_t cmdRole[sizeof(WriteRole)+sizeof(fed)];
+	unite(WriteRole, &leader, cmdRole);
+  send(cmdRole,(sizeof(cmdRole)/sizeof(cmdRole[0])), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
 	//Channel	
 	//printf("Channel\n\r");
-	send(WriteChannel,(sizeof(WriteChannel)/sizeof(WriteChannel[0])), &huart3);
+	uint8_t cmdChannel[sizeof(WriteChannel)+sizeof(channel)];
+	unite(WriteChannel, &channel, cmdChannel);
+	send(cmdChannel,(sizeof(cmdChannel)/sizeof(cmdChannel[0])), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	send(PanID, sizeof(PanID)/sizeof(PanID[0]), &huart3);
+	
+	//WritePANID
+	uint8_t cmdWPANID[sizeof(WritePANID)+sizeof(PANID)];
+	unite(WritePANID, PANID, cmdWPANID);
+	send(cmdWPANID, sizeof(cmdWPANID)/sizeof(cmdWPANID[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
@@ -673,7 +700,7 @@ void unite(uint8_t *buff1, uint8_t *buff2, uint8_t *out)
 	{
 		out[i] = buff1[i];
 	}
-	for(int i = size1, p=0; i<(size1 + size2); i++, p++)
+	for(int i = size1+1, p=0; i<(size1+size2); i++, p++)
 	{
 		out[i] = buff2[p];
 	}

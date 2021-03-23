@@ -3,7 +3,7 @@
 <title>Static Call Graph - [UART\UART.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image UART\UART.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Thu Feb 25 17:20:25 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Mar 23 18:54:19 2021
 <BR><P>
 <H3>Maximum Stack Usage =        632 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -446,10 +446,6 @@ Global Symbols
 
 <P><STRONG><a name="[a0]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
-<P><STRONG><a name="[a1]"></a>__decompress</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, __dczerorl2.o(.text), UNUSED)
-
-<P><STRONG><a name="[a2]"></a>__decompress1</STRONG> (Thumb, 86 bytes, Stack size unknown bytes, __dczerorl2.o(.text), UNUSED)
-
 <P><STRONG><a name="[4]"></a>BusFault_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.BusFault_Handler))
 <BR><BR>[Calls]<UL><LI><a href="#[4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BusFault_Handler
 </UL>
@@ -470,7 +466,6 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioLeader
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
 </UL>
 
@@ -728,11 +723,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[a3]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[a1]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[a4]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[a2]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[a5]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[a3]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[91]"></a>cobs_decode</STRONG> (Thumb, 258 bytes, Stack size 32 bytes, main.o(i.cobs_decode))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = cobs_decode
@@ -756,8 +751,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 </UL>
 
-<P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 296 bytes, Stack size 8 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 600<LI>Call Chain = main &rArr; InicioLeader &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[5b]"></a>main</STRONG> (Thumb, 218 bytes, Stack size 8 bytes, main.o(i.main))
+<BR><BR>[Stack]<UL><LI>Max Depth = 624<LI>Call Chain = main &rArr; InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Init
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Init
@@ -765,7 +760,6 @@ Global Symbols
 <LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioLeader
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
@@ -785,24 +779,21 @@ Global Symbols
 </UL>
 <P><STRONG><a name="[5f]"></a>uart_recvChar2</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, main.o(i.uart_recvChar2))
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.HAL_UART_RxCpltCallback)
-</UL><P>
+</UL>
+<P><STRONG><a name="[8c]"></a>unite</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, main.o(i.unite))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = unite
+</UL>
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
+</UL>
+<P>
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[89]"></a>InicioFed</STRONG> (Thumb, 330 bytes, Stack size 8 bytes, main.o(i.InicioFed))
-<BR><BR>[Stack]<UL><LI>Max Depth = 592<LI>Call Chain = InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
+<P><STRONG><a name="[89]"></a>InicioFed</STRONG> (Thumb, 368 bytes, Stack size 32 bytes, main.o(i.InicioFed))
+<BR><BR>[Stack]<UL><LI>Max Depth = 616<LI>Call Chain = InicioFed &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
-<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive
-</UL>
-<BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
-<P><STRONG><a name="[8c]"></a>InicioLeader</STRONG> (Thumb, 376 bytes, Stack size 8 bytes, main.o(i.InicioLeader))
-<BR><BR>[Stack]<UL><LI>Max Depth = 592<LI>Call Chain = InicioLeader &rArr; receive &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
-</UL>
-<BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_Delay
+<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;unite
 <LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send
 <LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;receive
 </UL>
@@ -816,7 +807,6 @@ Local Symbols
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cobs_decode
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioLeader
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
 </UL>
 
@@ -828,7 +818,6 @@ Local Symbols
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioLeader
 <LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;InicioFed
 </UL>
 
