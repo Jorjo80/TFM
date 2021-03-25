@@ -109,6 +109,12 @@ static void hextobin( const char *str, uint8_t *dst, size_t len );
 
 uint8_t channel = 0x0B;
 uint8_t PANID[] = {0x12, 0x34}; // PAN ID = 0x1234
+uint8_t NetName[] = {0x4d, 0x79, 0x4e, 0x65, 0x74,0x77, 0x6f, 0x72, 0x6b};
+uint8_t MeshLocPrefix[] = {0xfd, 0x12, 0x34, 0,56, 0x00, 0x00, 0x00, 0x00};
+uint8_t MasterKey[] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
+uint8_t ExtPANID[] = {0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88};
+uint8_t ComCred[] = {0x4d, 0x79,0x50, 0x61, 0x73, 0x73,0x77, 0x6f, 0x72, 0x64};
+uint8_t JoinCred[] = {0x38, 0x34, 0x30, 0x34, 0x44, 0x32, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x30, 0x35, 0x46, 0x43}; //Credencial 8404D200000005FC
 
 /* USER CODE END PFP */
 
@@ -153,7 +159,7 @@ int main(void)
 	//HAL_UART_Receive_IT(&huart1, cadena, 1);
 
   /* USER CODE END 2 */
-	//InicioLeader();
+	InicioLeader();
 	InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -175,10 +181,10 @@ int main(void)
     /* USER CODE END WHILE */
 		send(Status,(sizeof(Status)/sizeof(Status[0])), &huart1);
 		receive(&huart1);
-		HAL_Delay(1000);
-		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
-		receive(&huart3);
 		HAL_Delay(5000);
+		/*send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
+		receive(&huart3);
+		HAL_Delay(5000);*/
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -348,7 +354,7 @@ static void MX_GPIO_Init(void)
 static  void InicioFed(void)
 {
 	//Clear
-	HAL_Delay(1000);
+
 	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])), &huart1);
 	HAL_Delay(3000);
 	
@@ -386,33 +392,50 @@ static  void InicioFed(void)
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(NetName, sizeof(NetName)/sizeof(NetName[0]), &huart1);
+	
+	uint8_t cmdWNetName[sizeof(WriteNetName)+sizeof(NetName)];
+	unite(WriteNetName, NetName, cmdWNetName);
+	send(cmdWNetName, sizeof(cmdWNetName)/sizeof(cmdWNetName[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(MeshLocPrefix, sizeof(MeshLocPrefix)/sizeof(MeshLocPrefix[0]), &huart1);
+	uint8_t cmdWMLP[sizeof(WriteMLocPref)+sizeof(MeshLocPrefix)];
+	unite(WriteMLocPref, MeshLocPrefix, cmdWMLP);
+	send(cmdWMLP, sizeof(cmdWMLP)/sizeof(cmdWMLP[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(MasterKey, sizeof(MasterKey)/sizeof(MasterKey[0]), &huart1);
+	
+	uint8_t cmdMK[sizeof(WriteMK)+sizeof(MasterKey)];
+	unite(WriteMK, MasterKey, cmdMK);
+	send(cmdMK, sizeof(cmdMK)/sizeof(cmdMK[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(ExtendPanID, sizeof(ExtendPanID)/sizeof(ExtendPanID[0]), &huart1);
+	
+	uint8_t cmdExtPID[sizeof(WriteExtPID)+sizeof(ExtPANID)];
+	unite(WriteExtPID, ExtPANID, cmdExtPID);
+	send(cmdExtPID, sizeof(cmdExtPID)/sizeof(cmdExtPID[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(ComCred, sizeof(ComCred)/sizeof(ComCred[0]),&huart1);
+	uint8_t cmdComCred[sizeof(WriteComCred)+sizeof(ComCred)];
+	unite(WriteComCred, ComCred, cmdComCred);
+	send(cmdComCred, sizeof(cmdComCred)/sizeof(cmdComCred[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
 	//Join Credential
-	HAL_Delay(1000);
-	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), &huart1);
+	uint8_t cmdJoinCred[sizeof(WriteJoinCred)+sizeof(JoinCred)];
+	unite(WriteJoinCred, JoinCred, cmdJoinCred);
+	HAL_UART_Transmit(&huart2, WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])),10);
+	HAL_UART_Transmit(&huart2, JoinCred,(sizeof(JoinCred)/sizeof(JoinCred[0])),10);
+	HAL_UART_Transmit(&huart2, cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])),10);
+	send(cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])), &huart1);
 	receive(&huart1);	
-	
-
 	HAL_Delay(1000);
+
+	
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), &huart1);
 	receive(&huart1);
@@ -430,8 +453,7 @@ static  void InicioFed(void)
 static  void InicioLeader(void)
 {
 	//Clear
-	HAL_Delay(1000);
-	send(ComClear,(sizeof(ComClear)/sizeof(ComClear[0])), &huart3);
+	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])), &huart3);
 	HAL_Delay(3000);
 	
 	send(OOB, sizeof(OOB)/sizeof(OOB[0]), &huart3);
@@ -442,7 +464,7 @@ static  void InicioLeader(void)
 	HAL_Delay(1000);
 	//printf("Role\n\r");
 	
-	uint8_t cmdRole[sizeof(WriteRole)+sizeof(fed)];
+	uint8_t cmdRole[sizeof(WriteRole)+sizeof(leader)];
 	unite(WriteRole, &leader, cmdRole);
   send(cmdRole,(sizeof(cmdRole)/sizeof(cmdRole[0])), &huart3);
 	receive(&huart3);
@@ -464,29 +486,46 @@ static  void InicioLeader(void)
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	send(NetName, sizeof(NetName)/sizeof(NetName[0]), &huart3);
+	uint8_t cmdWNetName[sizeof(WriteNetName)+sizeof(NetName)];
+	unite(WriteNetName, NetName, cmdWNetName);
+	send(cmdWNetName, sizeof(cmdWNetName)/sizeof(cmdWNetName[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	send(MeshLocPrefix, sizeof(MeshLocPrefix)/sizeof(MeshLocPrefix[0]), &huart3);
+
+	uint8_t cmdWMLP[sizeof(WriteMLocPref)+sizeof(MeshLocPrefix)];
+	unite(WriteMLocPref, MeshLocPrefix, cmdWMLP);
+	send(cmdWMLP, sizeof(cmdWMLP)/sizeof(cmdWMLP[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	send(MasterKey, sizeof(MasterKey)/sizeof(MasterKey[0]), &huart3);
+	uint8_t cmdMK[sizeof(WriteMK)+sizeof(MasterKey)];
+	unite(WriteMK, MasterKey, cmdMK);
+	send(cmdMK, sizeof(cmdMK)/sizeof(cmdMK[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	send(ExtendPanID, sizeof(ExtendPanID)/sizeof(ExtendPanID[0]), &huart3);
+	uint8_t cmdExtPID[sizeof(WriteExtPID)+sizeof(ExtPANID)];
+	unite(WriteExtPID, ExtPANID, cmdExtPID);
+	send(cmdExtPID, sizeof(cmdExtPID)/sizeof(cmdExtPID[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
 	//Join Credential
 
-	send(WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])), &huart3);
+	uint8_t cmdJoinCred[sizeof(WriteJoinCred)sizeof(JoinCred)];
+	unite(WriteJoinCred, JoinCred, cmdJoinCred);
+	
+	HAL_UART_Transmit(&huart2, WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])),10);
+	HAL_UART_Transmit(&huart2, JoinCred,(sizeof(JoinCred)/sizeof(JoinCred[0])),10);
+	HAL_UART_Transmit(&huart2, cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])),10);
+	send(cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])), &huart3);
 	receive(&huart3);	
 	HAL_Delay(1000);
 	
-	send(ComCred, sizeof(ComCred)/sizeof(ComCred[0]),&huart3);
+	uint8_t cmdComCred[sizeof(WriteComCred)+sizeof(ComCred)];
+	unite(WriteComCred, ComCred, cmdComCred);
+	send(cmdComCred, sizeof(cmdComCred)/sizeof(cmdComCred[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
@@ -693,8 +732,8 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 
 void unite(uint8_t *buff1, uint8_t *buff2, uint8_t *out)
 {
-	size_t size1 = (sizeof(buff1)/sizeof(buff1[0]));
-	size_t size2 = (sizeof(buff2)/sizeof(buff2[0]));
+	int size1 = (sizeof(buff1)/sizeof(buff1[0]));
+	int size2 = sizeof(buff2);
 	
 	for(int i = 0; i<size1;i++)
 	{
