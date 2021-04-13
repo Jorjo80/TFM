@@ -97,7 +97,7 @@ static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef *modulo);
 static void receive(UART_HandleTypeDef *modulo);
 static void InicioLeader(void);
 static void InicioFed(void);
-void unite( uint8_t *buff1, uint8_t *buff2, uint8_t *out);
+void unite( uint8_t buff1[], uint8_t buff2[], uint8_t out[], size_t size1, size_t doble);
 static uint8_t XOR_CKS(uint8_t *frame,size_t size);
 uint8_t uart_recvChar(uint8_t *byte, UART_HandleTypeDef *modulo);
 uint8_t uart_recvChar2(uint8_t *byte, uint8_t *m);
@@ -110,7 +110,7 @@ static void hextobin( const char *str, uint8_t *dst, size_t len );
 uint8_t channel = 0x0B;
 uint8_t PANID[] = {0x12, 0x34}; // PAN ID = 0x1234
 uint8_t NetName[] = {0x4d, 0x79, 0x4e, 0x65, 0x74,0x77, 0x6f, 0x72, 0x6b};
-uint8_t MeshLocPrefix[] = {0xfd, 0x12, 0x34, 0,56, 0x00, 0x00, 0x00, 0x00};
+uint8_t MeshLocPrefix[] = {0xfd, 0x12, 0x34, 0x00,0x38, 0x00, 0x00, 0x00, 0x00};
 uint8_t MasterKey[] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
 uint8_t ExtPANID[] = {0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88};
 uint8_t ComCred[] = {0x4d, 0x79,0x50, 0x61, 0x73, 0x73,0x77, 0x6f, 0x72, 0x64};
@@ -160,31 +160,31 @@ int main(void)
 
   /* USER CODE END 2 */
 	InicioLeader();
-	InicioFed();
+ InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	HAL_Delay(1000);
 	
-	/*send(OpenSocket2, (sizeof(OpenSocket2)/sizeof(OpenSocket2[0])),&huart3);
+	send(OpenSocket2, (sizeof(OpenSocket2)/sizeof(OpenSocket2[0])),&huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])),&huart1);
 	receive(&huart1);
-	HAL_Delay(1000);*/
-	
-	/*send(route, sizeof(route)/sizeof(route[0]),&huart3);
-	receive(&huart3);*/
 	HAL_Delay(1000);
 	
+	send(route, (sizeof(route)/sizeof(route[0])),&huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+
   while (1)
   {
     /* USER CODE END WHILE */
 		send(Status,(sizeof(Status)/sizeof(Status[0])), &huart1);
 		receive(&huart1);
 		HAL_Delay(5000);
-		/*send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
+		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
 		receive(&huart3);
-		HAL_Delay(5000);*/
+		HAL_Delay(5000);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -353,84 +353,175 @@ static void MX_GPIO_Init(void)
 
 static  void InicioFed(void)
 {
-	//Clear
-
 	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])), &huart1);
 	HAL_Delay(3000);
 	
 	send(OOB, sizeof(OOB)/sizeof(OOB[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
+	
 	//Role
-	
-	//printf("Role\n\r");
-	/*for(int i = 0; i<sizeof(RoleFed); i++)
+	HAL_Delay(1000);
+	//printf("Role\n\r");		
+	size_t size1 = sizeof(WriteRole);
+	size_t size2 = sizeof(med);
+	uint8_t cmdRole[size1+size2];
+	for(int i = 0; i<size1;i++)
 	{
-		pld[i]=RoleFed[i];
+		cmdRole[i] = WriteRole[i];
 	}
-	pld[sizeof(RoleFed)]= 0x04;*/
-	
-	
-	uint8_t cmdRole[sizeof(WriteRole)+sizeof(med)];
-	unite(WriteRole, &med, cmdRole);	
+	for(int i = size1; i<(size1+size2); i++)
+	{
+		cmdRole[i] = med;
+	}
+	//unite(WriteRole, &leader, cmdRole, size1, doble);
   send(cmdRole,(sizeof(cmdRole)/sizeof(cmdRole[0])), &huart1);
 	receive(&huart1);
-	HAL_Delay(1000);	
-	
+	HAL_Delay(1000);
 	
 	//Channel	
 	//printf("Channel\n\r");
-	uint8_t cmdChannel[sizeof(WriteChannel)+sizeof(channel)];
-	unite(WriteChannel, &channel, cmdChannel);
+	
+	size1 = sizeof(WriteChannel);
+	size2 = sizeof(channel);
+	uint8_t cmdChannel[size1+size2];
+	for(int i = 0; i<size1;i++)
+	{
+		cmdChannel[i] = WriteChannel[i];
+	}
+	for(int i = size1; i<(size1+size2); i++)
+	{
+		cmdChannel[i] = channel;
+	}
 	send(cmdChannel,(sizeof(cmdChannel)/sizeof(cmdChannel[0])), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	uint8_t cmdWPANID[sizeof(WritePANID)+sizeof(PANID)];
-	unite(WritePANID, PANID, cmdWPANID);
+	
+	//WritePANID
+	size1 = sizeof(WritePANID);
+	size2 = sizeof(PANID);
+	uint8_t cmdWPANID[size1+size2];
+	for(int i = 0; i<size1;i++)
+	{
+		cmdWPANID[i] = WritePANID[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdWPANID[i] = PANID[p];
+	}	
+	//unite(WritePANID, PANID, cmdWPANID);
 	send(cmdWPANID, sizeof(cmdWPANID)/sizeof(cmdWPANID[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
 	
-	uint8_t cmdWNetName[sizeof(WriteNetName)+sizeof(NetName)];
-	unite(WriteNetName, NetName, cmdWNetName);
+	size1 = sizeof(WriteNetName);
+	size2 = sizeof(NetName);
+	uint8_t cmdWNetName[size1+size2];
+	//unite(WriteNetName, NetName, cmdWNetName);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdWNetName[i] = WriteNetName[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdWNetName[i] = NetName[p];
+	}	
 	send(cmdWNetName, sizeof(cmdWNetName)/sizeof(cmdWNetName[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	uint8_t cmdWMLP[sizeof(WriteMLocPref)+sizeof(MeshLocPrefix)];
-	unite(WriteMLocPref, MeshLocPrefix, cmdWMLP);
+
+	size1 = sizeof(WriteMLocPref);
+	size2 = sizeof(MeshLocPrefix);
+	uint8_t cmdWMLP[size1 + size2];
+	//unite(WriteMLocPref, MeshLocPrefix, cmdWMLP);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdWMLP[i] = WriteMLocPref[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdWMLP[i] = MeshLocPrefix[p];
+	}	
+
 	send(cmdWMLP, sizeof(cmdWMLP)/sizeof(cmdWMLP[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
 	
-	uint8_t cmdMK[sizeof(WriteMK)+sizeof(MasterKey)];
-	unite(WriteMK, MasterKey, cmdMK);
+	size1 = sizeof(WriteMK);
+	size2 = sizeof(MasterKey);
+	uint8_t cmdMK[size1 + size2];
+	//unite(WriteMK, MasterKey, cmdMK);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdMK[i] = WriteMK[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdMK[i] = MasterKey[p];
+	}	
 	send(cmdMK, sizeof(cmdMK)/sizeof(cmdMK[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
+	////
 	
-	uint8_t cmdExtPID[sizeof(WriteExtPID)+sizeof(ExtPANID)];
-	unite(WriteExtPID, ExtPANID, cmdExtPID);
+	size1 = sizeof(WriteExtPID);
+	size2 = sizeof(ExtPANID);
+	uint8_t cmdExtPID[size1 + size2];
+	//unite(WriteExtPID, ExtPANID, cmdExtPID);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdExtPID[i] = WriteExtPID[i];
+	}
+	HAL_Delay(100);
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdExtPID[i] = ExtPANID[p];
+	}	
+	
 	send(cmdExtPID, sizeof(cmdExtPID)/sizeof(cmdExtPID[0]), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	uint8_t cmdComCred[sizeof(WriteComCred)+sizeof(ComCred)];
-	unite(WriteComCred, ComCred, cmdComCred);
-	send(cmdComCred, sizeof(cmdComCred)/sizeof(cmdComCred[0]), &huart1);
+	//Join Credential
+
+size1 = sizeof(WriteComCred);
+	size2 = sizeof(ComCred);
+	uint8_t cmdComCred[size1 + size2];
+	//unite(WriteComCred, ComCred, cmdComCred);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdComCred[i] = WriteComCred[i];
+	}
+	HAL_Delay(100);
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdComCred[i] = ComCred[p];
+	}	
+	
+	send(cmdComCred,(sizeof(cmdComCred)/sizeof(cmdComCred[0])), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	//Join Credential
-	uint8_t cmdJoinCred[sizeof(WriteJoinCred)+sizeof(JoinCred)];
-	unite(WriteJoinCred, JoinCred, cmdJoinCred);
-	HAL_UART_Transmit(&huart2, WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])),10);
-	HAL_UART_Transmit(&huart2, JoinCred,(sizeof(JoinCred)/sizeof(JoinCred[0])),10);
-	HAL_UART_Transmit(&huart2, cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])),10);
+	
+	
+	size1 = sizeof(WriteJoinCred);
+	size2 = sizeof(JoinCred);
+	uint8_t cmdJoinCred[size1 + size2];
+	//unite(WriteJoinCred, JoinCred, cmdJoinCred);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdJoinCred[i] = WriteJoinCred[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdJoinCred[i] = JoinCred[p];
+	}	
+	
 	send(cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])), &huart1);
 	receive(&huart1);	
 	HAL_Delay(1000);
@@ -462,70 +553,169 @@ static  void InicioLeader(void)
 	
 	//Role
 	HAL_Delay(1000);
-	//printf("Role\n\r");
-	
-	uint8_t cmdRole[sizeof(WriteRole)+sizeof(leader)];
-	unite(WriteRole, &leader, cmdRole);
+	//printf("Role\n\r");		
+	size_t size1 = sizeof(WriteRole);
+	size_t size2 = sizeof(leader);
+	uint8_t cmdRole[size1+size2];
+	for(int i = 0; i<size1;i++)
+	{
+		cmdRole[i] = WriteRole[i];
+	}
+	for(int i = size1; i<(size1+size2); i++)
+	{
+		cmdRole[i] = leader
+		;
+	}
+	//unite(WriteRole, &leader, cmdRole, size1, doble);
   send(cmdRole,(sizeof(cmdRole)/sizeof(cmdRole[0])), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
 	//Channel	
 	//printf("Channel\n\r");
-	uint8_t cmdChannel[sizeof(WriteChannel)+sizeof(channel)];
-	unite(WriteChannel, &channel, cmdChannel);
+	
+	size1 = sizeof(WriteChannel);
+	size2 = sizeof(channel);
+	uint8_t cmdChannel[size1+size2];
+	for(int i = 0; i<size1;i++)
+	{
+		cmdChannel[i] = WriteChannel[i];
+	}
+	for(int i = size1; i<(size1+size2); i++)
+	{
+		cmdChannel[i] = channel;
+	}
 	send(cmdChannel,(sizeof(cmdChannel)/sizeof(cmdChannel[0])), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
 	
 	//WritePANID
-	uint8_t cmdWPANID[sizeof(WritePANID)+sizeof(PANID)];
-	unite(WritePANID, PANID, cmdWPANID);
+	size1 = sizeof(WritePANID);
+	size2 = sizeof(PANID);
+	uint8_t cmdWPANID[size1+size2];
+	for(int i = 0; i<size1;i++)
+	{
+		cmdWPANID[i] = WritePANID[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdWPANID[i] = PANID[p];
+	}	
+	//unite(WritePANID, PANID, cmdWPANID);
 	send(cmdWPANID, sizeof(cmdWPANID)/sizeof(cmdWPANID[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	uint8_t cmdWNetName[sizeof(WriteNetName)+sizeof(NetName)];
-	unite(WriteNetName, NetName, cmdWNetName);
+	
+	size1 = sizeof(WriteNetName);
+	size2 = sizeof(NetName);
+	uint8_t cmdWNetName[size1+size2];
+	//unite(WriteNetName, NetName, cmdWNetName);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdWNetName[i] = WriteNetName[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdWNetName[i] = NetName[p];
+	}	
 	send(cmdWNetName, sizeof(cmdWNetName)/sizeof(cmdWNetName[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
 
-	uint8_t cmdWMLP[sizeof(WriteMLocPref)+sizeof(MeshLocPrefix)];
-	unite(WriteMLocPref, MeshLocPrefix, cmdWMLP);
+	size1 = sizeof(WriteMLocPref);
+	size2 = sizeof(MeshLocPrefix);
+	uint8_t cmdWMLP[size1 + size2];
+	//unite(WriteMLocPref, MeshLocPrefix, cmdWMLP);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdWMLP[i] = WriteMLocPref[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdWMLP[i] = MeshLocPrefix[p];
+	}	
+
 	send(cmdWMLP, sizeof(cmdWMLP)/sizeof(cmdWMLP[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	uint8_t cmdMK[sizeof(WriteMK)+sizeof(MasterKey)];
-	unite(WriteMK, MasterKey, cmdMK);
+	
+	size1 = sizeof(WriteMK);
+	size2 = sizeof(MasterKey);
+	uint8_t cmdMK[size1 + size2];
+	//unite(WriteMK, MasterKey, cmdMK);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdMK[i] = WriteMK[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdMK[i] = MasterKey[p];
+	}	
 	send(cmdMK, sizeof(cmdMK)/sizeof(cmdMK[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	uint8_t cmdExtPID[sizeof(WriteExtPID)+sizeof(ExtPANID)];
-	unite(WriteExtPID, ExtPANID, cmdExtPID);
+	////
+	
+	size1 = sizeof(WriteExtPID);
+	size2 = sizeof(ExtPANID);
+	uint8_t cmdExtPID[size1 + size2];
+	//unite(WriteExtPID, ExtPANID, cmdExtPID);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdExtPID[i] = WriteExtPID[i];
+	}
+	HAL_Delay(100);
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdExtPID[i] = ExtPANID[p];
+	}	
+	
 	send(cmdExtPID, sizeof(cmdExtPID)/sizeof(cmdExtPID[0]), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
 	//Join Credential
 
-	uint8_t cmdJoinCred[sizeof(WriteJoinCred)sizeof(JoinCred)];
-	unite(WriteJoinCred, JoinCred, cmdJoinCred);
+	/////
 	
-	HAL_UART_Transmit(&huart2, WriteJoinCred,(sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0])),10);
-	HAL_UART_Transmit(&huart2, JoinCred,(sizeof(JoinCred)/sizeof(JoinCred[0])),10);
-	HAL_UART_Transmit(&huart2, cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])),10);
+	
+	size1 = sizeof(WriteJoinCred);
+	size2 = sizeof(JoinCred);
+	uint8_t cmdJoinCred[size1 + size2];
+	//unite(WriteJoinCred, JoinCred, cmdJoinCred);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdJoinCred[i] = WriteJoinCred[i];
+	}
+	HAL_Delay(100);
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdJoinCred[i] = JoinCred[p];
+	}	
+	
 	send(cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])), &huart3);
 	receive(&huart3);	
 	HAL_Delay(1000);
 	
-	uint8_t cmdComCred[sizeof(WriteComCred)+sizeof(ComCred)];
-	unite(WriteComCred, ComCred, cmdComCred);
-	send(cmdComCred, sizeof(cmdComCred)/sizeof(cmdComCred[0]), &huart3);
+	size1 = sizeof(WriteComCred);
+	size2 = sizeof(ComCred);
+	uint8_t cmdComCred[size1 + size2];
+	//unite(WriteComCred, ComCred, cmdComCred);
+	for(int i = 0; i<size1;i++)
+	{
+		cmdComCred[i] = WriteComCred[i];
+	}
+	for(int i = size1, p=0; i<(size1+size2); i++, p++)
+	{
+		cmdComCred[i] = ComCred[p];
+	}	
+	
+	send(cmdComCred,(sizeof(cmdComCred)/sizeof(cmdComCred[0])), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
@@ -539,16 +729,6 @@ static  void InicioLeader(void)
 	receive(&huart3);
 	HAL_Delay(1000);
 	
-	
-	send(CommissionerOn, (sizeof(CommissionerOn)/sizeof(CommissionerOn[0])),&huart3);
-	receive(&huart3);
-	HAL_Delay(1000);
-	
-	
-	
-	send(AddJoiner, (sizeof(AddJoiner)/sizeof(AddJoiner[0])),&huart3);
-	receive(&huart3);
-	HAL_Delay(1000);
 }
 
 
@@ -730,16 +910,16 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 
 
 
-void unite(uint8_t *buff1, uint8_t *buff2, uint8_t *out)
+void unite(uint8_t buff1[], uint8_t buff2[], uint8_t out[], size_t size1, size_t doble)
 {
-	int size1 = (sizeof(buff1)/sizeof(buff1[0]));
-	int size2 = sizeof(buff2);
+	//int size1 = (sizeof(buff1)/sizeof(buff1[0]));
+	//int size2 = sizeof(buff2);
 	
 	for(int i = 0; i<size1;i++)
 	{
 		out[i] = buff1[i];
 	}
-	for(int i = size1+1, p=0; i<(size1+size2); i++, p++)
+	for(int i = size1, p=0; i<(size1+doble); i++, p++)
 	{
 		out[i] = buff2[p];
 	}
