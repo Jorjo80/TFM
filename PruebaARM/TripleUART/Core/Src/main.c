@@ -155,12 +155,12 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-
-	//HAL_UART_Receive_IT(&huart1, cadena, 1);
+//HAL_UART_Receive_IT(&huart1, cadena, 1);
+	
 
   /* USER CODE END 2 */
 	InicioLeader();
- InicioFed();
+  InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	HAL_Delay(1000);
@@ -555,7 +555,7 @@ static  void InicioLeader(void)
 	HAL_Delay(1000);
 	//printf("Role\n\r");		
 	size_t size1 = sizeof(WriteRole);
-	size_t size2 = sizeof(leader);
+	size_t size2 = sizeof(fed);
 	uint8_t cmdRole[size1+size2];
 	for(int i = 0; i<size1;i++)
 	{
@@ -563,7 +563,7 @@ static  void InicioLeader(void)
 	}
 	for(int i = size1; i<(size1+size2); i++)
 	{
-		cmdRole[i] = leader
+		cmdRole[i] = fed
 		;
 	}
 	//unite(WriteRole, &leader, cmdRole, size1, doble);
@@ -729,6 +729,17 @@ static  void InicioLeader(void)
 	receive(&huart3);
 	HAL_Delay(1000);
 	
+	/*send(CommissionerOn,sizeof(CommissionerOn)/sizeof(CommissionerOn[0]),&huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	send(AddBR,sizeof(AddBR)/sizeof(AddBR[0]),&huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	
+	send(AddJoiner,sizeof(AddJoiner)/sizeof(AddJoiner[0]),&huart3);
+	receive(&huart3);
+	HAL_Delay(1000);*/
 }
 
 
