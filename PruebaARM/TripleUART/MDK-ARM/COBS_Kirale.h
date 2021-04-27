@@ -27,8 +27,8 @@
 typedef void ( *cobs_byteOut_t )( uint8_t c, UART_HandleTypeDef *m );
 
 /* Encoded byte input function. */
-typedef char ( *cobs_byteIn_t )( uint8_t *c , UART_HandleTypeDef *m);
-typedef char ( *cobs_byteIn_t2 )( uint8_t *c , uint8_t *m);
+typedef uint8_t ( *cobs_byteIn_t )( uint8_t *c , UART_HandleTypeDef *m);
+typedef uint8_t ( *cobs_byteIn_t2 )( uint8_t *c , uint8_t *m);
 	
 
 struct cobs_tx_s

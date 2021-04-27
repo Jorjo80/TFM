@@ -1,7 +1,8 @@
 #include <ADuC841.h>
 #include <stdio.h>
 #include "Comandos.h"
-#include "COBS_kirale.h"
+#include "netconfig.h"
+
 
 
 /**************** FPGA Communication Port: ********************/
@@ -17,6 +18,7 @@ unsigned char DATA_L;
 unsigned char DATA_H;
 unsigned int datain;
 
+uint8_t dato;
 unsigned char flag, c;
 
 unsigned int result,Temp,Hum, LDR, cuenta_temp, cuenta_hum; 
@@ -51,7 +53,7 @@ void _WSN_UART841_config()
 	PCON = 0x80;//PCON: power-saving options and general-purpose status flags => SMOD=1 (Double UART Baud Rate)
 	
 	TMOD = 0x21;//Timer 1 Set M1 for 8-bit autoreload timer, Timer 0 Set M0 16-bit 
-	TH1  = 0xDC;// 19200 ADuC841        //TH1 holds a value which is to be reloaded into TL1 each time it overflows. (BaudRate = 19200 bps)
+	TH1 =  0xFA; // 115200 ADuC841        //TH1 holds a value which is to be reloaded into TL1 each time it overflows. (BaudRate = 19200 bps)
 	TR1  = 1;   //Start timer 1
 
 	TI  = 1;   //bit1(SCON): Serial Port Transmit Interrupt Flag.
@@ -269,22 +271,14 @@ void main()
 	scanf("%d",&cuenta_temp);
 	printf("H = \n");
 	scanf("%d",&cuenta_hum);
-
+	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
 	   printf ("Connected\n\r");	   			   
 
 	   while (1)
 	   {
 	   	   if (flag == 1){
 
-			_WSN_sensors_reading();
-
-			/********* SHT11 Sensor Layer *************************/
-		 
-		    /*******************************************************/
-			
-			/********* ACC Sensor layer **************************
-
-			/*****************************************************/			
+			send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));	
 
 			flag = 0;
 

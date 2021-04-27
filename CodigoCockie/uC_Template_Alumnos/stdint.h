@@ -25,7 +25,7 @@
   #define __UINT64_C(x)  __ESCAPE__(__PASTE(x ## u, __INT64_C_SUFFIX__))
   #if defined(__clang__) || (defined(__ARMCC_VERSION) && !defined(__STRICT_ANSI__))
     /* armclang and non-strict armcc allow 'long long' in system headers */
-    #define __LONGLONG long long
+    #define __LONGLONG long 
   #else
     /* strict armcc has '__int64' */
     #define __LONGLONG __int64
@@ -54,15 +54,15 @@
 
     /* exact-width signed integer types */
 typedef   signed          char int8_t;
-typedef   signed short     int int16_t;
+typedef   signed      int int16_t;
 typedef   signed           int int32_t;
-typedef   signed       __INT64 int64_t;
+typedef   signed          long int64_t;
 
     /* exact-width unsigned integer types */
 typedef unsigned          char uint8_t;
 typedef unsigned short     int uint16_t;
 typedef unsigned           int uint32_t;
-typedef unsigned       __INT64 uint64_t;
+typedef unsigned 			long  uint64_t;
 
     /* 7.18.1.2 */
 
@@ -71,13 +71,13 @@ typedef unsigned       __INT64 uint64_t;
 typedef   signed          char int_least8_t;
 typedef   signed short     int int_least16_t;
 typedef   signed           int int_least32_t;
-typedef   signed       __INT64 int_least64_t;
+//typedef   signed       __INT64 int_least64_t;
 
     /* minimum-width unsigned integer types */
 typedef unsigned          char uint_least8_t;
 typedef unsigned short     int uint_least16_t;
 typedef unsigned           int uint_least32_t;
-typedef unsigned       __INT64 uint_least64_t;
+//typedef unsigned       __INT64 uint_least64_t;
 
     /* 7.18.1.3 */
 
@@ -85,13 +85,13 @@ typedef unsigned       __INT64 uint_least64_t;
 typedef   signed           int int_fast8_t;
 typedef   signed           int int_fast16_t;
 typedef   signed           int int_fast32_t;
-typedef   signed       __INT64 int_fast64_t;
+//typedef   signed       __INT64 int_fast64_t;
 
     /* fastest minimum-width unsigned integer types */
 typedef unsigned           int uint_fast8_t;
 typedef unsigned           int uint_fast16_t;
 typedef unsigned           int uint_fast32_t;
-typedef unsigned       __INT64 uint_fast64_t;
+//typedef unsigned       __INT64 uint_fast64_t;
 
     /* 7.18.1.4 integer types capable of holding object pointers */
 #if __sizeof_ptr == 8
@@ -103,8 +103,8 @@ typedef unsigned           int uintptr_t;
 #endif
 
     /* 7.18.1.5 greatest-width integer types */
-typedef   signed     __LONGLONG intmax_t;
-typedef unsigned     __LONGLONG uintmax_t;
+//typedef   signed     __LONGLONG intmax_t;
+//typedef unsigned     __LONGLONG uintmax_t;
 
 
 #if !defined(__cplusplus) || defined(__STDC_LIMIT_MACROS)
@@ -172,11 +172,11 @@ typedef unsigned     __LONGLONG uintmax_t;
     /* 7.18.2.4 */
 
     /* minimum value of pointer-holding signed integer type */
-#if __sizeof_ptr == 8
+/*#if __sizeof_ptr == 8
 #define INTPTR_MIN INT64_MIN
 #else
 #define INTPTR_MIN INT32_MIN
-#endif
+#endif*/
 
     /* maximum value of pointer-holding signed integer type */
 #if __sizeof_ptr == 8

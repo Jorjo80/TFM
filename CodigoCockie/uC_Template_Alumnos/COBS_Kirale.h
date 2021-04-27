@@ -1,15 +1,13 @@
-
-#include "stdint.h"
-#include "stdio.h"
-#include "stdlib.h"
-#include "string.h"
-#include "inttypes.h"
-
 /****************************************************************************
 **                                                                         **
 **                         DEFINITIONS AND MACROS                          **
 **                                                                         **
 ****************************************************************************/
+typedef unsigned char  uint8_t;
+typedef unsigned short uint16_t;
+typedef   signed int   int16_t;
+typedef enum { false, true } _Bool;
+
 
 #define COBS_SIZE_codS_ARRAY 10
 
@@ -23,12 +21,14 @@
 **                                                                         **
 ****************************************************************************/
 
+
+
 /* Encodd byte output function. */
-typedef void ( *cobs_byteOut_t )(char c);
+typedef void (*cobs_byteOut_t)(uint8_t c);
 
 /* Encodd byte input function. */
-typedef char ( *cobs_byteIn_t )( char *c);
-typedef char ( *cobs_byteIn_t2 )( char *c , char *m);
+typedef char ( *cobs_byteIn_t )( uint8_t *c);
+typedef char ( *cobs_byteIn_t2 )( uint8_t *c , uint8_t *m);
 	
 
 struct cobs_tx_s
@@ -75,24 +75,34 @@ static struct usart_rx_s usart_rxPkt;
 **                      PROTOTYPES OF LOCAL FUNCTIONS                      **
 **                                                                         **
 ****************************************************************************/
+static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last);	   
+void  *memset (void *dest, int val, size_t len); 
 
-static void debug(_Bool tx, char byte, Bool first, _Bool last);
 
-#ifdef DEBUG_COBS
-#define debug_tx( ... ) debug( 1, __VA_ARGS__ )
-#define debug_rx( ... ) debug( 0, __VA_ARGS__ )
-#else
-#define debug_tx( ... ) ( void ) 0
-#define debug_rx( ... ) ( void ) 0
-#endif /* DEBUG_COBS*/
+//#ifdef DEBUG_COBS
+int debug_tx( uint8_t byte, _Bool first, _Bool last ) {debug( 1, byte, first,  last );}
+int debug_rx( uint8_t byte, _Bool first, _Bool last ) {debug(0, byte, first,  last  );}
+//#else
+//#define debug_tx( uint8_t byte, _Bool first, _Bool last )( void ) 0
+//#define debug_rx(  uint8_t byte, _Bool first, _Bool last)( void ) 0
+//#endif
 
 // COBS ENcod PROPIO
-static size_t getEncoddBufferSize(size_t unencoddBufferSize)
-{
-		return unencoddBufferSize + unencoddBufferSize / 254 + 1;
-}
 
-static size_t encod(const char* buffer, size_t size, char* encoddBuffer)
+
+/*void* memset (void *dest, int val, size_t len)
+{
+  unsigned char *ptr = dest;
+  while (len-- > 0)
+    *ptr++ = val;
+  return dest;
+}*/
+
+void uart_sendChar(uint8_t byte)
+{
+	printf("%c",byte);
+}
+static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
 {
 		size_t read_index  = 0;
 		size_t write_index = 1;
@@ -129,15 +139,15 @@ static size_t encod(const char* buffer, size_t size, char* encoddBuffer)
 
 // COBS KIRALE
 
-int16_t cobs_encod(char *buff, short len, cobs_byteOut_t output, UART_HandleTypeDef *modulo)
+int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 {
 	struct usart_tx_s usart_txPkt;
-	char *         tmpPtr = buff;
-	char *         lastZeroPtr = NULL;
-	char *         codPtr = NULL;
-	short          codPos = 0;
-	short          cod = 0x01;
-	char           numZeroes = 0;
+	uint8_t *         tmpPtr = buff;
+	uint8_t *         lastZeroPtr = NULL;
+	uint8_t *         codPtr = NULL;
+	uint16_t          codPos = 0;
+	uint16_t          cod = 0x01;
+	uint8_t           numZeroes = 0;
 	int16_t           outIdx = 0;
 
 	/* Initialize COBS structure. */
@@ -345,31 +355,31 @@ int16_t cobs_encod(char *buff, short len, cobs_byteOut_t output, UART_HandleType
 		if (outIdx == 0)
 		{
 			/* First zero as start delimiter */
-			debug_tx(0x00, 1, outIdx == usart_txPkt.totBytes);
-			output(0x00, modulo);
+			//debug_tx(0x00, 1, outIdx == usart_txPkt.totBytes);
+			output(0x00);
 			outIdx++;
 		}
 		else if ((usart_txPkt.cobs.pos[usart_txPkt.cobs.codPos] ==
 			usart_txPkt.proBytes) &&
 			(usart_txPkt.cobs.cod[usart_txPkt.cobs.codPos] != 0))
 		{
-			debug_tx(usart_txPkt.cobs.cod[usart_txPkt.cobs.codPos], 0,
-				outIdx == usart_txPkt.totBytes);
-			output(usart_txPkt.cobs.cod[usart_txPkt.cobs.codPos], modulo);
+			//debug_tx(usart_txPkt.cobs.cod[usart_txPkt.cobs.codPos], 0,
+				//outIdx == usart_txPkt.totBytes);
+			output(usart_txPkt.cobs.cod[usart_txPkt.cobs.codPos]);
 			usart_txPkt.cobs.codPos++;
 			outIdx++;
 		}
 		else
 		{
-			char data = 0;
+			uint8_t dato = 0;
 
-			while (data == 0)
+			while (dato == 0)
 			{
-				data = buff[usart_txPkt.proBytes++];
-				if (data != 0)
+				dato = buff[usart_txPkt.proBytes++];
+				if (dato != 0)
 				{
-					debug_tx(data, 0, outIdx == usart_txPkt.totBytes);
-					output(data,modulo);
+					//debug_tx(data, 0, outIdx == usart_txPkt.totBytes);
+					output(dato);
 					outIdx++;
 				}
 			}
@@ -380,20 +390,50 @@ int16_t cobs_encod(char *buff, short len, cobs_byteOut_t output, UART_HandleType
 }
 
 
-
-
-
-int16_t cobs_decod(char *buff, short len, cobs_byteIn_t input, UART_HandleTypeDef *modulo)
+int timeout(uint8_t inByte)
 {
-	char inByte = 0;
-	char numChar = 0;
-	numChar = input(&inByte, modulo);
+	debug_rx(inByte, 1, 1);
+	return COBS_RESULT_TIMEOUT;
+}
+
+ int nothing()
+ {
+	return COBS_RESULT_NONE;
+}
+int first(uint8_t inByte)
+{
+	debug_rx(inByte, 1, 0);
+	return COBS_RESULT_NONE;
+}
+int error(uint8_t inByte)
+ {
+	debug_rx(inByte, 0, 1);
+	return COBS_RESULT_ERROR;
+}
+int incomplete(uint8_t inByte)
+{
+	debug_rx(inByte, 0, 0);
+	return COBS_RESULT_NONE;
+}
+int finished(uint8_t inByte)
+{
+	debug_rx(inByte, 0, 1);
+	return (usart_rxPkt.totBytes);
+}
+
+
+
+int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
+{
+	uint8_t inByte = 0;
+	uint8_t numChar = 0;
+	numChar = input(&inByte);
 	if (numChar == 0)
-		goto timeout;
+		timeout(inByte);
 
 	if (inByte == 0)
 	{
-		short dataBytes = usart_rxPkt.cobs.dataBytes;
+		uint16_t dataBytes = usart_rxPkt.cobs.dataBytes;
 		/* Initialize COBS structure. */
 		usart_rxPkt.totBytes = 5;
 		usart_rxPkt.proBytes = 0;
@@ -403,9 +443,9 @@ int16_t cobs_decod(char *buff, short len, cobs_byteIn_t input, UART_HandleTypeDe
 		usart_rxPkt.cobs.zeroes = 0;
 		memset(buff, 0, 5);
 		if (dataBytes == 0)
-			goto first;
+			first(inByte);
 		else
-			goto nothing;
+			nothing();
 	}
 	else if ((inByte != 0) && (usart_rxPkt.startMsg == 1))
 	{
@@ -413,7 +453,7 @@ int16_t cobs_decod(char *buff, short len, cobs_byteIn_t input, UART_HandleTypeDe
 		{
 			usart_rxPkt.totBytes += (buff[0] << 8) + buff[1];
 			if (usart_rxPkt.totBytes > len)
-				goto error;
+				error(inByte);
 
 			memset(buff + 5, 0, usart_rxPkt.totBytes - 5);
 			usart_rxPkt.payload = 1;
@@ -433,7 +473,7 @@ int16_t cobs_decod(char *buff, short len, cobs_byteIn_t input, UART_HandleTypeDe
 				usart_rxPkt.cobs.zeroes = 0;
 			}
 			else if ((inByte == 0xD1) || (inByte == 0xD2))
-				goto error;
+				error(inByte);
 			else if (inByte < 0xE0)
 			{
 				/* Move pointer to the new position. */
@@ -446,7 +486,7 @@ int16_t cobs_decod(char *buff, short len, cobs_byteIn_t input, UART_HandleTypeDe
 				usart_rxPkt.cobs.zeroes = 2;
 			}
 			else
-				goto error;
+				error(inByte);
 
 			if (usart_rxPkt.cobs.dataBytes == 0)
 			{
@@ -471,33 +511,18 @@ int16_t cobs_decod(char *buff, short len, cobs_byteIn_t input, UART_HandleTypeDe
 		}
 	}
 	else
-		goto nothing;
+		nothing();
 
 	if (usart_rxPkt.proBytes >= usart_rxPkt.totBytes)
 	{
 		usart_rxPkt.startMsg = 0;
-		goto finished;
+		finished(inByte);
 	}
 	else
-		goto incomplete;
+		incomplete(inByte);
 
-timeout:
-	debug_rx(inByte, 1, 1);
-	return COBS_RESULT_TIMEOUT;
-nothing:
-	return COBS_RESULT_NONE;
-first:
-	debug_rx(inByte, 1, 0);
-	return COBS_RESULT_NONE;
-error:
-	debug_rx(inByte, 0, 1);
-	return COBS_RESULT_ERROR;
-incomplete:
-	debug_rx(inByte, 0, 0);
-	return COBS_RESULT_NONE;
-finished:
-	debug_rx(inByte, 0, 1);
-	return (usart_rxPkt.totBytes);
+
+
 }
 
 /****************************************************************************
@@ -522,18 +547,18 @@ finished:
 
 
 
-int16_t cobs_decodInt(char *buff, short len, cobs_byteIn_t2 input, char *input_buff)
+/*int16_t cobs_decodInt(uint8_t *buff, uint16_t len, cobs_byteIn_t2 input, uint8_t *input_buff)
 {
 	char inByte = 0;
 	char numChar = 0;
 	numChar = input(&inByte, input_buff++);
 	if (numChar == 0)
-		goto timeout;
+		timeout(inByte);
 
 	if (inByte == 0)
 	{
 		short dataBytes = usart_rxPkt.cobs.dataBytes;
-		/* Initialize COBS structure. */
+		// Initialize COBS structure. 
 		usart_rxPkt.totBytes = 5;
 		usart_rxPkt.proBytes = 0;
 		usart_rxPkt.startMsg = 1;
@@ -560,7 +585,7 @@ int16_t cobs_decodInt(char *buff, short len, cobs_byteIn_t2 input, char *input_b
 
 		if (usart_rxPkt.cobs.dataBytes == 0)
 		{
-			/* Read COBS cod. */
+			// Read COBS cod. 
 			if (inByte < 0xD0)
 			{
 				usart_rxPkt.cobs.dataBytes = inByte - 1;
@@ -575,7 +600,7 @@ int16_t cobs_decodInt(char *buff, short len, cobs_byteIn_t2 input, char *input_b
 				goto error;
 			else if (inByte < 0xE0)
 			{
-				/* Move pointer to the new position. */
+				// Move pointer to the new position. /
 				usart_rxPkt.cobs.dataBytes = 0;
 				usart_rxPkt.cobs.zeroes = inByte - 0xD0;
 			}
@@ -597,7 +622,7 @@ int16_t cobs_decodInt(char *buff, short len, cobs_byteIn_t2 input, char *input_b
 		{
 			if (usart_rxPkt.proBytes < usart_rxPkt.totBytes)
 			{
-				/* Read data byte. */
+				// Read data byte. 
 				buff[usart_rxPkt.proBytes] = inByte;
 			}
 
@@ -620,7 +645,7 @@ int16_t cobs_decodInt(char *buff, short len, cobs_byteIn_t2 input, char *input_b
 	else
 		goto incomplete;
 
-timeout:
+/*timeout:
 	debug_rx(inByte, 1, 1);
 	return COBS_RESULT_TIMEOUT;
 nothing:
@@ -636,13 +661,13 @@ incomplete:
 	return COBS_RESULT_NONE;
 finished:
 	debug_rx(inByte, 0, 1);
-	return (usart_rxPkt.totBytes);
-}
+	return (usart_rxPkt.totBytes); 
+}			*/
 
 
 
 
-static void debug(_Bool tx, char byte, _Bool first, _Bool last)
+ static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last)
 {
 	if (first)
 		printf("COBS_%sX: |", tx ? "T" : "R");
@@ -655,4 +680,14 @@ static void debug(_Bool tx, char byte, _Bool first, _Bool last)
 	else
 		printf(":");
 }
+
+
+void  *memset (void *dest, int val, size_t len)
+{
+  unsigned char *ptr = dest;
+  while (len-- > 0)
+    *ptr++ = val;
+  return dest;
+}
+
 
