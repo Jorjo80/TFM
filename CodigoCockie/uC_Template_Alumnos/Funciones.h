@@ -24,9 +24,14 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 	while(i<size)
 	{
 		if(i != CKS_POS)
+		{
 			cks ^= frame[i];
+		}
 		else
+		{
 			cks=cks;
+		}
+		i++;
 	}
 	return cks;
 	
@@ -37,9 +42,11 @@ static void send(uint8_t *buffer, size_t size)
 {
 	uint8_t _encodeBuffer[512];
 	size_t numEncoded= 0;
+	printf("\nEntrando al envio\n");
 	buffer[CKS_POS]= XOR_CKS(buffer, size);
+	printf("\nTerminado XOR\n");
 	numEncoded = encod(buffer, size, _encodeBuffer);
-	printf("%d",PacketMarker);
+	printf("\n%c\n",PacketMarker);
 	printf(_encodeBuffer);
 	//HAL_UART_Transmit(&PacketMarker,sizeof(PacketMarker),1000);
 	//HAL_UART_Transmit(_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);

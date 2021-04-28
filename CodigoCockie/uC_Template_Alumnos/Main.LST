@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  04/27/2021 18:54:50 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  04/28/2021 19:31:46 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -9,9 +9,9 @@ line level    source
 
    1          #include <ADuC841.h>
    2          #include <stdio.h>
-   3          #include "Comandos.h"
+   3          
    4          #include "netconfig.h"
-*** WARNING C231 IN LINE 691 OF COBS_KIRALE.H: '_memset': attempt to redefine intrinsic function
+*** WARNING C231 IN LINE 689 OF COBS_KIRALE.H: '_memset': attempt to redefine intrinsic function
    5          
    6          
    7          
@@ -27,299 +27,311 @@ line level    source
   17          unsigned char DATA_L;
   18          unsigned char DATA_H;
   19          unsigned int datain;
-  20          
-  21          uint8_t dato;
-  22          unsigned char flag, c;
-  23          
-  24          unsigned int result,Temp,Hum, LDR, cuenta_temp, cuenta_hum; 
-  25          
-  26          unsigned int resulti[2];
-  27          
-  28          /***************** Timer Configuration: **************************/
-  29          void _WS_Timer_Config(char value)
-  30          {
-  31   1              IEIP2   = 0xA4; // TIC Interruption enable
-  32   1              SEC     = 0x00;
-  33   1              HTHSEC  = 0x00;
-  34   1              MIN             = 0x00;
-  35   1              HOUR    = 0x00;
-  36   1              INTVAL  = value;        //**(Config.)   
-  37   1              TIMECON = 0x53;         // The timer interrupt each second **(Config.)  /* 0x43 = 1/128 seconds */
-  38   1      }       
-  39          /*****************************************************************/
-  40          
-  41          /***************** ADC Configuration: ****************************/
-  42          void _WS_ADC_Config (void)
-  43          {
-  44   1              ADCCON1  = 0xAC;     // ADCCON1: ADC Configuration: 12 clock periods for each conversion.              
+  20          unsigned int i;
+  21          
+  22          uint8_t dato;
+  23          unsigned char flag, c;
+  24          
+  25          unsigned int result,Temp,Hum, LDR, cuenta_temp, cuenta_hum; 
+  26          
+  27          unsigned int resulti[2];
+  28          
+  29          /***************** Timer Configuration: **************************/
+  30          void _WS_Timer_Config(char value)
+  31          {
+  32   1              IEIP2   = 0xA4; // TIC Interruption enable
+  33   1              SEC     = 0x00;
+  34   1              HTHSEC  = 0x00;
+  35   1              MIN             = 0x00;
+  36   1              HOUR    = 0x00;
+  37   1              INTVAL  = value;        //**(Config.)   
+  38   1              TIMECON = 0x53;         // The timer interrupt each second **(Config.)  /* 0x43 = 1/128 seconds */
+  39   1      }       
+  40          /*****************************************************************/
+  41          
+  42          /***************** ADC Configuration: ****************************/
+  43          void _WS_ADC_Config (void)
+  44          {
+  45   1              ADCCON1  = 0xAC;     // ADCCON1: ADC Configuration: 12 clock periods for each conversion.              
              -                                                       
-  45   1              ADCCON2  = 0x03;     // Selects channel 3 & on demand conversion.  (LDR is connected to the ADC3)
-  46   1      }
-  47          /*****************************************************************/
-  48          
-  49          /***************** UART configuration: ***************************/
-  50          void _WSN_UART841_config()
-  51          {
-  52   1              SCON = 0x52;//SCON: UART Serial Port Control Register   => Mode 1: 8-bit UART, variable baud rate
-  53   1              PCON = 0x80;//PCON: power-saving options and general-purpose status flags => SMOD=1 (Double UART Baud Rat
-C51 COMPILER V8.08   MAIN                                                                  04/27/2021 18:54:50 PAGE 2   
+  46   1              ADCCON2  = 0x03;     // Selects channel 3 & on demand conversion.  (LDR is connected to the ADC3)
+  47   1      }
+  48          /*****************************************************************/
+  49          
+  50          /***************** UART configuration: ***************************/
+  51          void _WSN_UART841_config()
+  52          {
+  53   1              SCON = 0x52;//SCON: UART Serial Port Control Register   => Mode 1: 8-bit UART, variable baud rate
+C51 COMPILER V8.08   MAIN                                                                  04/28/2021 19:31:46 PAGE 2   
 
+  54   1              PCON = 0x80;//PCON: power-saving options and general-purpose status flags => SMOD=1 (Double UART Baud Rat
              -e)
-  54   1              
-  55   1              TMOD = 0x21;//Timer 1 Set M1 for 8-bit autoreload timer, Timer 0 Set M0 16-bit 
-  56   1              TH1 = 0xFA;// 115200 ADuC841        //TH1 holds a value which is to be reloaded into TL1 each time it ove
-             -rflows. (BaudRate = 19200 bps)
-  57   1              TR1  = 1;   //Start timer 1
-  58   1      
-  59   1              TI  = 1;   //bit1(SCON): Serial Port Transmit Interrupt Flag.
-  60   1              ES  = 0;        // Serial Port interruption disable
-  61   1              ET1 = 0;        // Timer 1 Interruption Disable 
-  62   1      
-  63   1              EA  = 1;        // Global Enable Interruption Flag
-  64   1      }
-  65          /****************************************************************/
-  66          
-  67          /****************** ADC Conversion: *****************************/
-  68          int _WSN_ADC_conversion()
-  69          {
-  70   1              unsigned int sensorData;
-  71   1      
-  72   1              //*** Sigle conversion:
-  73   1              SCONV = 1;
-  74   1              while (SCONV == 1);
-  75   1      
-  76   1              sensorData = ((ADCDATAH & 0x0F) * 0x0100) + ADCDATAL;
-  77   1              
-  78   1              SCONV = 0; // Conversion Flag
-  79   1              
-  80   1              return (sensorData);
-  81   1      
-  82   1      }
-  83          /*****************************************************************/
-  84          
-  85          /****************** FPGA Initial config. *************************/
-  86          void _WSN_ini_FPGA(void)
-  87          { 
-  88   1                 TrigByte1N  = 1;                
-  89   1                 TrigByte2N  = 1;
-  90   1                 SelTrigger  = 0;
-  91   1                 reset_fpga  = 1;
-  92   1      }
-  93          /****************** FPGA-DATA capture: **************************/
-  94          int _WSN_FPGA(bit sensorSelector)
-  95          {     
-  96   1         unsigned int fpga_data;
-  97   1               
-  98   1         SelTrigger  = sensorSelector;
-  99   1         TrigByte1N = 0; 
- 100   1         while (Ack1N == 1){};
- 101   1         
- 102   1         DATA_L = P2;            // LSB
- 103   1         TrigByte1N = 1;         // Release Trigger1
- 104   1          
- 105   1         TrigByte2N = 0;         //Trigger second data byte
- 106   1         while (Ack2N == 1){};
- 107   1         
- 108   1         DATA_H = P2;           // MSB
- 109   1         TrigByte2N = 1;    // Release Trigger2
- 110   1      
+  55   1              
+  56   1              TMOD = 0x21;//Timer 1 Set M1 for 8-bit autoreload timer, Timer 0 Set M0 16-bit 
+  57   1              TH1 =  0xFA; // 115200 ADuC841        //TH1 holds a value which is to be reloaded into TL1 each time it o
+             -verflows. (BaudRate = 19200 bps)
+  58   1              TR1  = 1;   //Start timer 1
+  59   1      
+  60   1              TI  = 1;   //bit1(SCON): Serial Port Transmit Interrupt Flag.
+  61   1              ES  = 0;        // Serial Port interruption disable
+  62   1              ET1 = 0;        // Timer 1 Interruption Disable 
+  63   1      
+  64   1              EA  = 1;        // Global Enable Interruption Flag
+  65   1      }
+  66          /****************************************************************/
+  67          
+  68          /****************** ADC Conversion: *****************************/
+  69          int _WSN_ADC_conversion()
+  70          {
+  71   1              unsigned int sensorData;
+  72   1      
+  73   1              //*** Sigle conversion:
+  74   1              SCONV = 1;
+  75   1              while (SCONV == 1);
+  76   1      
+  77   1              sensorData = ((ADCDATAH & 0x0F) * 0x0100) + ADCDATAL;
+  78   1              
+  79   1              SCONV = 0; // Conversion Flag
+  80   1              
+  81   1              return (sensorData);
+  82   1      
+  83   1      }
+  84          /*****************************************************************/
+  85          
+  86          /****************** FPGA Initial config. *************************/
+  87          void _WSN_ini_FPGA(void)
+  88          { 
+  89   1                 TrigByte1N  = 1;                
+  90   1                 TrigByte2N  = 1;
+  91   1                 SelTrigger  = 0;
+  92   1                 reset_fpga  = 1;
+  93   1      }
+  94          /****************** FPGA-DATA capture: **************************/
+  95          int _WSN_FPGA(bit sensorSelector)
+  96          {     
+  97   1         unsigned int fpga_data;
+  98   1               
+  99   1         SelTrigger  = sensorSelector;
+ 100   1         TrigByte1N = 0; 
+ 101   1         while (Ack1N == 1){};
+ 102   1         
+ 103   1         DATA_L = P2;            // LSB
+ 104   1         TrigByte1N = 1;         // Release Trigger1
+ 105   1          
+ 106   1         TrigByte2N = 0;         //Trigger second data byte
+ 107   1         while (Ack2N == 1){};
+ 108   1         
+ 109   1         DATA_H = P2;           // MSB
+ 110   1         TrigByte2N = 1;    // Release Trigger2
  111   1      
- 112   1         fpga_data = DATA_L + 256*(int)DATA_H;
- 113   1      
-C51 COMPILER V8.08   MAIN                                                                  04/27/2021 18:54:50 PAGE 3   
+ 112   1      
+ 113   1         fpga_data = DATA_L + 256*(int)DATA_H;
+C51 COMPILER V8.08   MAIN                                                                  04/28/2021 19:31:46 PAGE 3   
 
- 114   1         return(fpga_data);  
- 115   1         
- 116   1      }
- 117          /*****************************************************************/
- 118                                                                                                                                                  
- 119          /***************** Timer Interruption: ***************************/
- 120          void _WSN_interrupt_TimeInterval() interrupt 10 using 3 
- 121          { 
- 122   1         //unsigned int result,Temp,Hum,LDR,Axis;
- 123   1      
- 124   1            /** DO NOT EDIT *********/
- 125   1                 c++;
- 126   1                 if (c==2){
- 127   2                   reset_fpga = 0;
- 128   2                       reset_fpga = 1;
- 129   2                       c = 0;
- 130   2                 }   
- 131   1                /************************/
- 132   1         
+ 114   1      
+ 115   1         return(fpga_data);  
+ 116   1         
+ 117   1      }
+ 118          /*****************************************************************/
+ 119                                                                                                                                                  
+ 120          /***************** Timer Interruption: ***************************/
+ 121          void _WSN_interrupt_TimeInterval() interrupt 10 using 3 
+ 122          { 
+ 123   1         //unsigned int result,Temp,Hum,LDR,Axis;
+ 124   1      
+ 125   1            /** DO NOT EDIT *********/
+ 126   1                 c++;
+ 127   1                 if (c==2){
+ 128   2                   reset_fpga = 0;
+ 129   2                       reset_fpga = 1;
+ 130   2                       c = 0;
+ 131   2                 }   
+ 132   1                /************************/
  133   1         
- 134   1         flag = 1;
- 135   1      
- 136   1            
- 137   1      }
- 138          /*****************************************************************/
- 139          
- 140          /***************** Sensors reading functionalities: ***************/
- 141          void _WSN_sensors_reading(void){
- 142   1      
- 143   1         int result[2], i;
- 144   1         int estado;
- 145   1         static int cuenta = 0;
- 146   1         cuenta++;
- 147   1      
- 148   1              /** _WSN_FPGA(0) = Temperature, ACC Y **/
- 149   1              if(cuenta%cuenta_temp == 0)
- 150   1              {
- 151   2                      result[0] = _WSN_FPGA(0); 
- 152   2                      Temp = (result[0] - (273.15*100)); 
- 153   2                      printf("La temperatura son %.2f grados celsius\n", ((float)Temp)/100);
- 154   2                      if(Temp>=25)
- 155   2                              estado = 1;
- 156   2                      else if(Temp<25)
- 157   2                              estado = 2;
- 158   2              }
- 159   1      
- 160   1              for(i=0;i<100;i++);
- 161   1      
- 162   1              /** _WSN_FPGA(1) = Humidity, ACC X **/ 
- 163   1              if(cuenta%cuenta_hum == 0)
- 164   1              {
- 165   2                      result[1] = _WSN_FPGA(1);  
- 166   2              Hum =  ( (result[1]*127.0)/100 );  
- 167   2                      printf("Hay una humedad del %.2f %c\n", ((float)Hum)/100,37);   
- 168   2              }
- 169   1      
+ 134   1         
+ 135   1         flag = 1;
+ 136   1      
+ 137   1            
+ 138   1      }
+ 139          /*****************************************************************/
+ 140          
+ 141          /***************** Sensors reading functionalities: ***************/
+ 142          void _WSN_sensors_reading(void){
+ 143   1      
+ 144   1         int result[2], i;
+ 145   1         int estado;
+ 146   1         static int cuenta = 0;
+ 147   1         cuenta++;
+ 148   1      
+ 149   1              /** _WSN_FPGA(0) = Temperature, ACC Y **/
+ 150   1              if(cuenta%cuenta_temp == 0)
+ 151   1              {
+ 152   2                      result[0] = _WSN_FPGA(0); 
+ 153   2                      Temp = (result[0] - (273.15*100)); 
+ 154   2                      printf("La temperatura son %.2f grados celsius\n", ((float)Temp)/100);
+ 155   2                      if(Temp>=25)
+ 156   2                              estado = 1;
+ 157   2                      else if(Temp<25)
+ 158   2                              estado = 2;
+ 159   2              }
+ 160   1      
+ 161   1              for(i=0;i<100;i++);
+ 162   1      
+ 163   1              /** _WSN_FPGA(1) = Humidity, ACC X **/ 
+ 164   1              if(cuenta%cuenta_hum == 0)
+ 165   1              {
+ 166   2                      result[1] = _WSN_FPGA(1);  
+ 167   2              Hum =  ( (result[1]*127.0)/100 );  
+ 168   2                      printf("Hay una humedad del %.2f %c\n", ((float)Hum)/100,37);   
+ 169   2              }
  170   1      
- 171   1         /************ Temp: ******************/
- 172   1         // the temperature value taken from the FPGA has     to be
- 173   1         // substracted from 27315 in order to show Degree Celsius x 100                              
- 174   1         // Ej: Temp =  ( result - (273.15*100) );      // Degree Celsius x 100
- 175   1         // c = 0;
-C51 COMPILER V8.08   MAIN                                                                  04/27/2021 18:54:50 PAGE 4   
+ 171   1      
+ 172   1         /************ Temp: ******************/
+ 173   1         // the temperature value taken from the FPGA has     to be
+ 174   1         // substracted from 27315 in order to show Degree Celsius x 100                              
+ 175   1         // Ej: Temp =  ( result - (273.15*100) );      // Degree Celsius x 100
+C51 COMPILER V8.08   MAIN                                                                  04/28/2021 19:31:46 PAGE 4   
 
- 176   1         /*************************************/
- 177   1              
- 178   1      
- 179   1         /************ Humidity ***************/
- 180   1         // the humidity value taken form the FPGA has to be multipled
- 181   1         // by 127.5 and divided by 100 in order to show H% x 100.
- 182   1         // Ej: Hum =  ( (result*127.0)/100 );
- 183   1         // c = 0;
- 184   1         /*************************************/
- 185   1      
+ 176   1         // c = 0;
+ 177   1         /*************************************/
+ 178   1              
+ 179   1      
+ 180   1         /************ Humidity ***************/
+ 181   1         // the humidity value taken form the FPGA has to be multipled
+ 182   1         // by 127.5 and divided by 100 in order to show H% x 100.
+ 183   1         // Ej: Hum =  ( (result*127.0)/100 );
+ 184   1         // c = 0;
+ 185   1         /*************************************/
  186   1      
- 187   1         /************ Light: ******************/
- 188   1      
- 189   1         /**************************************/     
- 190   1      
+ 187   1      
+ 188   1         /************ Light: ******************/
+ 189   1      
+ 190   1         /**************************************/     
  191   1      
- 192   1      }
- 193          /*****************************************************************/
- 194          
- 195          /****************** ZigBee read: *********************************/
- 196          /** ASCII  = Value of the character to wait.
- 197          /** getsmj = It allows to get caracters from the serial port and 
- 198          /** print them until ASCII arrives. 
- 199          **/
- 200          
- 201          void _WSN_wait_answer(char ASCII,char getmsj)
- 202          {  
- 203   1              unsigned char serial_read,enable;
- 204   1      
- 205   1              enable = 1;
- 206   1        
- 207   1                   do
- 208   1                      {
- 209   2                              serial_read = _getkey(); 
- 210   2              
- 211   2                              if (serial_read == ASCII) 
- 212   2                              {                                                                                        
- 213   3                                      enable = 0;
- 214   3                              }
- 215   2                              else if (getmsj == 1)
- 216   2                              {
- 217   3                                      putchar(serial_read);
- 218   3                              }                       
- 219   2                      }while (enable != 0);
- 220   1      }
- 221          /**************** ZigBee Configuration: ************************/
- 222          void _WSN_ZigBee_config(char type)
- 223          {       
- 224   1              printf("ATS00=0004\r");
- 225   1              _WSN_wait_answer('O',0);
- 226   1              _WSN_wait_answer('K',0);
- 227   1      
- 228   1              printf("ATS02=0003\r");
- 229   1              _WSN_wait_answer('O',0);
- 230   1              _WSN_wait_answer('K',0);
- 231   1      
- 232   1              printf("ATS03=0000000000000003\r");
- 233   1              _WSN_wait_answer('O',0);
- 234   1              _WSN_wait_answer('K',0);
- 235   1      
- 236   1              printf("AT+JN\r");
- 237   1              _WSN_wait_answer('O',0);
-C51 COMPILER V8.08   MAIN                                                                  04/27/2021 18:54:50 PAGE 5   
+ 192   1      
+ 193   1      }
+ 194          /*****************************************************************/
+ 195          
+ 196          /****************** ZigBee read: *********************************/
+ 197          /** ASCII  = Value of the character to wait.
+ 198          /** getsmj = It allows to get caracters from the serial port and 
+ 199          /** print them until ASCII arrives. 
+ 200          **/
+ 201          
+ 202          void _WSN_wait_answer(char ASCII,char getmsj)
+ 203          {  
+ 204   1              unsigned char serial_read,enable;
+ 205   1      
+ 206   1              enable = 1;
+ 207   1        
+ 208   1                   do
+ 209   1                      {
+ 210   2                              serial_read = _getkey(); 
+ 211   2              
+ 212   2                              if (serial_read == ASCII) 
+ 213   2                              {                                                                                        
+ 214   3                                      enable = 0;
+ 215   3                              }
+ 216   2                              else if (getmsj == 1)
+ 217   2                              {
+ 218   3                                      putchar(serial_read);
+ 219   3                              }                       
+ 220   2                      }while (enable != 0);
+ 221   1      }
+ 222          /**************** ZigBee Configuration: ************************/
+ 223          void _WSN_ZigBee_config(char type)
+ 224          {       
+ 225   1              printf("ATS00=0004\r");
+ 226   1              _WSN_wait_answer('O',0);
+ 227   1              _WSN_wait_answer('K',0);
+ 228   1      
+ 229   1              printf("ATS02=0003\r");
+ 230   1              _WSN_wait_answer('O',0);
+ 231   1              _WSN_wait_answer('K',0);
+ 232   1      
+ 233   1              printf("ATS03=0000000000000003\r");
+ 234   1              _WSN_wait_answer('O',0);
+ 235   1              _WSN_wait_answer('K',0);
+ 236   1      
+ 237   1              printf("AT+JN\r");
+C51 COMPILER V8.08   MAIN                                                                  04/28/2021 19:31:46 PAGE 5   
 
- 238   1              _WSN_wait_answer('K',0);
- 239   1              
- 240   1      }
-*** WARNING C280 IN LINE 222 OF MAIN.C: 'type': unreferenced local variable
- 241          /******************* Message Detection: *************************/
- 242          void _WSN_message_detect()
- 243          {  
- 244   1              _WSN_wait_answer('U',0);
- 245   1              _WSN_wait_answer(':',0);
- 246   1              _WSN_wait_answer(',',1);
- 247   1               putchar('\t');
- 248   1              _WSN_wait_answer('=',0);
- 249   1              _WSN_wait_answer(0x03,1); 
- 250   1      }
- 251          /******************* Main Function: *****************************/
- 252          void main()
- 253          {
- 254   1        
- 255   1         //---- Peripheral Configurations: -------------
- 256   1      
- 257   1         c = 0;
- 258   1         flag = 0;
- 259   1         _WS_Timer_Config(1);
- 260   1         _WS_ADC_Config();
- 261   1         _WSN_UART841_config();
- 262   1         _WSN_ini_FPGA();
- 263   1         //entrada cuenta humedad y temperatura por defecto
- 264   1         cuenta_temp = 1;
- 265   1         cuenta_hum = 5;
- 266   1         //_WSN_ZigBee_config('a');
- 267   1      
- 268   1         // --------------------------------------------
- 269   1              printf("Introduce los tiempos de cada sensor: \n");
- 270   1              printf("T = \n");
- 271   1              scanf("%d",&cuenta_temp);
- 272   1              printf("H = \n");
- 273   1              scanf("%d",&cuenta_hum);
- 274   1              send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
- 275   1                 printf ("Connected\n\r");                               
+ 238   1              _WSN_wait_answer('O',0);
+ 239   1              _WSN_wait_answer('K',0);
+ 240   1              
+ 241   1      }
+*** WARNING C280 IN LINE 223 OF MAIN.C: 'type': unreferenced local variable
+ 242          /******************* Message Detection: *************************/
+ 243          void _WSN_message_detect()
+ 244          {  
+ 245   1              _WSN_wait_answer('U',0);
+ 246   1              _WSN_wait_answer(':',0);
+ 247   1              _WSN_wait_answer(',',1);
+ 248   1               putchar('\t');
+ 249   1              _WSN_wait_answer('=',0);
+ 250   1              _WSN_wait_answer(0x03,1); 
+ 251   1      }
+ 252          /******************* Main Function: *****************************/
+ 253          void main()
+ 254          {
+ 255   1        
+ 256   1         //---- Peripheral Configurations: -------------
+ 257   1      
+ 258   1         c = 0;
+ 259   1         flag = 0;
+ 260   1         _WS_Timer_Config(1);
+ 261   1         _WS_ADC_Config();
+ 262   1         _WSN_UART841_config();
+ 263   1         _WSN_ini_FPGA();
+ 264   1         //entrada cuenta humedad y temperatura por defecto
+ 265   1         cuenta_temp = 1;
+ 266   1         cuenta_hum = 5;
+ 267   1         //_WSN_ZigBee_config('a');
+ 268   1      
+ 269   1         // --------------------------------------------
+ 270   1              printf("Introduce los tiempos de cada sensor: \n");
+ 271   1              printf("T = \n");
+ 272   1              //scanf("%d",&cuenta_temp);
+ 273   1              printf("H = \n");
+ 274   1              //scanf("%d",&cuenta_hum);
+ 275   1              send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
  276   1      
- 277   1                 while (1)
- 278   1                 {
- 279   2                         if (flag == 1){
- 280   3      
- 281   3                              send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0]))); 
- 282   3      
- 283   3                              flag = 0;
- 284   3      
- 285   3                      }                               
- 286   2                                                
- 287   2                 }
+ 277   1              i = 0;
+ 278   1              while(i<1000)
+ 279   1              {
+ 280   2                      i++;
+ 281   2              }
+ 282   1              send(Role, (sizeof(Role)/sizeof(Role[0])));
+ 283   1              while(i<1000)
+ 284   1              {
+ 285   2                      i++;
+ 286   2              }
+ 287   1                 printf ("Connected\n\r");                               
  288   1      
- 289   1      }
- 290          /****************************************************************/
+ 289   1                 while (1)
+ 290   1                 {
+ 291   2                         if (flag == 1){
+ 292   3      
+ 293   3                              //send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));       
+ 294   3      
+ 295   3                              flag = 0;
+ 296   3      
+ 297   3                      }                               
+ 298   2                                                
+C51 COMPILER V8.08   MAIN                                                                  04/28/2021 19:31:46 PAGE 6   
+
+ 299   2                 }
+ 300   1      
+ 301   1      }
+ 302          /****************************************************************/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   4145    ----
-   CONSTANT SIZE    =    222    ----
-   XDATA SIZE       =    445    1150
+   CODE SIZE        =   4198    ----
+   CONSTANT SIZE    =    253    ----
+   XDATA SIZE       =    453    1150
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
-C51 COMPILER V8.08   MAIN                                                                  04/27/2021 18:54:50 PAGE 6   
-
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----       1
 END OF MODULE INFORMATION.

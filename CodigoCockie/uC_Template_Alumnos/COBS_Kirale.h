@@ -3,10 +3,8 @@
 **                         DEFINITIONS AND MACROS                          **
 **                                                                         **
 ****************************************************************************/
-typedef unsigned char  uint8_t;
-typedef unsigned short uint16_t;
-typedef   signed int   int16_t;
-typedef enum { false, true } _Bool;
+
+#include "comandos.h"
 
 
 #define COBS_SIZE_codS_ARRAY 10

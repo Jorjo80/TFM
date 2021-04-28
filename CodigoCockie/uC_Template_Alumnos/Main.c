@@ -1,6 +1,6 @@
 #include <ADuC841.h>
 #include <stdio.h>
-#include "Comandos.h"
+
 #include "netconfig.h"
 
 
@@ -17,6 +17,7 @@ sbit reset_fpga  = P0^0;
 unsigned char DATA_L;
 unsigned char DATA_H;
 unsigned int datain;
+unsigned int i;
 
 uint8_t dato;
 unsigned char flag, c;
@@ -268,17 +269,28 @@ void main()
    // --------------------------------------------
 	printf("Introduce los tiempos de cada sensor: \n");
 	printf("T = \n");
-	scanf("%d",&cuenta_temp);
+	//scanf("%d",&cuenta_temp);
 	printf("H = \n");
-	scanf("%d",&cuenta_hum);
+	//scanf("%d",&cuenta_hum);
 	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
-	   printf ("Connected\n\r");	   			   
+
+	i = 0;
+	while(i<1000)
+	{
+		i++;
+	}
+	send(Role, (sizeof(Role)/sizeof(Role[0])));
+	while(i<1000)
+	{
+		i++;
+	}
+	   printf ("\nConnected\n\r");	   			   
 
 	   while (1)
 	   {
 	   	   if (flag == 1){
 
-			send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));	
+			//send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));	
 
 			flag = 0;
 
