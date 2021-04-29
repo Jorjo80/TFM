@@ -272,14 +272,15 @@ void main()
 	//scanf("%d",&cuenta_temp);
 	printf("H = \n");
 	//scanf("%d",&cuenta_hum);
-	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
-
+	//send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
+	
 	i = 0;
-	while(i<1000)
+	while(i<1)
 	{
 		i++;
 	}
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
+	receive();
 	while(i<1000)
 	{
 		i++;

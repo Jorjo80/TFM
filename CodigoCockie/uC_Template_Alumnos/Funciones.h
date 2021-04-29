@@ -9,6 +9,7 @@ static void receive();
 
 
 
+
 //////////////////////////////
 
 // SEND
@@ -46,7 +47,7 @@ static void send(uint8_t *buffer, size_t size)
 	buffer[CKS_POS]= XOR_CKS(buffer, size);
 	printf("\nTerminado XOR\n");
 	numEncoded = encod(buffer, size, _encodeBuffer);
-	printf("\n%c\n",PacketMarker);
+	printf("%c",PacketMarker);
 	printf(_encodeBuffer);
 	//HAL_UART_Transmit(&PacketMarker,sizeof(PacketMarker),1000);
 	//HAL_UART_Transmit(_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
@@ -60,11 +61,7 @@ static void send(uint8_t *buffer, size_t size)
 
 
 //////////////////////////////
-uint8_t uart_recvChar(uint8_t *byte) 
-{	   	
-	scanf("%c", byte);
-	return 1;
-}
+
 
 
 static void receive()
@@ -75,12 +72,12 @@ static void receive()
 	do
 	{
 		//Receiving the Response and decoding byte to byte.
+		//printf("leyendo un carater\n");
 		result=cobs_decod(decoddbuffer,512,uart_recvChar);
 	}while(result == 0);
-	
-	//decode(receivebuffer,RXSIZE,decodedbuffer);
-	//HAL_UART_Transmit(&huart2, decodedbuffer,result,10);
-	//HAL_UART_Transmit(&huart2, &x,1,10);
+	printf("\nImprimiendo Resultado\n");
+	printf(decoddbuffer);
+
 
 }
 

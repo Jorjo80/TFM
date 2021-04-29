@@ -18,7 +18,7 @@
 **                         TYPEDEFS AND STRUCTURES                         **
 **                                                                         **
 ****************************************************************************/
-
+ uint8_t returned;
 
 
 /* Encodd byte output function. */
@@ -78,8 +78,8 @@ void  *memset (void *dest, int val, size_t len);
 
 
 //#ifdef DEBUG_COBS
-int debug_tx( uint8_t byte, _Bool first, _Bool last ) {debug( 1, byte, first,  last );}
-int debug_rx( uint8_t byte, _Bool first, _Bool last ) {debug(0, byte, first,  last  );}
+void debug_tx( uint8_t byte, _Bool first, _Bool last ) {debug( 1, byte, first,  last );}
+void debug_rx( uint8_t byte, _Bool first, _Bool last ) {debug(0, byte, first,  last  );}
 //#else
 //#define debug_tx( uint8_t byte, _Bool first, _Bool last )( void ) 0
 //#define debug_rx(  uint8_t byte, _Bool first, _Bool last)( void ) 0
@@ -98,7 +98,14 @@ int debug_rx( uint8_t byte, _Bool first, _Bool last ) {debug(0, byte, first,  la
 
 void uart_sendChar(uint8_t byte)
 {
-	printf("%c",byte);
+	printf("%hhx",byte);
+}
+
+uint8_t uart_recvChar(uint8_t *byte) 
+{	   	
+	scanf("%hhx", byte);
+	returned = sizeof(byte)/sizeof(byte[0]);
+	return returned;
 }
 static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
 {
@@ -388,14 +395,14 @@ int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 }
 
 
-int timeout(uint8_t inByte)
+/*int timeout(uint8_t inByte)
 {
 	debug_rx(inByte, 1, 1);
 	return COBS_RESULT_TIMEOUT;
 }
 
  int nothing()
- {
+{
 	return COBS_RESULT_NONE;
 }
 int first(uint8_t inByte)
@@ -419,7 +426,7 @@ int finished(uint8_t inByte)
 	return (usart_rxPkt.totBytes);
 }
 
-
+*/
 
 int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
 {
@@ -427,8 +434,10 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
 	uint8_t numChar = 0;
 	numChar = input(&inByte);
 	if (numChar == 0)
-		timeout(inByte);
-
+	{
+		debug_rx(inByte, 1, 1);
+		return COBS_RESULT_TIMEOUT;
+	}
 	if (inByte == 0)
 	{
 		uint16_t dataBytes = usart_rxPkt.cobs.dataBytes;
@@ -441,9 +450,14 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
 		usart_rxPkt.cobs.zeroes = 0;
 		memset(buff, 0, 5);
 		if (dataBytes == 0)
-			first(inByte);
+		{
+			debug_rx(inByte, 1, 0);
+			return COBS_RESULT_NONE;
+		}
 		else
-			nothing();
+		{
+			return COBS_RESULT_NONE;
+		}
 	}
 	else if ((inByte != 0) && (usart_rxPkt.startMsg == 1))
 	{
@@ -451,7 +465,10 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
 		{
 			usart_rxPkt.totBytes += (buff[0] << 8) + buff[1];
 			if (usart_rxPkt.totBytes > len)
-				error(inByte);
+			{
+				debug_rx(inByte, 0, 1);
+				return COBS_RESULT_ERROR;
+			}
 
 			memset(buff + 5, 0, usart_rxPkt.totBytes - 5);
 			usart_rxPkt.payload = 1;
@@ -471,7 +488,10 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
 				usart_rxPkt.cobs.zeroes = 0;
 			}
 			else if ((inByte == 0xD1) || (inByte == 0xD2))
-				error(inByte);
+			{
+				debug_rx(inByte, 0, 1);
+				return COBS_RESULT_ERROR;
+			}
 			else if (inByte < 0xE0)
 			{
 				/* Move pointer to the new position. */
@@ -484,7 +504,10 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
 				usart_rxPkt.cobs.zeroes = 2;
 			}
 			else
-				error(inByte);
+			{
+				debug_rx(inByte, 0, 1);
+				return COBS_RESULT_ERROR;
+			}
 
 			if (usart_rxPkt.cobs.dataBytes == 0)
 			{
@@ -509,15 +532,21 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
 		}
 	}
 	else
-		nothing();
+	{
+		return COBS_RESULT_NONE;
+	}
 
 	if (usart_rxPkt.proBytes >= usart_rxPkt.totBytes)
 	{
 		usart_rxPkt.startMsg = 0;
-		finished(inByte);
+		debug_rx(inByte, 0, 0);
+		return COBS_RESULT_NONE;
 	}
 	else
-		incomplete(inByte);
+	{
+		debug_rx(inByte, 0, 1);
+		return (usart_rxPkt.totBytes);
+	}
 
 
 
