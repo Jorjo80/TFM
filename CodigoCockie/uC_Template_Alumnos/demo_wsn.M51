@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.05                                                        04/29/2021  18:52:54  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.05                                                        05/10/2021  17:26:18  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.05, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  demo_wsn (?C_STARTUP)
             -----------------------------------------------------
 
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 2
 
 
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
@@ -119,7 +119,7 @@ LINK MAP OF MODULE:  demo_wsn (?C_STARTUP)
             CODE    2465H     000EH     UNIT         ?PR?_UART_SENDCHAR?MAIN
             CODE    2473H     000AH     UNIT         ?PR?_GETKEY?_GETKEY
             CODE    247DH     0009H     UNIT         ?PR?_WSN_INI_FPGA?MAIN
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 3
 
 
             CODE    2486H     0008H     UNIT         ?PR?GETCHAR?UNGETCHAR
@@ -179,7 +179,7 @@ SEGMENT                                         BIT_GROUP          DATA_GROUP   
 ?PR?GETCHAR?GETCHAR                          -----    -----      -----    -----      -----    -----
   +--> ?PR?_GETKEY?_GETKEY
   +--> ?PR?PUTCHAR?PUTCHAR
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 4
 
 
 
@@ -239,7 +239,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:2103H         LINE#         202
   C:2106H         LINE#         236
   C:2109H         LINE#         248
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 5
 
 
   -------         ENDMOD        ?C_STARTUP
@@ -299,7 +299,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:2453H         PUBLIC        __WS_Timer_Config
   X:032CH         PUBLIC        dato
   X:032DH         PUBLIC        Hum
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 6
 
 
   X:032FH         PUBLIC        NetName
@@ -359,7 +359,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   X:03B3H         PUBLIC        c
   D:00A4H         PUBLIC        MIN
   C:229BH         PUBLIC        __WSN_wait_answer
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 7
 
 
   X:03B4H         PUBLIC        CloseSocket
@@ -419,7 +419,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   -------         ENDDO         
   C:1B4CH         LINE#         110
   C:1B5DH         LINE#         111
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 8
 
 
   C:1B5DH         LINE#         112
@@ -479,7 +479,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:0095H         LINE#         159
   C:00A3H         LINE#         160
   C:00B1H         LINE#         166
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 9
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 9
 
 
   C:00C9H         LINE#         167
@@ -539,7 +539,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:02E8H         LINE#         238
   C:02E8H         LINE#         240
   C:02FDH         LINE#         241
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 10
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 10
 
 
   C:030BH         LINE#         243
@@ -599,7 +599,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:0546H         LINE#         322
   C:054EH         LINE#         323
   C:054EH         LINE#         324
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 11
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 11
 
 
   C:0565H         LINE#         325
@@ -659,7 +659,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   -------         PROC          _COBS_DECOD
   X:0200H         SYMBOL        buff
   X:0203H         SYMBOL        len
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 12
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 12
 
 
   X:0205H         SYMBOL        input
@@ -719,7 +719,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:1A44H         LINE#         482
   C:1A4AH         LINE#         483
   C:1A4EH         LINE#         484
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 13
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 13
 
 
   C:1A50H         LINE#         485
@@ -779,7 +779,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:1B43H         LINE#         548
   C:1B4BH         LINE#         549
   C:1B4BH         LINE#         553
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 14
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 14
 
 
   -------         ENDPROC       _COBS_DECOD
@@ -839,7 +839,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:2240H         LINE#         37
   C:2245H         LINE#         39
   -------         ENDPROC       _XOR_CKS
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 15
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 15
 
 
   -------         PROC          _SEND
@@ -899,7 +899,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:23ECH         LINE#         54
   C:23EFH         LINE#         56
   C:23F2H         LINE#         57
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 16
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 16
 
 
   C:23F5H         LINE#         58
@@ -959,7 +959,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:2392H         LINE#         129
   C:2394H         LINE#         130
   C:2396H         LINE#         131
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 17
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 17
 
 
   C:2396H         LINE#         135
@@ -1019,7 +1019,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:22C2H         LINE#         219
   C:22C2H         LINE#         220
   C:22C8H         LINE#         221
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 18
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 18
 
 
   -------         ENDPROC       __WSN_WAIT_ANSWER
@@ -1079,7 +1079,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   C:2053H         LINE#         290
   C:2053H         LINE#         291
   C:2053H         LINE#         292
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 19
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 19
 
 
   C:205AH         LINE#         296
@@ -1139,7 +1139,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
 
   -------         MODULE        ?C?FTNPWR
   C:0C91H         PUBLIC        ?C?FTNPWR
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 20
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 20
 
 
   -------         ENDMOD        ?C?FTNPWR
@@ -1199,7 +1199,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
   -------         MODULE        ?C?PILDXDATA
   C:0E3FH         PUBLIC        ?C?PILDXDATA
   -------         ENDMOD        ?C?PILDXDATA
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 21
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 21
 
 
 
@@ -1259,7 +1259,7 @@ SYMBOL TABLE OF MODULE:  demo_wsn (?C_STARTUP)
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_COBS_ENCOD?MAIN
 
-BL51 BANKED LINKER/LOCATER V6.05                                                      04/29/2021  18:52:54  PAGE 22
+BL51 BANKED LINKER/LOCATER V6.05                                                      05/10/2021  17:26:18  PAGE 22
 
 
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS

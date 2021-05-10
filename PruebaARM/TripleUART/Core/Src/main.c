@@ -22,8 +22,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS_Kirale.h"
-#include "H:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\Comandos.h"
+#include "F:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS_Kirale.h"
+#include "F:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\Comandos.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -172,9 +172,9 @@ int main(void)
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(route, (sizeof(route)/sizeof(route[0])),&huart3);
+	/*send(route, (sizeof(route)/sizeof(route[0])),&huart3);
 	receive(&huart3);
-	HAL_Delay(1000);
+	HAL_Delay(1000);*/
 
   while (1)
   {
@@ -563,7 +563,7 @@ static  void InicioLeader(void)
 	}
 	for(int i = size1; i<(size1+size2); i++)
 	{
-		cmdRole[i] = fed
+		cmdRole[i] = reed;
 		;
 	}
 	//unite(WriteRole, &leader, cmdRole, size1, doble);

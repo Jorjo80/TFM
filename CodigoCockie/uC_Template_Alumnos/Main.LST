@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  04/29/2021 18:52:54 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  05/10/2021 17:26:18 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   51          void _WSN_UART841_config()
   52          {
   53   1              SCON = 0x52;//SCON: UART Serial Port Control Register   => Mode 1: 8-bit UART, variable baud rate
-C51 COMPILER V8.08   MAIN                                                                  04/29/2021 18:52:54 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  05/10/2021 17:26:18 PAGE 2   
 
   54   1              PCON = 0x80;//PCON: power-saving options and general-purpose status flags => SMOD=1 (Double UART Baud Rat
              -e)
@@ -126,7 +126,7 @@ line level    source
  111   1      
  112   1      
  113   1         fpga_data = DATA_L + 256*(int)DATA_H;
-C51 COMPILER V8.08   MAIN                                                                  04/29/2021 18:52:54 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  05/10/2021 17:26:18 PAGE 3   
 
  114   1      
  115   1         return(fpga_data);  
@@ -190,7 +190,7 @@ line level    source
  173   1         // the temperature value taken from the FPGA has     to be
  174   1         // substracted from 27315 in order to show Degree Celsius x 100                              
  175   1         // Ej: Temp =  ( result - (273.15*100) );      // Degree Celsius x 100
-C51 COMPILER V8.08   MAIN                                                                  04/29/2021 18:52:54 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  05/10/2021 17:26:18 PAGE 4   
 
  176   1         // c = 0;
  177   1         /*************************************/
@@ -254,7 +254,7 @@ line level    source
  235   1              _WSN_wait_answer('K',0);
  236   1      
  237   1              printf("AT+JN\r");
-C51 COMPILER V8.08   MAIN                                                                  04/29/2021 18:52:54 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  05/10/2021 17:26:18 PAGE 5   
 
  238   1              _WSN_wait_answer('O',0);
  239   1              _WSN_wait_answer('K',0);
@@ -318,7 +318,7 @@ line level    source
  296   3                              flag = 0;
  297   3      
  298   3                      }                               
-C51 COMPILER V8.08   MAIN                                                                  04/29/2021 18:52:54 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  05/10/2021 17:26:18 PAGE 6   
 
  299   2                                                
  300   2                 }
