@@ -1,5 +1,5 @@
 #include "COBS_Kirale.h"
-
+#include "Cobs.h"
 
 
 static void send(uint8_t *buffer, size_t size);
@@ -42,13 +42,19 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 static void send(uint8_t *buffer, size_t size)
 {
 	uint8_t _encodeBuffer[512];
+	int i = 0;
 	size_t numEncoded= 0;
 	printf("\nEntrando al envio\n");
 	buffer[CKS_POS]= XOR_CKS(buffer, size);
 	printf("\nTerminado XOR\n");
 	numEncoded = encod(buffer, size, _encodeBuffer);
 	printf("%c",PacketMarker);
-	printf(_encodeBuffer);
+	while(i<numEncoded)
+	{
+		printf("%c",_encodeBuffer[i]);
+		i++;
+	}
+	printf("\n");
 	//HAL_UART_Transmit(&PacketMarker,sizeof(PacketMarker),1000);
 	//HAL_UART_Transmit(_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
 		

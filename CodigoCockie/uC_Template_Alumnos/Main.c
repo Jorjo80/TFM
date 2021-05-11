@@ -19,6 +19,7 @@ unsigned char DATA_H;
 unsigned int datain;
 unsigned int i;
 
+char cadena[512];
 uint8_t dato;
 unsigned char flag, c;
 
@@ -275,16 +276,15 @@ void main()
 	//send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
 	
 	i = 0;
-	while(i<1)
-	{
-		i++;
-	}
+	
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
-	receive();
-	while(i<1000)
+	//receive();
+	while(i<6)
 	{
+		cadena[i]=getchar();
 		i++;
 	}
+	printf(cadena);
 	   printf ("\nConnected\n\r");	   			   
 
 	   while (1)

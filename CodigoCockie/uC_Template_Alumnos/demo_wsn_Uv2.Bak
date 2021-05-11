@@ -11,6 +11,7 @@ File 1,1,<.\Main.c><Main.c> 0x0
 File 1,5,<.\COBS_Kirale.h><COBS_Kirale.h> 0x0 
 File 1,5,<.\COBS_propio.h><COBS_propio.h> 0x0 
 File 1,5,<.\decode.h><decode.h> 0x0 
+File 1,5,<.\Funciones.h><Funciones.h> 0x0 
 
 
 Options 1,0,0  // Target 'Target 1'
