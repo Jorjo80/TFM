@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  05/11/2021 18:20:38 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  05/12/2021 20:33:36 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   51          /***************** UART configuration: ***************************/
   52          void _WSN_UART841_config()
   53          {
-C51 COMPILER V8.08   MAIN                                                                  05/11/2021 18:20:38 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  05/12/2021 20:33:36 PAGE 2   
 
   54   1              SCON = 0x52;//SCON: UART Serial Port Control Register   => Mode 1: 8-bit UART, variable baud rate
   55   1              PCON = 0x80;//PCON: power-saving options and general-purpose status flags => SMOD=1 (Double UART Baud Rat
@@ -126,7 +126,7 @@ line level    source
  111   1         TrigByte2N = 1;    // Release Trigger2
  112   1      
  113   1      
-C51 COMPILER V8.08   MAIN                                                                  05/11/2021 18:20:38 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  05/12/2021 20:33:36 PAGE 3   
 
  114   1         fpga_data = DATA_L + 256*(int)DATA_H;
  115   1      
@@ -190,7 +190,7 @@ line level    source
  173   1         /************ Temp: ******************/
  174   1         // the temperature value taken from the FPGA has     to be
  175   1         // substracted from 27315 in order to show Degree Celsius x 100                              
-C51 COMPILER V8.08   MAIN                                                                  05/11/2021 18:20:38 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  05/12/2021 20:33:36 PAGE 4   
 
  176   1         // Ej: Temp =  ( result - (273.15*100) );      // Degree Celsius x 100
  177   1         // c = 0;
@@ -254,7 +254,7 @@ line level    source
  235   1              _WSN_wait_answer('O',0);
  236   1              _WSN_wait_answer('K',0);
  237   1      
-C51 COMPILER V8.08   MAIN                                                                  05/11/2021 18:20:38 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  05/12/2021 20:33:36 PAGE 5   
 
  238   1              printf("AT+JN\r");
  239   1              _WSN_wait_answer('O',0);
@@ -301,7 +301,7 @@ line level    source
  279   1              
  280   1              send(Role, (sizeof(Role)/sizeof(Role[0])));
  281   1              //receive();
- 282   1              while(i<6)
+ 282   1              while(i<512)
  283   1              {
  284   2                      cadena[i]=getchar();
  285   2                      i++;
@@ -318,7 +318,7 @@ line level    source
  296   3                              flag = 0;
  297   3      
  298   3                      }                               
-C51 COMPILER V8.08   MAIN                                                                  05/11/2021 18:20:38 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  05/12/2021 20:33:36 PAGE 6   
 
  299   2                                                
  300   2                 }
@@ -328,7 +328,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   5439    ----
+   CODE SIZE        =   5433    ----
    CONSTANT SIZE    =    293    ----
    XDATA SIZE       =    908    1214
    PDATA SIZE       =   ----    ----
