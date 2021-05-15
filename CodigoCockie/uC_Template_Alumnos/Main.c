@@ -18,6 +18,7 @@ unsigned char DATA_L;
 unsigned char DATA_H;
 unsigned int datain;
 unsigned int i;
+char leido;
 
 char cadena[512];
 uint8_t dato;
@@ -281,10 +282,20 @@ void main()
 	//receive();
 	while(i<6)
 	{
+		leido=getchar();
+		cadena[i]=leido;
+		i++;
+	}
+	i=0;
+	//memset(cadena,0,512);
+	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
+	//receive();
+
+	while(i<6)
+	{
 		cadena[i]=getchar();
 		i++;
 	}
-	printf(cadena);
 	   printf ("\nConnected\n\r");	   			   
 
 	   while (1)

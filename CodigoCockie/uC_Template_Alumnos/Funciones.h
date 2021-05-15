@@ -49,12 +49,7 @@ static void send(uint8_t *buffer, size_t size)
 	printf("\nTerminado XOR\n");
 	numEncoded = encod(buffer, size, _encodeBuffer);
 	printf("%c",PacketMarker);
-	while(i<numEncoded)
-	{
-		printf("%c",_encodeBuffer[i]);
-		i++;
-	}
-	printf("\n");
+	printf(_encodeBuffer);
 	//HAL_UART_Transmit(&PacketMarker,sizeof(PacketMarker),1000);
 	//HAL_UART_Transmit(_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
 		
