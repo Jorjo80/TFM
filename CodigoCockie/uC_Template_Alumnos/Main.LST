@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  05/15/2021 19:56:15 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  05/17/2021 17:55:29 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   51          
   52          /***************** UART configuration: ***************************/
   53          void _WSN_UART841_config()
-C51 COMPILER V8.08   MAIN                                                                  05/15/2021 19:56:15 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  05/17/2021 17:55:29 PAGE 2   
 
   54          {
   55   1              SCON = 0x52;//SCON: UART Serial Port Control Register   => Mode 1: 8-bit UART, variable baud rate
@@ -126,7 +126,7 @@ line level    source
  111   1         DATA_H = P2;           // MSB
  112   1         TrigByte2N = 1;    // Release Trigger2
  113   1      
-C51 COMPILER V8.08   MAIN                                                                  05/15/2021 19:56:15 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  05/17/2021 17:55:29 PAGE 3   
 
  114   1      
  115   1         fpga_data = DATA_L + 256*(int)DATA_H;
@@ -190,7 +190,7 @@ line level    source
  173   1      
  174   1         /************ Temp: ******************/
  175   1         // the temperature value taken from the FPGA has     to be
-C51 COMPILER V8.08   MAIN                                                                  05/15/2021 19:56:15 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  05/17/2021 17:55:29 PAGE 4   
 
  176   1         // substracted from 27315 in order to show Degree Celsius x 100                              
  177   1         // Ej: Temp =  ( result - (273.15*100) );      // Degree Celsius x 100
@@ -254,7 +254,7 @@ line level    source
  235   1              printf("ATS03=0000000000000003\r");
  236   1              _WSN_wait_answer('O',0);
  237   1              _WSN_wait_answer('K',0);
-C51 COMPILER V8.08   MAIN                                                                  05/15/2021 19:56:15 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  05/17/2021 17:55:29 PAGE 5   
 
  238   1      
  239   1              printf("AT+JN\r");
@@ -301,47 +301,43 @@ line level    source
  279   1              i = 0;
  280   1              
  281   1              send(Role, (sizeof(Role)/sizeof(Role[0])));
- 282   1              //receive();
- 283   1              while(i<6)
- 284   1              {
- 285   2                      leido=getchar();
- 286   2                      cadena[i]=leido;
- 287   2                      i++;
- 288   2              }
- 289   1              i=0;
- 290   1              //memset(cadena,0,512);
- 291   1              send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
- 292   1              //receive();
- 293   1      
- 294   1              while(i<6)
- 295   1              {
- 296   2                      cadena[i]=getchar();
- 297   2                      i++;
- 298   2              }
-C51 COMPILER V8.08   MAIN                                                                  05/15/2021 19:56:15 PAGE 6   
+ 282   1              while(i<6)
+ 283   1              {
+ 284   2                      cadena[i]=getchar();
+ 285   2                      i++;
+ 286   2              }
+ 287   1              i=0;
+ 288   1      
+ 289   1              send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
+ 290   1              while(i<6)
+ 291   1              {
+ 292   2                      cadena[i]=getchar();
+ 293   2                      i++;
+ 294   2              }
+ 295   1                 printf ("\nConnected\n\r");                             
+ 296   1      
+ 297   1                 while (1)
+ 298   1                 {
+C51 COMPILER V8.08   MAIN                                                                  05/17/2021 17:55:29 PAGE 6   
 
- 299   1                 printf ("\nConnected\n\r");                             
- 300   1      
- 301   1                 while (1)
- 302   1                 {
- 303   2                         if (flag == 1){
+ 299   2                         if (flag == 1){
+ 300   3      
+ 301   3                              //send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));       
+ 302   3      
+ 303   3                              flag = 0;
  304   3      
- 305   3                              //send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));       
- 306   3      
- 307   3                              flag = 0;
- 308   3      
- 309   3                      }                               
- 310   2                                                
- 311   2                 }
- 312   1      
- 313   1      }
- 314          /****************************************************************/
+ 305   3                      }                               
+ 306   2                                                
+ 307   2                 }
+ 308   1      
+ 309   1      }
+ 310          /****************************************************************/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   5444    ----
+   CODE SIZE        =   5496    ----
    CONSTANT SIZE    =    291    ----
-   XDATA SIZE       =    910    1214
+   XDATA SIZE       =    913    1212
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

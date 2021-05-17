@@ -279,18 +279,14 @@ void main()
 	i = 0;
 	
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
-	//receive();
 	while(i<6)
 	{
-		leido=getchar();
-		cadena[i]=leido;
+		cadena[i]=getchar();
 		i++;
 	}
 	i=0;
-	//memset(cadena,0,512);
-	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	//receive();
 
+	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
 	while(i<6)
 	{
 		cadena[i]=getchar();
