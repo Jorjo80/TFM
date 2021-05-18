@@ -103,9 +103,9 @@ void uart_sendChar(uint8_t byte)
 
 uint8_t uart_recvChar(uint8_t *byte) 
 {	   	
-	char leido = getchar();
-	byte = &leido;
-	return 1;
+	uint8_t leido = _getkey();
+	byte[0] = leido;
+	return sizeof(byte)/sizeof(byte[0]);
 }
 static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
 {
