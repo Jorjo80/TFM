@@ -18,7 +18,7 @@ unsigned char DATA_L;
 unsigned char DATA_H;
 unsigned int datain;
 unsigned int i;
-string leido;
+
 
 char cadena[512];
 uint8_t dato;
@@ -278,29 +278,43 @@ void main()
 	
 	i = 0;
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
-	while(cadena[i]= getkey())
-	{
-		i++;
-	}
-	i=0;
-	printf("\n");
-	printf("\n");
-
-	i=0;
-	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	while(cadena[i]= getkey())
-	{
-		
-		i++;
-	}
-	i=0;
-	printf("\n");
 	while(i<6)
 	{
-		printf("%d",cadena[i]);
+	   cadena[i]= _getkey();
 		i++;
 	}
+	i=0;
 	printf("\n");
+	for(i=0;i<6;i++)
+	{
+		printf("%c",cadena[i]);
+	}
+	i=0;
+	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
+	while(i<6)
+	{
+	   cadena[i]= _getkey();
+		i++;
+	}
+	i=0;
+	for(i=0;i<6;i++)
+		printf("%c",cadena[i]);
+	printf("\n");
+
+
+	i = 0;
+	send(Role, (sizeof(Role)/sizeof(Role[0])));
+	while(i<6)
+	{
+	   cadena[i]= _getkey();
+		i++;
+	}
+	i=0;
+	printf("\n");
+	for(i=0;i<6;i++)
+	{
+		printf("%c",cadena[i]);
+	}
 	printf ("\nConnected\n\r");	   			   
 
  	while (1)
