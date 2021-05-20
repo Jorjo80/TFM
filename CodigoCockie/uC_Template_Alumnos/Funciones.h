@@ -1,5 +1,4 @@
 #include "COBS_Kirale.h"
-#include "Cobs.h"
 
 
 static void send(uint8_t *buffer, size_t size);
@@ -44,9 +43,7 @@ static void send(uint8_t *buffer, size_t size)
 	uint8_t _encodeBuffer[512];
 	int i = 0;
 	size_t numEncoded= 0;
-	printf("\nEntrando al envio\n");
 	buffer[CKS_POS]= XOR_CKS(buffer, size);
-	printf("\nTerminado XOR\n");
 	numEncoded = encod(buffer, size, _encodeBuffer);
 
 	printf("%c",PacketMarker);	
@@ -54,7 +51,7 @@ static void send(uint8_t *buffer, size_t size)
 	{
 		 printf("%c",_encodeBuffer[i]);
 	}
-	 
+	 printf("\n");
 	//HAL_UART_Transmit(&PacketMarker,sizeof(PacketMarker),1000);
 	//HAL_UART_Transmit(_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
 		
@@ -85,5 +82,39 @@ static void receive()
 	printf(decoddbuffer);
 
 
+}
+
+
+static int decode(const uint8_t* encodedBuffer, int size, uint8_t* decodedBuffer)
+{
+
+        int read_index  = 0;
+        int write_index = 0;
+        uint8_t cod       = 0;
+        uint8_t i          = 0;
+
+        while (read_index < size)
+        {
+            cod = encodedBuffer[read_index];
+
+            if (read_index + cod > size && cod != 1)
+            {
+                return 0;
+            }
+
+            read_index++;
+
+            for (i = 1; i < cod; i++)
+            {
+                decodedBuffer[write_index++] = encodedBuffer[read_index++];
+            }
+
+            if (cod != 0xFF && read_index != size)
+            {
+                decodedBuffer[write_index++] = '\0';
+            }
+        }
+
+        return write_index;
 }
 

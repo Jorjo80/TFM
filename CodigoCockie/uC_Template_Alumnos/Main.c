@@ -17,10 +17,11 @@ sbit reset_fpga  = P0^0;
 unsigned char DATA_L;
 unsigned char DATA_H;
 unsigned int datain;
-unsigned int i;
+unsigned int i, p;
 
 
-char cadena[512];
+uint8_t cadena[512];
+uint8_t decoded[512];
 uint8_t dato;
 unsigned char flag, c;
 
@@ -269,52 +270,32 @@ void main()
    //_WSN_ZigBee_config('a');
 
    // --------------------------------------------
-	printf("Introduce los tiempos de cada sensor: \n");
-	printf("T = \n");
-	//scanf("%d",&cuenta_temp);
-	printf("H = \n");
-	//scanf("%d",&cuenta_hum);
 	//send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
 	
 	i = 0;
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
 	while(i<6)
 	{
-	   cadena[i]= _getkey();
+	   cadena[i]= getkey();
 		i++;
 	}
+	for(p=1;p<6;p++)
+		printf("%c",cadena[p]);
 	i=0;
 	printf("\n");
-	for(i=0;i<6;i++)
-	{
-		printf("%c",cadena[i]);
-	}
-	i=0;
+	printf("\n");
 	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
 	while(i<6)
 	{
-	   cadena[i]= _getkey();
+	  	cadena[i]= getkey();
 		i++;
 	}
-	i=0;
-	for(i=0;i<6;i++)
-		printf("%c",cadena[i]);
+	for(p=1;p<6;p++)
+		printf("%c",cadena[p]);
 	printf("\n");
-
+	printf("\n");
 
 	i = 0;
-	send(Role, (sizeof(Role)/sizeof(Role[0])));
-	while(i<6)
-	{
-	   cadena[i]= _getkey();
-		i++;
-	}
-	i=0;
-	printf("\n");
-	for(i=0;i<6;i++)
-	{
-		printf("%c",cadena[i]);
-	}
 	printf ("\nConnected\n\r");	   			   
 
  	while (1)

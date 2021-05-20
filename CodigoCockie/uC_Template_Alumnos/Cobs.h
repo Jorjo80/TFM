@@ -1,3 +1,5 @@
+
+
 #define COBS_ENCODE_DST_BUF_LEN_MAX(SRC_LEN)            ((SRC_LEN) + (((SRC_LEN) + 253u)/254u))
 #define COBS_DECODE_DST_BUF_LEN_MAX(SRC_LEN)            (((SRC_LEN) == 0) ? 0u : ((SRC_LEN) - 1u))
 
@@ -44,8 +46,7 @@ typedef struct
 
 
 
-cobs_encode_result cobs_encode(void * dst_buf_ptr, size_t dst_buf_len,
-                               const void * src_ptr, size_t src_len)
+cobs_encode_result cobs_encode(char *dst_buf_ptr, size_t dst_buf_len, const char *src_ptr, size_t src_len)
 {
     cobs_encode_result  result              = { 0, COBS_ENCODE_OK };
     const uint8_t *     src_read_ptr        = src_ptr;
@@ -144,85 +145,33 @@ cobs_encode_result cobs_encode(void * dst_buf_ptr, size_t dst_buf_len,
  *                 operation and the length of the result (that was written to
  *                 dst_buf_ptr)
  */
-cobs_decode_result cobs_decode(void * dst_buf_ptr, size_t dst_buf_len,
-                               const void * src_ptr, size_t src_len)
+size_t cobs_decode(const uint8_t *input, size_t length, uint8_t *output)
 {
-    cobs_decode_result  result              = { 0, COBS_DECODE_OK };
-    const uint8_t *     src_read_ptr        = src_ptr;
-    const uint8_t *     src_end_ptr         = src_read_ptr + src_len;
-    uint8_t *           dst_buf_start_ptr   = dst_buf_ptr;
-    uint8_t *           dst_buf_end_ptr     = dst_buf_start_ptr + dst_buf_len;
-    uint8_t *           dst_write_ptr       = dst_buf_ptr;
-    size_t              remaining_bytes;
-    uint8_t             src_byte;
-    uint8_t             i;
-    uint8_t             len_code;
+    size_t read_index = 0;
+    size_t write_index = 0;
+    uint8_t cod;
+    int i;
 
-
-    /* First, do a NULL pointer check and return immediately if it fails. */
-    if ((dst_buf_ptr == NULL) || (src_ptr == NULL))
+    while(read_index < length)
     {
-        result.status = COBS_DECODE_NULL_POINTER;
-        return result;
-    }
+        cod = input[read_index];
 
-    if (src_len != 0)
-    {
-        for (;;)
+        if(read_index + cod > length && cod != 1)
         {
-            len_code = *src_read_ptr++;
-            if (len_code == 0)
-            {
-                result.status |= COBS_DECODE_ZERO_BYTE_IN_INPUT;
-                break;
-            }
-            len_code--;
+            return 0;
+        }
 
-            /* Check length code against remaining input bytes */
-            remaining_bytes = src_end_ptr - src_read_ptr;
-            if (len_code > remaining_bytes)
-            {
-                result.status |= COBS_DECODE_INPUT_TOO_SHORT;
-                len_code = remaining_bytes;
-            }
+        read_index++;
 
-            /* Check length code against remaining output buffer space */
-            remaining_bytes = dst_buf_end_ptr - dst_write_ptr;
-            if (len_code > remaining_bytes)
-            {
-                result.status |= COBS_DECODE_OUT_BUFFER_OVERFLOW;
-                len_code = remaining_bytes;
-            }
-
-            for (i = len_code; i != 0; i--)
-            {
-                src_byte = *src_read_ptr++;
-                if (src_byte == 0)
-                {
-                    result.status |= COBS_DECODE_ZERO_BYTE_IN_INPUT;
-                }
-                *dst_write_ptr++ = src_byte;
-            }
-
-            if (src_read_ptr >= src_end_ptr)
-            {
-                break;
-            }
-
-            /* Add a zero to the end */
-            if (len_code != 0xFE)
-            {
-                if (dst_write_ptr >= dst_buf_end_ptr)
-                {
-                    result.status |= COBS_DECODE_OUT_BUFFER_OVERFLOW;
-                    break;
-                }
-                *dst_write_ptr++ = 0;
-            }
+        for(i = 1; i < cod; i++)
+        {
+            output[write_index++] = input[read_index++];
+        }
+        if(cod != 0xFF && read_index != length)
+        {
+            output[write_index++] = '\0';
         }
     }
 
-    result.out_len = dst_write_ptr - dst_buf_start_ptr;
-
-    return result;
+    return write_index;
 }
