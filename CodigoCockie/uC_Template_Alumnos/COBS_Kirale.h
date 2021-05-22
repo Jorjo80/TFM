@@ -85,21 +85,6 @@ void debug_rx( uint8_t byte, _Bool first, _Bool last ) {debug(0, byte, first,  l
 //#define debug_rx(  uint8_t byte, _Bool first, _Bool last)( void ) 0
 //#endif
 
-// COBS ENcod PROPIO
-
-
-/*void* memset (void *dest, int val, size_t len)
-{
-  unsigned char *ptr = dest;
-  while (len-- > 0)
-    *ptr++ = val;
-  return dest;
-}*/
-
-void uart_sendChar(uint8_t byte)
-{
-	printf("%hhx",byte);
-}
 
 uint8_t uart_recvChar(uint8_t *byte) 
 {	   	
@@ -185,15 +170,12 @@ int finished(uint8_t inByte)
 
 
 
-int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
+int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
 {
 	uint8_t inByte = 0;
 	uint8_t numChar = 0;
-	numChar = input(&inByte);
-	if (numChar == 0)
-	{
-		debug_rx(inByte, 1, 1);
-	}
+	inByte = input;
+	numChar = 1;
 	if (numChar == 0)
 	{
 		debug_rx(inByte, 1, 1);
@@ -313,155 +295,13 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, cobs_byteIn_t input)
 
 }
 
-/****************************************************************************
-**                                                                         **
-**                             LOCAL FUNCTIONS                             **
-**                                                                         **
-****************************************************************************/
-
-
-/**
- * @brief Decod a UART message byte per byte.
- *
- * @param[out]     buff:  Pointer to the decodd message.
- * @param[in]      len:   Length limit of buff.
- * @param[in]      input: Pointer to encodd byte input callback (UART rx).
- *
- * @return          0: Decod not finished.
- *                 -1: Decod error.
- *                 -2: Port timeout.
- *                 >0: Length of the decodd message.
- */
-
-
-
-/*int16_t cobs_decodInt(uint8_t *buff, uint16_t len, cobs_byteIn_t2 input, uint8_t *input_buff)
-{
-	char inByte = 0;
-	char numChar = 0;
-	numChar = input(&inByte, input_buff++);
-	if (numChar == 0)
-		timeout(inByte);
-
-	if (inByte == 0)
-	{
-		short dataBytes = usart_rxPkt.cobs.dataBytes;
-		// Initialize COBS structure. 
-		usart_rxPkt.totBytes = 5;
-		usart_rxPkt.proBytes = 0;
-		usart_rxPkt.startMsg = 1;
-		usart_rxPkt.payload = 0;
-		usart_rxPkt.cobs.dataBytes = 0;
-		usart_rxPkt.cobs.zeroes = 0;
-		memset(buff, 0, 5);
-		if (dataBytes == 0)
-			goto first;
-		else
-			goto nothing;
-	}
-	else if ((inByte != 0) && (usart_rxPkt.startMsg == 1))
-	{
-		if ((usart_rxPkt.proBytes >= 2) && (usart_rxPkt.payload == 0))
-		{
-			usart_rxPkt.totBytes += (buff[0] << 8) + buff[1];
-			if (usart_rxPkt.totBytes > len)
-				goto error;
-
-			memset(buff + 5, 0, usart_rxPkt.totBytes - 5);
-			usart_rxPkt.payload = 1;
-		}
-
-		if (usart_rxPkt.cobs.dataBytes == 0)
-		{
-			// Read COBS cod. 
-			if (inByte < 0xD0)
-			{
-				usart_rxPkt.cobs.dataBytes = inByte - 1;
-				usart_rxPkt.cobs.zeroes = 1;
-			}
-			else if (inByte == 0xD0)
-			{
-				usart_rxPkt.cobs.dataBytes = inByte - 1;
-				usart_rxPkt.cobs.zeroes = 0;
-			}
-			else if ((inByte == 0xD1) || (inByte == 0xD2))
-				goto error;
-			else if (inByte < 0xE0)
-			{
-				// Move pointer to the new position. /
-				usart_rxPkt.cobs.dataBytes = 0;
-				usart_rxPkt.cobs.zeroes = inByte - 0xD0;
-			}
-			else if (inByte < 0xFF)
-			{
-				usart_rxPkt.cobs.dataBytes = inByte - 0xE0;
-				usart_rxPkt.cobs.zeroes = 2;
-			}
-			else
-				goto error;
-
-			if (usart_rxPkt.cobs.dataBytes == 0)
-			{
-				usart_rxPkt.proBytes += usart_rxPkt.cobs.zeroes;
-				usart_rxPkt.cobs.zeroes = 0;
-			}
-		}
-		else
-		{
-			if (usart_rxPkt.proBytes < usart_rxPkt.totBytes)
-			{
-				// Read data byte. 
-				buff[usart_rxPkt.proBytes] = inByte;
-			}
-
-			++usart_rxPkt.proBytes;
-			if (--usart_rxPkt.cobs.dataBytes == 0)
-			{
-				usart_rxPkt.proBytes += usart_rxPkt.cobs.zeroes;
-				usart_rxPkt.cobs.zeroes = 0;
-			}
-		}
-	}
-	else
-		goto nothing;
-
-	if (usart_rxPkt.proBytes >= usart_rxPkt.totBytes)
-	{
-		usart_rxPkt.startMsg = 0;
-		goto finished;
-	}
-	else
-		goto incomplete;
-
-/*timeout:
-	debug_rx(inByte, 1, 1);
-	return COBS_RESULT_TIMEOUT;
-nothing:
-	return COBS_RESULT_NONE;
-first:
-	debug_rx(inByte, 1, 0);
-	return COBS_RESULT_NONE;
-error:
-	debug_rx(inByte, 0, 1);
-	return COBS_RESULT_ERROR;
-incomplete:
-	debug_rx(inByte, 0, 0);
-	return COBS_RESULT_NONE;
-finished:
-	debug_rx(inByte, 0, 1);
-	return (usart_rxPkt.totBytes); 
-}			*/
-
-
-
-
  static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last)
 {
 	if (first)
-		printf("COBS_%sX: |", tx ? "T" : "R");
+		//printf("COBS_%sX: |", tx ? "T" : "R");
 
 	if (!(first && last))
-		printf(" %02x ", byte);
+		printf(" %c ", byte);
 
 	if (last)
 		printf("|\n");

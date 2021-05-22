@@ -16,7 +16,7 @@ sbit reset_fpga  = P0^0;
 
 unsigned char DATA_L;
 unsigned char DATA_H;
-unsigned int datain;
+unsigned int sizeRpl;
 unsigned int i, p;
 
 
@@ -252,6 +252,74 @@ void _WSN_message_detect()
 	_WSN_wait_answer('=',0);
 	_WSN_wait_answer(0x03,1); 
 }
+
+/*********** FUNCIONES PROPIAS***************/
+
+
+static uint8_t XOR_CKS(uint8_t *frame, size_t size)
+{
+	uint8_t cks = 0;
+	int i=0;
+	while(i<size)
+	{
+		if(i != CKS_POS)
+		{
+			cks ^= frame[i];
+		}
+		else
+		{
+			cks=cks;
+		}
+		i++;
+	}
+	return cks;
+	
+}
+
+
+static void send(uint8_t *buffer, size_t size)
+{
+	uint8_t _encodeBuffer[512];
+	int i = 0;
+	size_t numEncoded= 0;
+	buffer[CKS_POS]= XOR_CKS(buffer, size);
+	numEncoded = encod(buffer, size, _encodeBuffer);
+
+	printf("%c",PacketMarker);	
+	for(i=0;i<numEncoded;i++)
+	{
+		 printf("%c",_encodeBuffer[i]);
+	}
+	 printf("\n");
+	//HAL_UART_Transmit(&PacketMarker,sizeof(PacketMarker),1000);
+	//HAL_UART_Transmit(_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
+		
+}
+
+
+static void receive()
+{
+	while(i<6)
+	{
+		cadena[i]= _getkey();
+		i++;
+	}
+	for(p=1;p<6;p++)
+		printf("%c",cadena[p]);
+	printf("\n");
+	for(p=0;p<6;p++)
+	{
+		cobs_decod(decoded, 6, cadena[p]);
+	}
+	for(p=0;p<5;p++)
+	{
+		if(p==0)
+			printf("%c", decoded[p]+0x0E);
+		else
+			printf("%c",decoded[p]);
+	}
+}
+
 /******************* Main Function: *****************************/
 void main()
 {
@@ -274,25 +342,13 @@ void main()
 	
 	i = 0;
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
-	while(i<6)
-	{
-	   cadena[i]= getkey();
-		i++;
-	}
-	for(p=1;p<6;p++)
-		printf("%c",cadena[p]);
+	receive();
+	
 	i=0;
 	printf("\n");
 	printf("\n");
 	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	while(i<6)
-	{
-	  	cadena[i]= getkey();
-		i++;
-	}
-	for(p=1;p<6;p++)
-		printf("%c",cadena[p]);
-	printf("\n");
+	receive();
 	printf("\n");
 
 	i = 0;
