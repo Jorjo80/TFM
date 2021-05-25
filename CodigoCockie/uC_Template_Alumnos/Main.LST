@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  05/22/2021 18:53:43 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  05/25/2021 19:39:31 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   50   1      }
   51          /*****************************************************************/
   52          
-C51 COMPILER V8.08   MAIN                                                                  05/22/2021 18:53:43 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  05/25/2021 19:39:31 PAGE 2   
 
   53          /***************** UART configuration: ***************************/
   54          void _WSN_UART841_config()
@@ -126,7 +126,7 @@ line level    source
  110   1         while (Ack2N == 1){};
  111   1         
  112   1         DATA_H = P2;           // MSB
-C51 COMPILER V8.08   MAIN                                                                  05/22/2021 18:53:43 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  05/25/2021 19:39:31 PAGE 3   
 
  113   1         TrigByte2N = 1;    // Release Trigger2
  114   1      
@@ -190,7 +190,7 @@ line level    source
  172   2              }
  173   1      
  174   1      
-C51 COMPILER V8.08   MAIN                                                                  05/22/2021 18:53:43 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  05/25/2021 19:39:31 PAGE 4   
 
  175   1         /************ Temp: ******************/
  176   1         // the temperature value taken from the FPGA has     to be
@@ -254,7 +254,7 @@ line level    source
  234   1              _WSN_wait_answer('K',0);
  235   1      
  236   1              printf("ATS03=0000000000000003\r");
-C51 COMPILER V8.08   MAIN                                                                  05/22/2021 18:53:43 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  05/25/2021 19:39:31 PAGE 5   
 
  237   1              _WSN_wait_answer('O',0);
  238   1              _WSN_wait_answer('K',0);
@@ -318,7 +318,7 @@ line level    source
  295   1              //HAL_UART_Transmit(_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
  296   1                      
  297   1      }
-C51 COMPILER V8.08   MAIN                                                                  05/22/2021 18:53:43 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  05/25/2021 19:39:31 PAGE 6   
 
  298          
  299          
@@ -345,62 +345,123 @@ line level    source
  320   2              }
  321   1      }
  322          
- 323          /******************* Main Function: *****************************/
- 324          void main()
- 325          {
- 326   1        
- 327   1         //---- Peripheral Configurations: -------------
- 328   1      
- 329   1         c = 0;
- 330   1         flag = 0;
- 331   1         _WS_Timer_Config(1);
- 332   1         _WS_ADC_Config();
- 333   1         _WSN_UART841_config();
- 334   1         _WSN_ini_FPGA();
- 335   1         //entrada cuenta humedad y temperatura por defecto
- 336   1         cuenta_temp = 1;
- 337   1         cuenta_hum = 5;
- 338   1         //_WSN_ZigBee_config('a');
- 339   1      
- 340   1         // --------------------------------------------
- 341   1              //send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
- 342   1              
- 343   1              i = 0;
- 344   1              send(Role, (sizeof(Role)/sizeof(Role[0])));
- 345   1              receive();
- 346   1              
- 347   1              i=0;
- 348   1              printf("\n");
- 349   1              printf("\n");
- 350   1              send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
- 351   1              receive();
- 352   1              printf("\n");
+ 323          void delay()
+ 324          {
+ 325   1              if(flag == 1)
+ 326   1              {
+ 327   2                      flag = 0;
+ 328   2              }
+ 329   1              while(flag == 0)
+ 330   1              {
+ 331   2                      ;
+ 332   2              }
+ 333   1      }
+ 334          
+ 335          /******************* Main Function: *****************************/
+ 336          void main()
+ 337          {
+ 338   1        
+ 339   1         //---- Peripheral Configurations: -------------
+ 340   1      
+ 341   1         c = 0;
+ 342   1         flag = 0;
+ 343   1         _WS_Timer_Config(5);
+ 344   1         _WS_ADC_Config();
+ 345   1         _WSN_UART841_config();
+ 346   1         _WSN_ini_FPGA();
+ 347   1         //entrada cuenta humedad y temperatura por defecto
+ 348   1         cuenta_temp = 1;
+ 349   1         cuenta_hum = 5;
+ 350   1         //_WSN_ZigBee_config('a');
+ 351   1      
+ 352   1         // --------------------------------------------
  353   1      
- 354   1              i = 0;
- 355   1              printf ("\nConnected\n\r");                                
- 356   1      
- 357   1              while (1)
- 358   1              {
- 359   2                 if (flag == 1){
-C51 COMPILER V8.08   MAIN                                                                  05/22/2021 18:53:43 PAGE 7   
+ 354   1              send(OOB, (sizeof(OOB)/sizeof(OOB[0])));
+ 355   1              receive();
+ 356   1              i = 0;
+ 357   1              delay();
+ 358   1              send(Role, (sizeof(Role)/sizeof(Role[0])));
+ 359   1              receive();
+C51 COMPILER V8.08   MAIN                                                                  05/25/2021 19:39:31 PAGE 7   
 
- 360   3      
- 361   3                      //send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));       
- 362   3      
- 363   3                      flag = 0;
- 364   3      
- 365   3                      }                               
- 366   2                                                        
- 367   2              }
- 368   1      
- 369   1      }
- 370          /****************************************************************/
+ 360   1              i=0;
+ 361   1              printf("\n");
+ 362   1              printf("\n");
+ 363   1              delay();
+ 364   1              send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
+ 365   1              receive();
+ 366   1              printf("\n");
+ 367   1              printf("\n");   
+ 368   1              i = 0;
+ 369   1              delay();
+ 370   1              send(WritePANID, sizeof(WritePANID)/sizeof(WritePANID[0]));
+ 371   1              receive();
+ 372   1              printf("\n");
+ 373   1              printf("\n");
+ 374   1              i = 0;
+ 375   1              send(WriteNetName, sizeof(WriteNetName)/sizeof(WriteNetName[0]));
+ 376   1              receive();
+ 377   1              printf("\n");
+ 378   1              printf("\n");
+ 379   1              i = 0;
+ 380   1              delay();
+ 381   1              send(WriteMLocPref, sizeof(WriteMLocPref)/sizeof(WriteMLocPref[0]));
+ 382   1              receive();
+ 383   1              printf("\n");
+ 384   1              printf("\n");
+ 385   1              i = 0;
+ 386   1              delay();
+ 387   1              send(WriteMK, sizeof(WriteMK)/sizeof(WriteMK[0]));
+ 388   1              receive();
+ 389   1              printf("\n");
+ 390   1              printf("\n");
+ 391   1              i = 0;
+ 392   1              send(WriteExtPID, sizeof(WriteExtPID)/sizeof(WriteExtPID[0]));
+ 393   1              receive();
+ 394   1              printf("\n");
+ 395   1              printf("\n");
+ 396   1              i = 0;
+ 397   1              delay();
+ 398   1              send(WriteComCred, sizeof(WriteComCred)/sizeof(WriteComCred[0]));
+ 399   1              receive();
+ 400   1              printf("\n");
+ 401   1              printf("\n");
+ 402   1              i = 0;
+ 403   1              delay();
+ 404   1              send(WriteJoinCred, sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0]));
+ 405   1              receive();
+ 406   1              printf("\n");
+ 407   1              printf("\n");
+ 408   1              i=0;
+ 409   1              delay();
+ 410   1              send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
+ 411   1              receive();
+ 412   1              printf("\n");
+ 413   1              printf("\n");
+ 414   1              printf ("\nConnected\n\r");                                
+ 415   1      
+ 416   1              while (1)
+ 417   1              {
+ 418   2                 if (flag == 1){
+ 419   3      
+ 420   3                      //send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));       
+ 421   3      
+C51 COMPILER V8.08   MAIN                                                                  05/25/2021 19:39:31 PAGE 8   
+
+ 422   3                      flag = 0;
+ 423   3      
+ 424   3                      }                               
+ 425   2                                                        
+ 426   2              }
+ 427   1      
+ 428   1      }
+ 429          /****************************************************************/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2435    ----
+   CODE SIZE        =   2773    ----
    CONSTANT SIZE    =    152    ----
-   XDATA SIZE       =   1423     578
+   XDATA SIZE       =   1488     578
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

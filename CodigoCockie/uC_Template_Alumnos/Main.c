@@ -320,6 +320,18 @@ static void receive()
 	}
 }
 
+void delay()
+{
+	if(flag == 1)
+	{
+		flag = 0;
+	}
+	while(flag == 0)
+	{
+		;
+	}
+}
+
 /******************* Main Function: *****************************/
 void main()
 {
@@ -328,7 +340,7 @@ void main()
 
    c = 0;
    flag = 0;
-   _WS_Timer_Config(1);
+   _WS_Timer_Config(5);
    _WS_ADC_Config();
    _WSN_UART841_config();
    _WSN_ini_FPGA();
@@ -338,20 +350,67 @@ void main()
    //_WSN_ZigBee_config('a');
 
    // --------------------------------------------
-	//send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));
-	
+
+	send(OOB, (sizeof(OOB)/sizeof(OOB[0])));
+	receive();
 	i = 0;
+	delay();
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
 	receive();
-	
 	i=0;
 	printf("\n");
 	printf("\n");
+	delay();
 	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
 	receive();
 	printf("\n");
-
+	printf("\n");	
 	i = 0;
+	delay();
+	send(WritePANID, sizeof(WritePANID)/sizeof(WritePANID[0]));
+	receive();
+	printf("\n");
+	printf("\n");
+	i = 0;
+	send(WriteNetName, sizeof(WriteNetName)/sizeof(WriteNetName[0]));
+	receive();
+	printf("\n");
+	printf("\n");
+	i = 0;
+	delay();
+	send(WriteMLocPref, sizeof(WriteMLocPref)/sizeof(WriteMLocPref[0]));
+	receive();
+	printf("\n");
+	printf("\n");
+	i = 0;
+	delay();
+	send(WriteMK, sizeof(WriteMK)/sizeof(WriteMK[0]));
+	receive();
+	printf("\n");
+	printf("\n");
+	i = 0;
+	send(WriteExtPID, sizeof(WriteExtPID)/sizeof(WriteExtPID[0]));
+	receive();
+	printf("\n");
+	printf("\n");
+	i = 0;
+	delay();
+	send(WriteComCred, sizeof(WriteComCred)/sizeof(WriteComCred[0]));
+	receive();
+	printf("\n");
+	printf("\n");
+	i = 0;
+	delay();
+	send(WriteJoinCred, sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0]));
+	receive();
+	printf("\n");
+	printf("\n");
+	i=0;
+	delay();
+	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
+	receive();
+	printf("\n");
+	printf("\n");
 	printf ("\nConnected\n\r");	   			   
 
  	while (1)
