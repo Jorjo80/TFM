@@ -1,4 +1,4 @@
-#include "COBS_Kirale.h"
+
 
 uint8_t channel = 0x0B;
 uint8_t PANID[] = {0x12, 0x34}; // PAN ID = 0x1234

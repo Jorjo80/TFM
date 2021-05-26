@@ -1,7 +1,7 @@
 #include <ADuC841.h>
 #include <stdio.h>
 
-#include "netconfig.h"
+#include "COBS_Kirale.h"
 
 
 
@@ -282,7 +282,7 @@ static void send(uint8_t *buffer, size_t size)
 	uint8_t _encodeBuffer[512];
 	int i = 0;
 	size_t numEncoded= 0;
-	buffer[CKS_POS]= XOR_CKS(buffer, size);
+	buffer[4]= XOR_CKS(buffer, size);
 	numEncoded = encod(buffer, size, _encodeBuffer);
 
 	printf("%c",PacketMarker);	
@@ -299,6 +299,7 @@ static void send(uint8_t *buffer, size_t size)
 
 static void receive()
 {
+;
 	while(i<6)
 	{
 		cadena[i]= _getkey();
@@ -331,30 +332,15 @@ void delay()
 		;
 	}
 }
-
-/******************* Main Function: *****************************/
-void main()
+void InicioRed(char role)
 {
-  
-   //---- Peripheral Configurations: -------------
-
-   c = 0;
-   flag = 0;
-   _WS_Timer_Config(5);
-   _WS_ADC_Config();
-   _WSN_UART841_config();
-   _WSN_ini_FPGA();
-   //entrada cuenta humedad y temperatura por defecto
-   cuenta_temp = 1;
-   cuenta_hum = 5;
-   //_WSN_ZigBee_config('a');
-
-   // --------------------------------------------
-
-	send(OOB, (sizeof(OOB)/sizeof(OOB[0])));
+   send(OOB, (sizeof(OOB)/sizeof(OOB[0])));
 	receive();
 	i = 0;
 	delay();
+	printf("\n");
+	printf("\n");
+	Role[5]= role;
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
 	receive();
 	i=0;
@@ -411,6 +397,27 @@ void main()
 	receive();
 	printf("\n");
 	printf("\n");
+}
+/******************* Main Function: *****************************/
+void main()
+{
+  
+   //---- Peripheral Configurations: -------------
+
+   c = 0;
+   flag = 0;
+   _WS_Timer_Config(0x05);
+   _WS_ADC_Config();
+   _WSN_UART841_config();
+   _WSN_ini_FPGA();
+   //entrada cuenta humedad y temperatura por defecto
+   cuenta_temp = 1;
+   cuenta_hum = 5;
+   //_WSN_ZigBee_config('a');
+
+   // --------------------------------------------
+
+	InicioRed(fed);
 	printf ("\nConnected\n\r");	   			   
 
  	while (1)
