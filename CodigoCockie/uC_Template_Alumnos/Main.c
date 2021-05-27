@@ -297,22 +297,24 @@ static void send(uint8_t *buffer, size_t size)
 }
 
 
-static void receive()
+static void receive(int len)
 {
-;
-	while(i<6)
+	int payload;
+	while(i<len)
 	{
 		cadena[i]= _getkey();
 		i++;
 	}
-	for(p=1;p<6;p++)
+	for(p=1;p<len;p++)
 		printf("%c",cadena[p]);
 	printf("\n");
-	for(p=0;p<6;p++)
+	for(p=0;p<len;p++)
 	{
-		cobs_decod(decoded, 6, cadena[p]);
+		cobs_decod(decoded, len, cadena[p]);
 	}
-	for(p=0;p<5;p++)
+	payload= (int) decoded[1];
+
+	for(p=0;p<(5+payload);p++)
 	{
 		if(p==0)
 			printf("%c", decoded[p]+0x0E);
@@ -334,67 +336,67 @@ void delay()
 }
 void InicioRed(char role)
 {
-   send(OOB, (sizeof(OOB)/sizeof(OOB[0])));
-	receive();
+   	send(OOB, (sizeof(OOB)/sizeof(OOB[0])));
+	receive(6);
 	i = 0;
 	delay();
 	printf("\n");
 	printf("\n");
 	Role[5]= role;
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
-	receive();
+	receive(7);
 	i=0;
 	printf("\n");
 	printf("\n");
 	delay();
 	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");	
 	i = 0;
 	delay();
 	send(WritePANID, sizeof(WritePANID)/sizeof(WritePANID[0]));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");
 	i = 0;
 	send(WriteNetName, sizeof(WriteNetName)/sizeof(WriteNetName[0]));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");
 	i = 0;
 	delay();
 	send(WriteMLocPref, sizeof(WriteMLocPref)/sizeof(WriteMLocPref[0]));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");
 	i = 0;
 	delay();
 	send(WriteMK, sizeof(WriteMK)/sizeof(WriteMK[0]));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");
 	i = 0;
 	send(WriteExtPID, sizeof(WriteExtPID)/sizeof(WriteExtPID[0]));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");
 	i = 0;
 	delay();
 	send(WriteComCred, sizeof(WriteComCred)/sizeof(WriteComCred[0]));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");
 	i = 0;
 	delay();
 	send(WriteJoinCred, sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0]));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");
 	i=0;
 	delay();
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
-	receive();
+	receive(6);
 	printf("\n");
 	printf("\n");
 }
