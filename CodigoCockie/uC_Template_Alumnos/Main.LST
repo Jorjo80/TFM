@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  05/27/2021 18:51:55 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  05/27/2021 19:48:42 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   50   1      }
   51          /*****************************************************************/
   52          
-C51 COMPILER V8.08   MAIN                                                                  05/27/2021 18:51:55 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  05/27/2021 19:48:42 PAGE 2   
 
   53          /***************** UART configuration: ***************************/
   54          void _WSN_UART841_config()
@@ -126,7 +126,7 @@ line level    source
  110   1         while (Ack2N == 1){};
  111   1         
  112   1         DATA_H = P2;           // MSB
-C51 COMPILER V8.08   MAIN                                                                  05/27/2021 18:51:55 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  05/27/2021 19:48:42 PAGE 3   
 
  113   1         TrigByte2N = 1;    // Release Trigger2
  114   1      
@@ -190,7 +190,7 @@ line level    source
  172   2              }
  173   1      
  174   1      
-C51 COMPILER V8.08   MAIN                                                                  05/27/2021 18:51:55 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  05/27/2021 19:48:42 PAGE 4   
 
  175   1         /************ Temp: ******************/
  176   1         // the temperature value taken from the FPGA has     to be
@@ -254,7 +254,7 @@ line level    source
  234   1              _WSN_wait_answer('K',0);
  235   1      
  236   1              printf("ATS03=0000000000000003\r");
-C51 COMPILER V8.08   MAIN                                                                  05/27/2021 18:51:55 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  05/27/2021 19:48:42 PAGE 5   
 
  237   1              _WSN_wait_answer('O',0);
  238   1              _WSN_wait_answer('K',0);
@@ -318,7 +318,7 @@ line level    source
  295   1              //HAL_UART_Transmit(_encodeBuffer,sizeof(_encodeBuffer)/sizeof(_encodeBuffer[0]),1000);
  296   1                      
  297   1      }
-C51 COMPILER V8.08   MAIN                                                                  05/27/2021 18:51:55 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  05/27/2021 19:48:42 PAGE 6   
 
  298          
  299          
@@ -382,7 +382,7 @@ line level    source
  357   1              delay();
  358   1              send(WritePANID, sizeof(WritePANID)/sizeof(WritePANID[0]));
  359   1              receive(6);
-C51 COMPILER V8.08   MAIN                                                                  05/27/2021 18:51:55 PAGE 7   
+C51 COMPILER V8.08   MAIN                                                                  05/27/2021 19:48:42 PAGE 7   
 
  360   1              printf("\n");
  361   1              printf("\n");
@@ -445,8 +445,8 @@ line level    source
  418   1         //_WSN_ZigBee_config('a');
  419   1      
  420   1         // --------------------------------------------
- 421   1      
-C51 COMPILER V8.08   MAIN                                                                  05/27/2021 18:51:55 PAGE 8   
+ 421   1              
+C51 COMPILER V8.08   MAIN                                                                  05/27/2021 19:48:42 PAGE 8   
 
  422   1              InicioRed(fed);
  423   1              printf ("\nConnected\n\r");                                

@@ -13,17 +13,6 @@ compiling Main.c...
 COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
 COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
 MAIN.C(226): warning C280: 'type': unreferenced local variable
-MAIN.C(340): warning C209: '_receive': too few actual parameters
-MAIN.C(347): warning C209: '_receive': too few actual parameters
-MAIN.C(353): warning C209: '_receive': too few actual parameters
-MAIN.C(359): warning C209: '_receive': too few actual parameters
-MAIN.C(364): warning C209: '_receive': too few actual parameters
-MAIN.C(370): warning C209: '_receive': too few actual parameters
-MAIN.C(376): warning C209: '_receive': too few actual parameters
-MAIN.C(381): warning C209: '_receive': too few actual parameters
-MAIN.C(387): warning C209: '_receive': too few actual parameters
-MAIN.C(393): warning C209: '_receive': too few actual parameters
-MAIN.C(399): warning C209: '_receive': too few actual parameters
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_DEBUG_TX?MAIN
@@ -39,31 +28,7 @@ linking...
     SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6526
-creating hex file from "demo_wsn"...
-"demo_wsn" - 0 Error(s), 21 Warning(s).
-Build target 'Target 1'
-assembling START_AD.A51...
-compiling Main.c...
-COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
-COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
-MAIN.C(226): warning C280: 'type': unreferenced local variable
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_DEBUG_TX?MAIN
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_MEMSET?MAIN
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6530
+Program Size: data=15.2 xdata=2011 code=6554
 creating hex file from "demo_wsn"...
 "demo_wsn" - 0 Error(s), 10 Warning(s).
 Build target 'Target 1'
@@ -87,7 +52,7 @@ linking...
     SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6530
+Program Size: data=15.2 xdata=2011 code=6554
 creating hex file from "demo_wsn"...
 "demo_wsn" - 0 Error(s), 10 Warning(s).
 Build target 'Target 1'
@@ -111,7 +76,7 @@ linking...
     SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6534
+Program Size: data=15.2 xdata=2011 code=6558
 creating hex file from "demo_wsn"...
 "demo_wsn" - 0 Error(s), 10 Warning(s).
 Build target 'Target 1'
@@ -135,7 +100,7 @@ linking...
     SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6534
+Program Size: data=15.2 xdata=2011 code=6554
 creating hex file from "demo_wsn"...
 "demo_wsn" - 0 Error(s), 10 Warning(s).
 Build target 'Target 1'
@@ -159,7 +124,7 @@ linking...
     SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6534
+Program Size: data=15.2 xdata=2011 code=6551
 creating hex file from "demo_wsn"...
 "demo_wsn" - 0 Error(s), 10 Warning(s).
 Build target 'Target 1'
@@ -183,7 +148,7 @@ linking...
     SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6530
+Program Size: data=15.2 xdata=2011 code=6551
 creating hex file from "demo_wsn"...
 "demo_wsn" - 0 Error(s), 10 Warning(s).
 Build target 'Target 1'
@@ -207,7 +172,7 @@ linking...
     SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6534
+Program Size: data=15.2 xdata=2011 code=6551
 creating hex file from "demo_wsn"...
 "demo_wsn" - 0 Error(s), 10 Warning(s).
 Build target 'Target 1'
@@ -231,7 +196,390 @@ linking...
     SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
-Program Size: data=15.2 xdata=2011 code=6534
+Program Size: data=15.2 xdata=2011 code=6547
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6547
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+MAIN.C(291): error C141: syntax error near ':'
+Target not created
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+MAIN.C(291): error C214: illegal pointer conversion
+Target not created
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+MAIN.C(291): error C214: illegal pointer conversion
+Target not created
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6577
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6537
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6537
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6537
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
+creating hex file from "demo_wsn"...
+"demo_wsn" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling START_AD.A51...
+compiling Main.c...
+COBS_KIRALE.H(298): warning C280: 'tx': unreferenced local variable
+COBS_KIRALE.H(319): warning C231: '_memset': attempt to redefine intrinsic function
+MAIN.C(226): warning C280: 'type': unreferenced local variable
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DEBUG_TX?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_RECVCHAR?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MEMSET?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_ADC_CONVERSION?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_SENSORS_READING?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?__WSN_ZIGBEE_CONFIG?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_WSN_MESSAGE_DETECT?MAIN
+Program Size: data=15.2 xdata=2011 code=6544
 creating hex file from "demo_wsn"...
 "demo_wsn" - 0 Error(s), 10 Warning(s).
 Build target 'Target 1'

@@ -418,7 +418,7 @@ void main()
    //_WSN_ZigBee_config('a');
 
    // --------------------------------------------
-
+	
 	InicioRed(fed);
 	printf ("\nConnected\n\r");	   			   
 
