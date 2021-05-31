@@ -344,7 +344,7 @@ void InicioRed(char role)
 	printf("\n");
 	Role[5]= role;
 	send(Role, (sizeof(Role)/sizeof(Role[0])));
-	receive(7);
+	receive(6);
 	i=0;
 	printf("\n");
 	printf("\n");
@@ -399,6 +399,19 @@ void InicioRed(char role)
 	receive(6);
 	printf("\n");
 	printf("\n");
+	delay();
+	printf("\nIFUP HECHO\n");
+	delay();
+	send(WriteIP, (sizeof(WriteIP)/sizeof(WriteIP[0])));
+	receive(6);
+	printf("\n");
+	printf("\n");
+	delay();
+	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])));
+	receive(6);
+	printf("\n");
+	printf("\n");
+	delay();
 }
 /******************* Main Function: *****************************/
 void main()
