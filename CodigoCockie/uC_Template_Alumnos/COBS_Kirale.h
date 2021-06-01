@@ -178,7 +178,7 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
 	numChar = 1;
 	if (numChar == 0)
 	{
-		debug_rx(inByte, 1, 1);
+		//debug_rx(inByte, 1, 1);
 		return COBS_RESULT_TIMEOUT;
 	}
 	if (inByte == 0)
@@ -194,7 +194,7 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
 		memset(buff, 0, 5);
 		if (dataBytes == 0)
 		{
-			debug_rx(inByte, 1, 0);
+			//debug_rx(inByte, 1, 0);
 			return COBS_RESULT_NONE;
 		}
 		else
@@ -209,7 +209,7 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
 			usart_rxPkt.totBytes += (buff[0] << 8) + buff[1];
 			if (usart_rxPkt.totBytes > len)
 			{
-				debug_rx(inByte, 0, 1);
+				//debug_rx(inByte, 0, 1);
 				return COBS_RESULT_ERROR;
 			}
 
@@ -232,7 +232,7 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
 			}
 			else if ((inByte == 0xD1) || (inByte == 0xD2))
 			{
-				debug_rx(inByte, 0, 1);
+				//debug_rx(inByte, 0, 1);
 				return COBS_RESULT_ERROR;
 			}
 			else if (inByte < 0xE0)
@@ -248,7 +248,7 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
 			}
 			else
 			{
-				debug_rx(inByte, 0, 1);
+				//debug_rx(inByte, 0, 1);
 				return COBS_RESULT_ERROR;
 			}
 
@@ -282,12 +282,12 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
 	if (usart_rxPkt.proBytes >= usart_rxPkt.totBytes)
 	{
 		usart_rxPkt.startMsg = 0;
-		debug_rx(inByte, 0, 0);
+		//debug_rx(inByte, 0, 0);
 		return COBS_RESULT_NONE;
 	}
 	else
 	{
-		debug_rx(inByte, 0, 1);
+		//debug_rx(inByte, 0, 1);
 		return (usart_rxPkt.totBytes);
 	}
 
@@ -298,12 +298,13 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
  static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last)
 {
 	if (first)
-		//printf("COBS_%sX: |", tx ? "T" : "R");
+		printf("COBS_%sX: |", tx ? "T" : "R");
 
 	if (!(first && last))
 		printf(" %c ", byte);
 
 	if (last)
+
 		printf("|\n");
 	else
 		printf(":");

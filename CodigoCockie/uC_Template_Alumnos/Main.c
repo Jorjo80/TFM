@@ -279,16 +279,16 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 
 static void send(uint8_t *buffer, size_t size)
 {
-	uint8_t _encodeBuffer[512];
-	int i = 0;
+	char _encodeBuffer[512];
+	int d = 0;
 	size_t numEncoded= 0;
 	buffer[4]= XOR_CKS(buffer, size);
 	numEncoded = encod(buffer, size, _encodeBuffer);
 
 	printf("%c",PacketMarker);	
-	for(i=0;i<numEncoded;i++)
+	for(d=0;d<numEncoded;d++)
 	{
-		 printf("%c",_encodeBuffer[i]);
+		 printf("%c",_encodeBuffer[d]);
 	}
 	 printf("\n");
 	//HAL_UART_Transmit(&PacketMarker,sizeof(PacketMarker),1000);
@@ -359,6 +359,7 @@ void InicioRed(char role)
 	receive(6);
 	printf("\n");
 	printf("\n");
+	delay();
 	i = 0;
 	send(WriteNetName, sizeof(WriteNetName)/sizeof(WriteNetName[0]));
 	receive(6);
@@ -377,6 +378,7 @@ void InicioRed(char role)
 	printf("\n");
 	printf("\n");
 	i = 0;
+	delay();
 	send(WriteExtPID, sizeof(WriteExtPID)/sizeof(WriteExtPID[0]));
 	receive(6);
 	printf("\n");
@@ -393,22 +395,22 @@ void InicioRed(char role)
 	receive(6);
 	printf("\n");
 	printf("\n");
-	i=0;
 	delay();
-	send(ifup,(sizeof(ifup)/sizeof(ifup[0])));
+	i=0;
+	send(ifup,sizeof(ifup));
 	receive(6);
 	printf("\n");
 	printf("\n");
 	delay();
-	printf("\nIFUP HECHO\n");
-	delay();
+	i=0;
 	send(WriteIP, (sizeof(WriteIP)/sizeof(WriteIP[0])));
 	receive(6);
 	printf("\n");
 	printf("\n");
 	delay();
+	i=0;
 	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])));
-	receive(6);
+	receive(9);
 	printf("\n");
 	printf("\n");
 	delay();
@@ -439,7 +441,7 @@ void main()
    	{
    	   if (flag == 1){
 
-		//send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])));	
+		send(SendHello, (sizeof(SendHello)/sizeof(SendHello[0])));	
 
 		flag = 0;
 

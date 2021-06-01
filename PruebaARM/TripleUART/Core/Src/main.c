@@ -493,17 +493,7 @@ size1 = sizeof(WriteComCred);
 	size2 = sizeof(ComCred);
 	uint8_t cmdComCred[size1 + size2];
 	//unite(WriteComCred, ComCred, cmdComCred);
-	for(int i = 0; i<size1;i++)
-	{
-		cmdComCred[i] = WriteComCred[i];
-	}
-	HAL_Delay(100);
-	for(int i = size1, p=0; i<(size1+size2); i++, p++)
-	{
-		cmdComCred[i] = ComCred[p];
-	}	
-	
-	send(cmdComCred,(sizeof(cmdComCred)/sizeof(cmdComCred[0])), &huart1);
+	send(WriteComCred,(sizeof(WriteComCred)/sizeof(WriteComCred[0])), &huart1);
 	receive(&huart1);
 	HAL_Delay(1000);
 	
@@ -702,20 +692,7 @@ static  void InicioLeader(void)
 	receive(&huart3);	
 	HAL_Delay(1000);
 	
-	size1 = sizeof(WriteComCred);
-	size2 = sizeof(ComCred);
-	uint8_t cmdComCred[size1 + size2];
-	//unite(WriteComCred, ComCred, cmdComCred);
-	for(int i = 0; i<size1;i++)
-	{
-		cmdComCred[i] = WriteComCred[i];
-	}
-	for(int i = size1, p=0; i<(size1+size2); i++, p++)
-	{
-		cmdComCred[i] = ComCred[p];
-	}	
-	
-	send(cmdComCred,(sizeof(cmdComCred)/sizeof(cmdComCred[0])), &huart3);
+	send(WriteComCred,(sizeof(WriteComCred)/sizeof(WriteComCred[0])), &huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	
