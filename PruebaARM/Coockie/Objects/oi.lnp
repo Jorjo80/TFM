@@ -1,0 +1,3 @@
+".\Objects\START_AD.obj" 
+TO ".\Objects\oi" 
+PRINT(".\Listings\oi.m51") RAMSIZE(256) 
