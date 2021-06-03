@@ -1,4 +1,4 @@
---cpu=Cortex-M4.fp.sp
+--cpu=Cortex-M4.fp
 "uart\startup_stm32f407xx.o"
 "uart\main.o"
 "uart\stm32f4xx_it.o"

@@ -182,6 +182,7 @@ int main(void)
 		send(Status,(sizeof(Status)/sizeof(Status[0])), &huart1);
 		receive(&huart1);
 		HAL_Delay(5000);
+		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart2);
 		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
 		receive(&huart3);
 		HAL_Delay(5000);
