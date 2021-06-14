@@ -20,8 +20,8 @@ unsigned int sizeRpl;
 unsigned int i, p;
 
 
-uint8_t cadena[512];
-uint8_t decoded[512];
+uint8_t cadena[256];
+uint8_t decoded[256];
 uint8_t dato;
 unsigned char flag, c;
 

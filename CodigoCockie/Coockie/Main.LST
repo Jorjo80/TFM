@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  06/07/2021 17:19:40 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  06/14/2021 18:33:13 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -30,8 +30,8 @@ line level    source
   20          unsigned int i, p;
   21          
   22          
-  23          uint8_t cadena[512];
-  24          uint8_t decoded[512];
+  23          uint8_t cadena[256];
+  24          uint8_t decoded[256];
   25          uint8_t dato;
   26          unsigned char flag, c;
   27          
@@ -62,7 +62,7 @@ line level    source
   51          /*****************************************************************/
   52          
   53          /***************** UART configuration: ***************************/
-C51 COMPILER V8.08   MAIN                                                                  06/07/2021 17:19:40 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  06/14/2021 18:33:13 PAGE 2   
 
   54          void _WSN_UART841_config()
   55          {
@@ -126,7 +126,7 @@ line level    source
  111   1         
  112   1         DATA_H = P2;           // MSB
  113   1         TrigByte2N = 1;    // Release Trigger2
-C51 COMPILER V8.08   MAIN                                                                  06/07/2021 17:19:40 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  06/14/2021 18:33:13 PAGE 3   
 
  114   1      
  115   1      
@@ -190,7 +190,7 @@ line level    source
  173   1      
  174   1      
  175   1         /************ Temp: ******************/
-C51 COMPILER V8.08   MAIN                                                                  06/07/2021 17:19:40 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  06/14/2021 18:33:13 PAGE 4   
 
  176   1         // the temperature value taken from the FPGA has     to be
  177   1         // substracted from 27315 in order to show Degree Celsius x 100                              
@@ -254,7 +254,7 @@ line level    source
  235   1      
  236   1              printf("ATS03=0000000000000003\r");
  237   1              _WSN_wait_answer('O',0);
-C51 COMPILER V8.08   MAIN                                                                  06/07/2021 17:19:40 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  06/14/2021 18:33:13 PAGE 5   
 
  238   1              _WSN_wait_answer('K',0);
  239   1      
@@ -318,7 +318,7 @@ line level    source
  296          {
  297   1              int payload;
  298   1              while(i<len)
-C51 COMPILER V8.08   MAIN                                                                  06/07/2021 17:19:40 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  06/14/2021 18:33:13 PAGE 6   
 
  299   1              {
  300   2                      cadena[i]= _getkey();
@@ -382,7 +382,7 @@ line level    source
  358   1              i = 0;
  359   1              send(WriteNetName, sizeof(WriteNetName)/sizeof(WriteNetName[0]));
  360   1              receive(6);
-C51 COMPILER V8.08   MAIN                                                                  06/07/2021 17:19:40 PAGE 7   
+C51 COMPILER V8.08   MAIN                                                                  06/14/2021 18:33:13 PAGE 7   
 
  361   1              printf("\n");
  362   1              printf("\n");
@@ -431,7 +431,7 @@ line level    source
  405   1              delay();
  406   1              i=0;
  407   1              send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])));
- 408   1              receive(6);
+ 408   1              receive(9);
  409   1              printf("\n");
  410   1              printf("\n");
  411   1              delay();
@@ -446,7 +446,7 @@ line level    source
  420   1         flag = 0;
  421   1         _WS_Timer_Config(0x05);
  422   1         _WS_ADC_Config();
-C51 COMPILER V8.08   MAIN                                                                  06/07/2021 17:19:40 PAGE 8   
+C51 COMPILER V8.08   MAIN                                                                  06/14/2021 18:33:13 PAGE 8   
 
  423   1         _WSN_UART841_config();
  424   1         _WSN_ini_FPGA();
@@ -477,9 +477,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2949    ----
+   CODE SIZE        =   2947    ----
    CONSTANT SIZE    =    168    ----
-   XDATA SIZE       =   1390     583
+   XDATA SIZE       =    878     583
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
