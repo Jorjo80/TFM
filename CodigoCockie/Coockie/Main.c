@@ -277,7 +277,7 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 }
 
 
-static void send(uint8_t *buffer, size_t size)
+static void send(char *buffer, size_t size)
 {
 	char _encodeBuffer[512];
 	int d = 0;
@@ -288,7 +288,8 @@ static void send(uint8_t *buffer, size_t size)
 	for(d=0;d<numEncoded;d++)
 	{
 		 printf("%c",_encodeBuffer[d]);
-	}	
+	}
+		
 }
 
 
@@ -311,7 +312,7 @@ static void receive(int len)
 
 	for(p=0;p<(5+payload);p++)
 	{
-		if(p==0)
+		if(decoded[p]==0x00)
 			printf("%c", decoded[p]+0x0E);
 		else
 			printf("%c",decoded[p]);
@@ -331,83 +332,59 @@ void delay()
 }
 void InicioRed(char role)
 {
-   	send(OOB, (sizeof(OOB)/sizeof(OOB[0])));
+   	send(OOB, (sizeof(OOB)));
 	receive(6);
 	i = 0;
 	delay();
-	printf("\n");
-	printf("\n");
 	Role[5]= role;
-	send(Role, (sizeof(Role)/sizeof(Role[0])));
+	send(Role, (sizeof(Role)));
 	receive(6);
 	i=0;
-	printf("\n");
-	printf("\n");
+
 	delay();
-	send(WriteChannel, (sizeof(WriteChannel)/sizeof(WriteChannel[0])));
-	receive(6);
-	printf("\n");
-	printf("\n");	
+	send(WriteChannel, (sizeof(WriteChannel)));
+	receive(6);	
 	i = 0;
 	delay();
-	send(WritePANID, sizeof(WritePANID)/sizeof(WritePANID[0]));
+	send(WritePANID, sizeof(WritePANID));
 	receive(6);
-	printf("\n");
-	printf("\n");
+
 	delay();
 	i = 0;
-	send(WriteNetName, sizeof(WriteNetName)/sizeof(WriteNetName[0]));
+	send(WriteNetName, sizeof(WriteNetName));
 	receive(6);
-	printf("\n");
-	printf("\n");
 	i = 0;
 	delay();
-	send(WriteMLocPref, sizeof(WriteMLocPref)/sizeof(WriteMLocPref[0]));
+	send(WriteMLocPref, sizeof(WriteMLocPref));
 	receive(6);
-	printf("\n");
-	printf("\n");
 	i = 0;
 	delay();
-	send(WriteMK, sizeof(WriteMK)/sizeof(WriteMK[0]));
+	send(WriteMK, sizeof(WriteMK));
 	receive(6);
-	printf("\n");
-	printf("\n");
 	i = 0;
 	delay();
-	send(WriteExtPID, sizeof(WriteExtPID)/sizeof(WriteExtPID[0]));
+	send(WriteExtPID, sizeof(WriteExtPID));
 	receive(6);
-	printf("\n");
-	printf("\n");
 	i = 0;
 	delay();
-	send(WriteComCred, sizeof(WriteComCred)/sizeof(WriteComCred[0]));
+	send(WriteComCred, sizeof(WriteComCred));
 	receive(6);
-	printf("\n");
-	printf("\n");
 	i = 0;
 	delay();
-	send(WriteJoinCred, sizeof(WriteJoinCred)/sizeof(WriteJoinCred[0]));
+	send(WriteJoinCred, sizeof(WriteJoinCred));
 	receive(6);
-	printf("\n");
-	printf("\n");
 	delay();
 	i=0;
 	send(ifup,sizeof(ifup));
 	receive(6);
-	printf("\n");
-	printf("\n");
 	delay();
 	i=0;
-	send(WriteIP, (sizeof(WriteIP)/sizeof(WriteIP[0])));
+	send(WriteIP, (sizeof(WriteIP)));
 	receive(6);
-	printf("\n");
-	printf("\n");
 	delay();
 	i=0;
-	send(OpenSocket, (sizeof(OpenSocket)/sizeof(OpenSocket[0])));
+	send(OpenSocket, (sizeof(OpenSocket)));
 	receive(9);
-	printf("\n");
-	printf("\n");
 	delay();
 }
 /******************* Main Function: *****************************/
@@ -423,13 +400,8 @@ void main()
    _WSN_UART841_config();
    _WSN_ini_FPGA();
    //entrada cuenta humedad y temperatura por defecto
-   cuenta_temp = 1;
-   cuenta_hum = 5;
-   //_WSN_ZigBee_config('a');
 
-   // --------------------------------------------
-	
-	InicioRed(fed);
+	InicioRed(leader);
 	printf ("\nConnected\n\r");	   			   
 
  	while (1)
