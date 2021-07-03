@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  06/24/2021 20:47:22 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   51          /*****************************************************************/
   52          
   53          /***************** UART configuration: ***************************/
-C51 COMPILER V8.08   MAIN                                                                  06/24/2021 20:47:22 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 2   
 
   54          void _WSN_UART841_config()
   55          {
@@ -126,7 +126,7 @@ line level    source
  111   1         
  112   1         DATA_H = P2;           // MSB
  113   1         TrigByte2N = 1;    // Release Trigger2
-C51 COMPILER V8.08   MAIN                                                                  06/24/2021 20:47:22 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 3   
 
  114   1      
  115   1      
@@ -190,7 +190,7 @@ line level    source
  173   1      
  174   1      
  175   1         /************ Temp: ******************/
-C51 COMPILER V8.08   MAIN                                                                  06/24/2021 20:47:22 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 4   
 
  176   1         // the temperature value taken from the FPGA has     to be
  177   1         // substracted from 27315 in order to show Degree Celsius x 100                              
@@ -254,7 +254,7 @@ line level    source
  235   1      
  236   1              printf("ATS03=0000000000000003\r");
  237   1              _WSN_wait_answer('O',0);
-C51 COMPILER V8.08   MAIN                                                                  06/24/2021 20:47:22 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 5   
 
  238   1              _WSN_wait_answer('K',0);
  239   1      
@@ -318,7 +318,7 @@ line level    source
  296          static void receive(int len)
  297          {
  298   1              int payload;
-C51 COMPILER V8.08   MAIN                                                                  06/24/2021 20:47:22 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 6   
 
  299   1              while(i<len)
  300   1              {
@@ -382,7 +382,7 @@ line level    source
  358   1              send(WriteMLocPref, sizeof(WriteMLocPref));
  359   1              receive(6);
  360   1              i = 0;
-C51 COMPILER V8.08   MAIN                                                                  06/24/2021 20:47:22 PAGE 7   
+C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 7   
 
  361   1              delay();
  362   1              send(WriteMK, sizeof(WriteMK));
@@ -446,7 +446,7 @@ line level    source
  420          /****************************************************************/
 
 
-C51 COMPILER V8.08   MAIN                                                                  06/24/2021 20:47:22 PAGE 8   
+C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 8   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   2693    ----
