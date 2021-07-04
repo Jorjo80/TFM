@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  07/04/2021 17:17:54 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -11,7 +11,9 @@ line level    source
    2          #include <stdio.h>
    3          
    4          #include "COBS_Kirale.h"
-*** WARNING C231 IN LINE 320 OF COBS_KIRALE.H: '_memset': attempt to redefine intrinsic function
+*** WARNING C280 IN LINE 555 OF COBS_KIRALE.H: 'tx': unreferenced local variable
+*** WARNING C280 IN LINE 555 OF COBS_KIRALE.H: 'byte': unreferenced local variable
+*** WARNING C231 IN LINE 577 OF COBS_KIRALE.H: '_memset': attempt to redefine intrinsic function
    5          
    6          
    7          
@@ -60,10 +62,10 @@ line level    source
   49   1              ADCCON2  = 0x03;     // Selects channel 3 & on demand conversion.  (LDR is connected to the ADC3)
   50   1      }
   51          /*****************************************************************/
+C51 COMPILER V8.08   MAIN                                                                  07/04/2021 17:17:54 PAGE 2   
+
   52          
   53          /***************** UART configuration: ***************************/
-C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 2   
-
   54          void _WSN_UART841_config()
   55          {
   56   1              SCON = 0x52;//SCON: UART Serial Port Control Register   => Mode 1: 8-bit UART, variable baud rate
@@ -124,10 +126,10 @@ line level    source
  109   1         TrigByte2N = 0;         //Trigger second data byte
  110   1         while (Ack2N == 1){};
  111   1         
+C51 COMPILER V8.08   MAIN                                                                  07/04/2021 17:17:54 PAGE 3   
+
  112   1         DATA_H = P2;           // MSB
  113   1         TrigByte2N = 1;    // Release Trigger2
-C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 3   
-
  114   1      
  115   1      
  116   1         fpga_data = DATA_L + 256*(int)DATA_H;
@@ -188,10 +190,10 @@ line level    source
  171   2                      printf("Hay una humedad del %.2f %c\n", ((float)Hum)/100,37);   
  172   2              }
  173   1      
+C51 COMPILER V8.08   MAIN                                                                  07/04/2021 17:17:54 PAGE 4   
+
  174   1      
  175   1         /************ Temp: ******************/
-C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 4   
-
  176   1         // the temperature value taken from the FPGA has     to be
  177   1         // substracted from 27315 in order to show Degree Celsius x 100                              
  178   1         // Ej: Temp =  ( result - (273.15*100) );      // Degree Celsius x 100
@@ -252,10 +254,10 @@ line level    source
  233   1              _WSN_wait_answer('O',0);
  234   1              _WSN_wait_answer('K',0);
  235   1      
+C51 COMPILER V8.08   MAIN                                                                  07/04/2021 17:17:54 PAGE 5   
+
  236   1              printf("ATS03=0000000000000003\r");
  237   1              _WSN_wait_answer('O',0);
-C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 5   
-
  238   1              _WSN_wait_answer('K',0);
  239   1      
  240   1              printf("AT+JN\r");
@@ -299,7 +301,7 @@ line level    source
  277   1      }
  278          
  279          
- 280          static void send(char *buffer, size_t size)
+ 280          static void send(char *buffer, short size)
  281          {
  282   1              char _encodeBuffer[512];
  283   1              int d = 0;
@@ -311,147 +313,148 @@ line level    source
  289   1              {
  290   2                       printf("%c",_encodeBuffer[d]);
  291   2              }
- 292   1                      
- 293   1      }
- 294          
+ 292   1              //cobs_encod(buffer, size, sendChar);
+ 293   1                      
+ 294   1      }
  295          
- 296          static void receive(int len)
- 297          {
- 298   1              int payload;
-C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 6   
+ 296          
+C51 COMPILER V8.08   MAIN                                                                  07/04/2021 17:17:54 PAGE 6   
 
- 299   1              while(i<len)
- 300   1              {
- 301   2                      cadena[i]= _getkey();
- 302   2                      i++;
- 303   2              }
- 304   1              for(p=1;p<len;p++)
- 305   1                      printf("%c",cadena[p]);
- 306   1              printf("\n");
- 307   1              for(p=0;p<len;p++)
- 308   1              {
- 309   2                      cobs_decod(decoded, len, cadena[p]);
- 310   2              }
- 311   1              payload= (int) decoded[1];
- 312   1      
- 313   1              for(p=0;p<(5+payload);p++)
- 314   1              {
- 315   2                      if(decoded[p]==0x00)
- 316   2                              printf("%c", decoded[p]+0x0E);
- 317   2                      else
- 318   2                              printf("%c",decoded[p]);
- 319   2              }
- 320   1      }
- 321          
- 322          void delay()
- 323          {
- 324   1              if(flag == 1)
- 325   1              {
- 326   2                      flag = 0;
- 327   2              }
- 328   1              while(flag == 0)
- 329   1              {
- 330   2                      ;
- 331   2              }
- 332   1      }
- 333          void InicioRed(char role)
- 334          {
- 335   1              send(OOB, (sizeof(OOB)));
- 336   1              receive(6);
- 337   1              i = 0;
- 338   1              delay();
- 339   1              Role[5]= role;
- 340   1              send(Role, (sizeof(Role)));
- 341   1              receive(6);
- 342   1              i=0;
- 343   1      
- 344   1              delay();
- 345   1              send(WriteChannel, (sizeof(WriteChannel)));
- 346   1              receive(6);     
- 347   1              i = 0;
- 348   1              delay();
- 349   1              send(WritePANID, sizeof(WritePANID));
- 350   1              receive(6);
- 351   1      
- 352   1              delay();
- 353   1              i = 0;
- 354   1              send(WriteNetName, sizeof(WriteNetName));
- 355   1              receive(6);
- 356   1              i = 0;
- 357   1              delay();
- 358   1              send(WriteMLocPref, sizeof(WriteMLocPref));
- 359   1              receive(6);
- 360   1              i = 0;
-C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 7   
+ 297          static void receive(int len)
+ 298          {
+ 299   1              int payload;
+ 300   1              while(i<len)
+ 301   1              {
+ 302   2                      cadena[i]= _getkey();
+ 303   2                      i++;
+ 304   2              }
+ 305   1              for(p=1;p<len;p++)
+ 306   1                      printf("%c",cadena[p]);
+ 307   1              printf("\n");
+ 308   1              for(p=0;p<len;p++)
+ 309   1              {
+ 310   2                      cobs_decod(decoded, len, cadena[p]);
+ 311   2              }
+ 312   1              payload= (int) decoded[1];
+ 313   1      
+ 314   1              for(p=0;p<(5+payload);p++)
+ 315   1              {
+ 316   2                      if(decoded[p]==0x00)
+ 317   2                              printf("%c", decoded[p]+0x0E);
+ 318   2                      else
+ 319   2                              printf("%c",decoded[p]);
+ 320   2              }
+ 321   1      }
+ 322          
+ 323          void delay()
+ 324          {
+ 325   1              if(flag == 1)
+ 326   1              {
+ 327   2                      flag = 0;
+ 328   2              }
+ 329   1              while(flag == 0)
+ 330   1              {
+ 331   2                      ;
+ 332   2              }
+ 333   1      }
+ 334          void InicioRed(char role)
+ 335          {
+ 336   1              send(OOB, (sizeof(OOB)));
+ 337   1              receive(6);
+ 338   1              i = 0;
+ 339   1              delay();
+ 340   1              Role[5]= role;
+ 341   1              send(Role, (sizeof(Role)));
+ 342   1              receive(6);
+ 343   1              i=0;
+ 344   1      
+ 345   1              delay();
+ 346   1              send(WriteChannel, (sizeof(WriteChannel)));
+ 347   1              receive(6);     
+ 348   1              i = 0;
+ 349   1              delay();
+ 350   1              send(WritePANID, sizeof(WritePANID));
+ 351   1              receive(6);
+ 352   1      
+ 353   1              delay();
+ 354   1              i = 0;
+ 355   1              send(WriteNetName, sizeof(WriteNetName));
+ 356   1              receive(6);
+ 357   1              i = 0;
+ 358   1              delay();
+C51 COMPILER V8.08   MAIN                                                                  07/04/2021 17:17:54 PAGE 7   
 
- 361   1              delay();
- 362   1              send(WriteMK, sizeof(WriteMK));
- 363   1              receive(6);
- 364   1              i = 0;
- 365   1              delay();
- 366   1              send(WriteExtPID, sizeof(WriteExtPID));
- 367   1              receive(6);
- 368   1              i = 0;
- 369   1              delay();
- 370   1              send(WriteComCred, sizeof(WriteComCred));
- 371   1              receive(6);
- 372   1              i = 0;
- 373   1              delay();
- 374   1              send(WriteJoinCred, sizeof(WriteJoinCred));
- 375   1              receive(6);
- 376   1              delay();
- 377   1              i=0;
- 378   1              send(ifup,sizeof(ifup));
- 379   1              receive(6);
- 380   1              delay();
- 381   1              i=0;
- 382   1              send(WriteIP, (sizeof(WriteIP)));
- 383   1              receive(6);
- 384   1              delay();
- 385   1              i=0;
- 386   1              send(OpenSocket, (sizeof(OpenSocket)));
- 387   1              receive(9);
- 388   1              delay();
- 389   1      }
- 390          /******************* Main Function: *****************************/
- 391          void main()
- 392          {
- 393   1        
- 394   1         //---- Peripheral Configurations: -------------
- 395   1      
- 396   1         c = 0;
- 397   1         flag = 0;
- 398   1         _WS_Timer_Config(0x05);
- 399   1         _WS_ADC_Config();
- 400   1         _WSN_UART841_config();
- 401   1         _WSN_ini_FPGA();
- 402   1         //entrada cuenta humedad y temperatura por defecto
- 403   1      
- 404   1              InicioRed(leader);
- 405   1              printf ("\nConnected\n\r");                                
- 406   1      
- 407   1              while (1)
- 408   1              {
- 409   2                 if (flag == 1){
- 410   3      
- 411   3                      send(SendHello, 31);    
- 412   3      
- 413   3                      flag = 0;
- 414   3      
- 415   3                      }                               
- 416   2                                                        
- 417   2              }
- 418   1      
- 419   1      }
- 420          /****************************************************************/
+ 359   1              send(WriteMLocPref, sizeof(WriteMLocPref));
+ 360   1              receive(6);
+ 361   1              i = 0;
+ 362   1              delay();
+ 363   1              send(WriteMK, sizeof(WriteMK));
+ 364   1              receive(6);
+ 365   1              i = 0;
+ 366   1              delay();
+ 367   1              send(WriteExtPID, sizeof(WriteExtPID));
+ 368   1              receive(6);
+ 369   1              i = 0;
+ 370   1              delay();
+ 371   1              send(WriteComCred, sizeof(WriteComCred));
+ 372   1              receive(6);
+ 373   1              i = 0;
+ 374   1              delay();
+ 375   1              send(WriteJoinCred, sizeof(WriteJoinCred));
+ 376   1              receive(6);
+ 377   1              delay();
+ 378   1              i=0;
+ 379   1              send(ifup,sizeof(ifup));
+ 380   1              receive(6);
+ 381   1              delay();
+ 382   1              i=0;
+ 383   1              send(WriteIP, (sizeof(WriteIP)));
+ 384   1              receive(6);
+ 385   1              delay();
+ 386   1              i=0;
+ 387   1              send(OpenSocket, (sizeof(OpenSocket)));
+ 388   1              receive(9);
+ 389   1              delay();
+ 390   1      }
+ 391          /******************* Main Function: *****************************/
+ 392          void main()
+ 393          {
+ 394   1        
+ 395   1         //---- Peripheral Configurations: -------------
+ 396   1      
+ 397   1         c = 0;
+ 398   1         flag = 0;
+ 399   1         _WS_Timer_Config(0x05);
+ 400   1         _WS_ADC_Config();
+ 401   1         _WSN_UART841_config();
+ 402   1         _WSN_ini_FPGA();
+ 403   1         //entrada cuenta humedad y temperatura por defecto
+ 404   1      
+ 405   1              InicioRed(leader);
+ 406   1              printf ("\nConnected\n\r");                                
+ 407   1      
+ 408   1              while (1)
+ 409   1              {
+ 410   2                 if (flag == 1){
+ 411   3      
+ 412   3                      send(SendHello, 31);    
+ 413   3      
+ 414   3                      flag = 0;
+ 415   3      
+ 416   3                      }                               
+ 417   2                                                        
+ 418   2              }
+ 419   1      
+ 420   1      }
+C51 COMPILER V8.08   MAIN                                                                  07/04/2021 17:17:54 PAGE 8   
 
+ 421          /****************************************************************/
 
-C51 COMPILER V8.08   MAIN                                                                  07/03/2021 11:12:30 PAGE 8   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   2693    ----
-   CONSTANT SIZE    =    168    ----
-   XDATA SIZE       =    878     583
+   CODE SIZE        =   4666    ----
+   CONSTANT SIZE    =    143    ----
+   XDATA SIZE       =    878     643
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
@@ -459,4 +462,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)

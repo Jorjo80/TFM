@@ -277,7 +277,7 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 }
 
 
-static void send(char *buffer, size_t size)
+static void send(char *buffer, short size)
 {
 	char _encodeBuffer[512];
 	int d = 0;
@@ -289,6 +289,7 @@ static void send(char *buffer, size_t size)
 	{
 		 printf("%c",_encodeBuffer[d]);
 	}
+	//cobs_encod(buffer, size, sendChar);
 		
 }
 

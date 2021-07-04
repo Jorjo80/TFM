@@ -104,6 +104,7 @@ static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
 				if (buffer[read_index] == 0)
 				{
 						encoddBuffer[cod_index] = cod;
+						//*encoddBuffer++ = cod;
 						cod = 1;
 						cod_index = write_index++;
 						read_index++;
@@ -111,11 +112,15 @@ static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
 				else
 				{
 						encoddBuffer[write_index++] = buffer[read_index++];
+						/**encoddBuffer++ = *buffer++;
+						write_index++;
+						read_index++;*/	
 						cod++;
 
 						if (cod == 0xFF)
 						{
 								encoddBuffer[cod_index] = cod;
+								//*encoddBuffer++ = cod;
 								cod = 1;
 								cod_index = write_index++;
 						}
@@ -123,7 +128,7 @@ static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
 		}
 
 		encoddBuffer[cod_index] = cod;
-
+		//*encoddBuffer++ = cod;
 		return write_index;
 }
 
@@ -164,7 +169,259 @@ int finished(uint8_t inByte)
 
 */
 
+void sendChar(uint8_t byte)
+{
+	printf("%c",byte);
+}
 
+int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
+{
+	struct usart_tx_s usart_txPkt;
+	uint8_t *         tmpPtr = buff;
+	uint8_t *         lastZeroPtr = NULL;
+	uint8_t *         codPtr = NULL;
+	uint16_t          codPos = 0;
+	uint16_t          cod = 0x01;
+	uint8_t           numZeroes = 0;
+	int16_t           outIdx = 0;
+
+	/* Initialize COBS structure. */
+	memset(&usart_txPkt, 0, sizeof(struct usart_tx_s));
+	codPtr = usart_txPkt.cobs.cod;
+
+	/*
+	 * proBytes = number of encodd bytes
+	 * length   = Number of in data bytes to encod
+	 */
+	while (usart_txPkt.proBytes < len)
+	{
+		if (*tmpPtr == 0)
+		{
+			numZeroes++;
+			if ((numZeroes == 2) && (cod != 0x01))
+			{
+				if ((cod + 0xDF) <= 0xFE)
+				{
+					/* The (n-E0) data bytes, plus two trailing zeroes. */
+					cod += 0xDF;
+					numZeroes = 0;
+				}
+				else
+				{
+					/* The (n-1) data bytes followed by a single zero. */
+					numZeroes = 1;
+				}
+
+				*codPtr = cod;
+				usart_txPkt.totBytes++;
+				if (codPtr == usart_txPkt.cobs.cod + usart_txPkt.cobs.codPos)
+				{
+					usart_txPkt.cobs.pos[usart_txPkt.cobs.codPos] = codPos;
+					usart_txPkt.cobs.codPos++;
+				}
+
+				/* Reset counters. */
+				codPtr = tmpPtr;
+				codPos = usart_txPkt.proBytes;
+				cod = 0x01;
+			}
+			else if (numZeroes == 0x0F)
+			{
+				/* We have reached maximun number of zeroes in a row. */
+				cod = numZeroes + 0xD0;
+				codPtr = lastZeroPtr;
+				*codPtr = cod;
+				usart_txPkt.totBytes++;
+
+				/* Reset counters. */
+				codPtr = tmpPtr;
+				codPos = usart_txPkt.proBytes;
+				numZeroes = 0;
+				cod = 0x01;
+			}
+			else if ((codPtr ==
+				usart_txPkt.cobs.cod + usart_txPkt.cobs.codPos) &&
+				(cod == 0x01) && (numZeroes == 1))
+			{
+				codPtr = tmpPtr;
+				codPos = usart_txPkt.proBytes;
+			}
+
+			lastZeroPtr = tmpPtr;
+		}
+		else if (numZeroes)
+		{
+			/* Finish previous block. */
+			if (numZeroes < 3)
+			{
+				if (cod == 0x01)
+				{
+					if (numZeroes == 2)
+					{
+						/* The (n-E0) data bytes, plus two trailing zeroes. */
+						cod += 0xDF;
+					}
+					else
+					{
+						/* The (n-1) data bytes followed by a single zero. */
+						/* Nothing to do. */
+					}
+
+					*codPtr = cod;
+					usart_txPkt.totBytes++;
+
+					if (codPtr != lastZeroPtr)
+					{
+						codPtr = lastZeroPtr;
+						codPos = usart_txPkt.proBytes - 1;
+					}
+					else
+					{
+						/* Add aditional byte. */
+						codPtr = usart_txPkt.cobs.cod + usart_txPkt.cobs.codPos;
+						codPos = usart_txPkt.proBytes;
+					}
+				}
+				else
+				{
+					/* The (n-1) data bytes followed by a single zero. */
+					*codPtr = cod;
+					usart_txPkt.totBytes++;
+
+					if (codPtr == usart_txPkt.cobs.cod + usart_txPkt.cobs.codPos)
+					{
+						usart_txPkt.cobs.pos[usart_txPkt.cobs.codPos] = codPos;
+						usart_txPkt.cobs.codPos++;
+					}
+
+					codPtr = lastZeroPtr;
+					codPos = usart_txPkt.proBytes - 1;
+				}
+			}
+			else
+			{
+				/* A run of (n-D0) zeroes. */
+				cod = numZeroes + 0xD0;
+				*codPtr = cod;
+				usart_txPkt.totBytes++;
+				codPtr = lastZeroPtr;
+				codPos = usart_txPkt.proBytes - 1;
+			}
+
+			/* Reset counters. */
+			numZeroes = 0;
+			cod = 0x02;
+			usart_txPkt.totBytes++;
+		}
+		else
+		{
+			/* Increment cod. */
+			cod++;
+			if (cod == 0xD0)
+			{
+				/*
+				 * We have reached the maximum number of bytes not followed by a
+				 * zero.
+				 */
+				*codPtr = 0xD0;
+				usart_txPkt.totBytes++;
+				if (codPtr == usart_txPkt.cobs.cod + usart_txPkt.cobs.codPos)
+				{
+					usart_txPkt.cobs.pos[usart_txPkt.cobs.codPos] = codPos;
+					usart_txPkt.cobs.codPos++;
+				}
+
+				/* Add aditional byte.*/
+				codPtr = usart_txPkt.cobs.cod + usart_txPkt.cobs.codPos;
+				codPos = usart_txPkt.proBytes + 1;
+
+				/* Reset counters. */
+				cod = 0x01;
+			}
+
+			usart_txPkt.totBytes++;
+		}
+
+		/* Increment pointers. */
+		tmpPtr++;
+		usart_txPkt.proBytes++;
+	}
+
+	/* Finish message. */
+	numZeroes++;
+	if (numZeroes == 2)
+	{
+		if ((cod + 0xDF) <= 0xFE)
+		{
+			/* The (n-E0) data bytes, plus two trailing zeroes. */
+			cod += 0xDF;
+		}
+		else
+		{
+			/* The (n-1) data bytes followed by a single zero. */
+			*codPtr = cod;
+			usart_txPkt.totBytes++;
+			if (codPtr == usart_txPkt.cobs.cod + usart_txPkt.cobs.codPos)
+			{
+				usart_txPkt.cobs.pos[usart_txPkt.cobs.codPos] = codPos;
+				usart_txPkt.cobs.codPos++;
+			}
+
+			codPtr = lastZeroPtr;
+			cod = 0x01;
+		}
+	}
+	else if (numZeroes > 2)
+	{
+		/* A run of zeroes. */
+		cod = numZeroes + 0xD0;
+	}
+
+	*codPtr = cod;
+	usart_txPkt.totBytes++;
+	if (codPtr == usart_txPkt.cobs.cod + usart_txPkt.cobs.codPos)
+		usart_txPkt.cobs.pos[usart_txPkt.cobs.codPos] = codPos;
+
+	/* Send out encodd bytes through the callback */
+	usart_txPkt.proBytes = 0;
+	usart_txPkt.cobs.codPos = 0;
+	while (outIdx < usart_txPkt.totBytes + 1)
+	{
+		if (outIdx == 0)
+		{
+			/* First zero as start delimiter */
+			debug_tx(0x00, 1, outIdx == usart_txPkt.totBytes);
+			output(0x00);
+			outIdx++;
+		}
+		else if ((usart_txPkt.cobs.pos[usart_txPkt.cobs.codPos] ==
+			usart_txPkt.proBytes) &&
+			(usart_txPkt.cobs.cod[usart_txPkt.cobs.codPos] != 0))
+		{
+			debug_tx(usart_txPkt.cobs.cod[usart_txPkt.cobs.codPos], 0, outIdx == usart_txPkt.totBytes);
+			output(usart_txPkt.cobs.cod[usart_txPkt.cobs.codPos]);
+			usart_txPkt.cobs.codPos++;
+			outIdx++;
+		}
+		else
+		{
+			uint8_t dato = 0;
+
+			while (dato == 0)
+			{
+				dato = buff[usart_txPkt.proBytes++];
+				if (dato != 0)
+				{
+					debug_tx(dato, 0, outIdx == usart_txPkt.totBytes);
+					output(dato);
+					outIdx++;
+				}
+			}
+		}
+	}
+
+	return (outIdx);
+}
 
 
 
@@ -298,16 +555,16 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
  static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last)
 {
 	if (first)
-		printf("COBS_%sX: |", tx ? "T" : "R");
+		printf("");
 
 	if (!(first && last))
-		printf(" %c ", byte);
+		printf("");
 
 	if (last)
-
-		printf("|\n");
+		printf("");
 	else
-		printf(":");
+		;
+
 }
 
 
