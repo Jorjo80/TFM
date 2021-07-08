@@ -17,7 +17,7 @@ sbit reset_fpga  = P0^0;
 unsigned char DATA_L;
 unsigned char DATA_H;
 unsigned int sizeRpl;
-unsigned int i, p;
+unsigned int i,f , p;
 
 
 uint8_t cadena[256];
@@ -30,7 +30,7 @@ unsigned int result,Temp,Hum, LDR, cuenta_temp, cuenta_hum;
 unsigned int resulti[2];
 
 /***************** Timer Configuration: **************************/
-void _WS_Timer_Config(char value)
+void _WS_Timer_Config(uint8_t value)
 {
    	IEIP2 	= 0xA4; // TIC Interruption enable
 	SEC 	= 0x00;
@@ -197,12 +197,12 @@ void _WSN_sensors_reading(void){
 /*****************************************************************/
 
 /****************** ZigBee read: *********************************/
-/** ASCII  = Value of the character to wait.
+/** ASCII  = Value of the uint8_tacter to wait.
 /** getsmj = It allows to get caracters from the serial port and 
 /** print them until ASCII arrives. 
 **/
 
-void _WSN_wait_answer(char ASCII,char getmsj)
+void _WSN_wait_answer(uint8_t ASCII,uint8_t getmsj)
 {  
 	unsigned char serial_read,enable;
 
@@ -223,7 +223,7 @@ void _WSN_wait_answer(char ASCII,char getmsj)
 		}while (enable != 0);
 }
 /**************** ZigBee Configuration: ************************/
-void _WSN_ZigBee_config(char type)
+void _WSN_ZigBee_config(uint8_t type)
 { 	
 	printf("ATS00=0004\r");
 	_WSN_wait_answer('O',0);
@@ -276,20 +276,38 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 	
 }
 
-
-static void send(char *buffer, short size)
+char putchar (char c)
 {
-	char _encodeBuffer[512];
+	#if 0                  // Con un 0 no se expande el LF, con un 1 se expande	a CR+LF
+	  if (c == '\n')  {
+	    while (!TI);
+	    TI = 0;
+	    SBUF = 0x0d;       
+	  }
+	#endif                 
+	  while (!TI);
+	  TI = 0;
+	  return (SBUF = c);
+}
+
+static void send(uint8_t *buffer, short size)
+{
+	uint8_t _encodeBuffer[512];
 	int d = 0;
 	size_t numEncoded= 0;
+	int f= 0;
+	for(f=0; f<512; f++)
+	{
+		_encodeBuffer[f]=0x00;
+	}
 	buffer[4]= XOR_CKS(buffer, size);
 	numEncoded = encod(buffer, size, _encodeBuffer);
 	printf("%c",PacketMarker);	
 	for(d=0;d<numEncoded;d++)
 	{
-		 printf("%c",_encodeBuffer[d]);
+		 putchar(_encodeBuffer[d]);
 	}
-	//cobs_encod(buffer, size, sendChar);
+	//cobs_encod(buffer, size, senduint8_t);
 		
 }
 
@@ -331,7 +349,7 @@ void delay()
 		;
 	}
 }
-void InicioRed(char role)
+void InicioRed(uint8_t role)
 {
    	send(OOB, (sizeof(OOB)));
 	receive(6);
@@ -381,7 +399,7 @@ void InicioRed(char role)
 	delay();
 	i=0;
 	send(WriteIP, (sizeof(WriteIP)));
-	receive(6);
+	receive(5);
 	delay();
 	i=0;
 	send(OpenSocket, (sizeof(OpenSocket)));
@@ -402,14 +420,14 @@ void main()
    _WSN_ini_FPGA();
    //entrada cuenta humedad y temperatura por defecto
 
-	InicioRed(leader);
-	printf ("\nConnected\n\r");	   			   
+	InicioRed(med);
+	//printf ("\nConnected\n\r");	   			   
 
  	while (1)
    	{
    	   if (flag == 1){
 
-		send(SendHello, 31);	
+		send(SendHello, (sizeof(SendHello)));	
 
 		flag = 0;
 

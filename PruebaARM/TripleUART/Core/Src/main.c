@@ -172,19 +172,21 @@ int main(void)
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	/*send(route, (sizeof(route)/sizeof(route[0])),&huart3);
+	send(route, (sizeof(route)/sizeof(route[0])),&huart3);
 	receive(&huart3);
-	HAL_Delay(1000);*/
+	HAL_Delay(1000);
 
   while (1)
   {
-    /* USER CODE END WHILE */
+    // USER CODE END WHILE 
 		send(Status,(sizeof(Status)/sizeof(Status[0])), &huart1);
 		receive(&huart1);
 		HAL_Delay(5000);
-		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart2);
 		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
-		receive(&huart3);
+		HAL_Delay(1000);
+		send(SendHello2,(sizeof(SendHello2)/sizeof(SendHello2[0])), &huart1);
+		HAL_Delay(1000);
+		//receive(&huart3);
 		HAL_Delay(5000);
     /* USER CODE BEGIN 3 */
   }
