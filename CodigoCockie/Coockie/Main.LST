@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  07/08/2021 19:57:19 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   49   1              ADCCON2  = 0x03;     // Selects channel 3 & on demand conversion.  (LDR is connected to the ADC3)
   50   1      }
   51          /*****************************************************************/
-C51 COMPILER V8.08   MAIN                                                                  07/08/2021 19:57:19 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 2   
 
   52          
   53          /***************** UART configuration: ***************************/
@@ -126,7 +126,7 @@ line level    source
  109   1         TrigByte2N = 0;         //Trigger second data byte
  110   1         while (Ack2N == 1){};
  111   1         
-C51 COMPILER V8.08   MAIN                                                                  07/08/2021 19:57:19 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 3   
 
  112   1         DATA_H = P2;           // MSB
  113   1         TrigByte2N = 1;    // Release Trigger2
@@ -190,7 +190,7 @@ line level    source
  171   2                      printf("Hay una humedad del %.2f %c\n", ((float)Hum)/100,37);   
  172   2              }
  173   1      
-C51 COMPILER V8.08   MAIN                                                                  07/08/2021 19:57:19 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 4   
 
  174   1      
  175   1         /************ Temp: ******************/
@@ -254,7 +254,7 @@ line level    source
  233   1              _WSN_wait_answer('O',0);
  234   1              _WSN_wait_answer('K',0);
  235   1      
-C51 COMPILER V8.08   MAIN                                                                  07/08/2021 19:57:19 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 5   
 
  236   1              printf("ATS03=0000000000000003\r");
  237   1              _WSN_wait_answer('O',0);
@@ -318,7 +318,7 @@ line level    source
  294          {
  295   1              uint8_t _encodeBuffer[512];
  296   1              int d = 0;
-C51 COMPILER V8.08   MAIN                                                                  07/08/2021 19:57:19 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 6   
 
  297   1              size_t numEncoded= 0;
  298   1              int f= 0;
@@ -382,7 +382,7 @@ line level    source
  356   1              i = 0;
  357   1              delay();
  358   1              Role[5]= role;
-C51 COMPILER V8.08   MAIN                                                                  07/08/2021 19:57:19 PAGE 7   
+C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 7   
 
  359   1              send(Role, (sizeof(Role)));
  360   1              receive(6);
@@ -422,56 +422,58 @@ line level    source
  394   1              receive(6);
  395   1              delay();
  396   1              i=0;
- 397   1              send(ifup,sizeof(ifup));
- 398   1              receive(6);
- 399   1              delay();
- 400   1              i=0;
- 401   1              send(WriteIP, (sizeof(WriteIP)));
- 402   1              receive(5);
- 403   1              delay();
- 404   1              i=0;
- 405   1              send(OpenSocket, (sizeof(OpenSocket)));
- 406   1              receive(9);
- 407   1              delay();
- 408   1      }
- 409          /******************* Main Function: *****************************/
- 410          void main()
- 411          {
- 412   1        
- 413   1         //---- Peripheral Configurations: -------------
- 414   1      
- 415   1         c = 0;
- 416   1         flag = 0;
- 417   1         _WS_Timer_Config(0x05);
- 418   1         _WS_ADC_Config();
- 419   1         _WSN_UART841_config();
- 420   1         _WSN_ini_FPGA();
-C51 COMPILER V8.08   MAIN                                                                  07/08/2021 19:57:19 PAGE 8   
+ 397   1              send(WriteTxPower, sizeof(WriteTxPower));
+ 398   1              delay();
+ 399   1              i=0;
+ 400   1              send(ifup,sizeof(ifup));
+ 401   1              receive(6);
+ 402   1              delay();
+ 403   1              i=0;
+ 404   1              send(WriteIP, (sizeof(WriteIP)));
+ 405   1              receive(5);
+ 406   1              delay();
+ 407   1              i=0;
+ 408   1              send(OpenSocket, (sizeof(OpenSocket)));
+ 409   1              receive(9);
+ 410   1              delay();
+ 411   1      }
+ 412          /******************* Main Function: *****************************/
+ 413          void main()
+ 414          {
+ 415   1        
+ 416   1         //---- Peripheral Configurations: -------------
+ 417   1              //fflush();
+ 418   1         c = 0;
+ 419   1         flag = 1;
+ 420   1         _WS_Timer_Config(0x05);
+C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 8   
 
- 421   1         //entrada cuenta humedad y temperatura por defecto
- 422   1      
- 423   1              InicioRed(med);
- 424   1              //printf ("\nConnected\n\r");                              
- 425   1      
- 426   1              while (1)
- 427   1              {
- 428   2                 if (flag == 1){
- 429   3      
- 430   3                      send(SendHello, (sizeof(SendHello)));   
+ 421   1         _WS_ADC_Config();
+ 422   1         _WSN_UART841_config();
+ 423   1         _WSN_ini_FPGA();
+ 424   1         //entrada cuenta humedad y temperatura por defecto
+ 425   1              //delay();
+ 426   1              InicioRed(med);
+ 427   1              printf ("\nConnected\n\r");                                
+ 428   1              while (1)
+ 429   1              {
+ 430   2                 if (flag == 1){
  431   3      
- 432   3                      flag = 0;
+ 432   3                      send(SendHello, (sizeof(SendHello)));   
  433   3      
- 434   3                      }                               
- 435   2                                                        
- 436   2              }
- 437   1      
- 438   1      }
- 439          /****************************************************************/
+ 434   3                      flag = 0;
+ 435   3      
+ 436   3                      }                               
+ 437   2                                                        
+ 438   2              }
+ 439   1      
+ 440   1      }
+ 441          /****************************************************************/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   4660    ----
-   CONSTANT SIZE    =    130    ----
+   CODE SIZE        =   4692    ----
+   CONSTANT SIZE    =    143    ----
    XDATA SIZE       =    880     641
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

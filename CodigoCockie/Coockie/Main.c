@@ -394,6 +394,9 @@ void InicioRed(uint8_t role)
 	receive(6);
 	delay();
 	i=0;
+	send(WriteTxPower, sizeof(WriteTxPower));
+	delay();
+	i=0;
 	send(ifup,sizeof(ifup));
 	receive(6);
 	delay();
@@ -411,18 +414,17 @@ void main()
 {
   
    //---- Peripheral Configurations: -------------
-
+	//fflush();
    c = 0;
-   flag = 0;
+   flag = 1;
    _WS_Timer_Config(0x05);
    _WS_ADC_Config();
    _WSN_UART841_config();
    _WSN_ini_FPGA();
    //entrada cuenta humedad y temperatura por defecto
-
+	//delay();
 	InicioRed(med);
-	//printf ("\nConnected\n\r");	   			   
-
+	printf ("\nConnected\n\r");	   			   
  	while (1)
    	{
    	   if (flag == 1){

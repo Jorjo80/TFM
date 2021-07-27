@@ -164,7 +164,12 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	HAL_Delay(1000);
-	
+	send(WriteIPLeader, sizeof(WriteIPLeader)/sizeof(WriteIPLeader[0]),&huart3);
+	receive(&huart3);
+	HAL_Delay(1000);
+	send(WriteIP, sizeof(WriteIP)/sizeof(WriteIP[0]),&huart1);
+	receive(&huart1);
+	HAL_Delay(1000);	
 	send(OpenSocket2, (sizeof(OpenSocket2)/sizeof(OpenSocket2[0])),&huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
@@ -172,8 +177,7 @@ int main(void)
 	receive(&huart1);
 	HAL_Delay(1000);
 	
-	send(route, (sizeof(route)/sizeof(route[0])),&huart3);
-	receive(&huart3);
+	
 	HAL_Delay(1000);
 
   while (1)
@@ -185,6 +189,14 @@ int main(void)
 		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
 		HAL_Delay(1000);
 		send(SendHello2,(sizeof(SendHello2)/sizeof(SendHello2[0])), &huart1);
+		HAL_Delay(1000);
+		send(SendHello3,(sizeof(SendHello3)/sizeof(SendHello3[0])), &huart1);
+		HAL_Delay(1000);
+		send(SendHello4,(sizeof(SendHello4)/sizeof(SendHello4[0])), &huart3);
+		HAL_Delay(1000);
+		send(SendHello5,(sizeof(SendHello5)/sizeof(SendHello5[0])), &huart3);
+		HAL_Delay(1000);
+		send(SendHello6,(sizeof(SendHello6)/sizeof(SendHello6[0])), &huart3);
 		HAL_Delay(1000);
 		//receive(&huart3);
 		HAL_Delay(5000);
@@ -518,8 +530,10 @@ size1 = sizeof(WriteComCred);
 	send(cmdJoinCred,(sizeof(cmdJoinCred)/sizeof(cmdJoinCred[0])), &huart1);
 	receive(&huart1);	
 	HAL_Delay(1000);
-
 	
+	send(WriteTxPower,(sizeof(WriteTxPower)/sizeof(WriteTxPower[0])), &huart1);
+	receive(&huart1);	
+	HAL_Delay(1000);
 	//IFUP
 	send(ifup,(sizeof(ifup)/sizeof(ifup[0])), &huart1);
 	receive(&huart1);
@@ -527,9 +541,7 @@ size1 = sizeof(WriteComCred);
 	
 	//uint8_t *SetIP;
 	//unite(WriteIP,IPFed, SetIP);
-	send(WriteIP, sizeof(WriteIP)/sizeof(WriteIP[0]),&huart1);
-	receive(&huart1);
-	HAL_Delay(1000);	
+	
 	
 }
 
@@ -705,9 +717,7 @@ static  void InicioLeader(void)
 	receive(&huart3);
 	HAL_Delay(7000);
 	
-	send(WriteIPLeader, sizeof(WriteIPLeader)/sizeof(WriteIPLeader[0]),&huart3);
-	receive(&huart3);
-	HAL_Delay(1000);
+	
 	
 	/*send(CommissionerOn,sizeof(CommissionerOn)/sizeof(CommissionerOn[0]),&huart3);
 	receive(&huart3);
