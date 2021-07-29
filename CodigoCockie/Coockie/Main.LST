@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  07/29/2021 18:45:11 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   49   1              ADCCON2  = 0x03;     // Selects channel 3 & on demand conversion.  (LDR is connected to the ADC3)
   50   1      }
   51          /*****************************************************************/
-C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  07/29/2021 18:45:11 PAGE 2   
 
   52          
   53          /***************** UART configuration: ***************************/
@@ -126,7 +126,7 @@ line level    source
  109   1         TrigByte2N = 0;         //Trigger second data byte
  110   1         while (Ack2N == 1){};
  111   1         
-C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  07/29/2021 18:45:11 PAGE 3   
 
  112   1         DATA_H = P2;           // MSB
  113   1         TrigByte2N = 1;    // Release Trigger2
@@ -190,7 +190,7 @@ line level    source
  171   2                      printf("Hay una humedad del %.2f %c\n", ((float)Hum)/100,37);   
  172   2              }
  173   1      
-C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  07/29/2021 18:45:11 PAGE 4   
 
  174   1      
  175   1         /************ Temp: ******************/
@@ -254,7 +254,7 @@ line level    source
  233   1              _WSN_wait_answer('O',0);
  234   1              _WSN_wait_answer('K',0);
  235   1      
-C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  07/29/2021 18:45:11 PAGE 5   
 
  236   1              printf("ATS03=0000000000000003\r");
  237   1              _WSN_wait_answer('O',0);
@@ -318,7 +318,7 @@ line level    source
  294          {
  295   1              uint8_t _encodeBuffer[512];
  296   1              int d = 0;
-C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  07/29/2021 18:45:11 PAGE 6   
 
  297   1              size_t numEncoded= 0;
  298   1              int f= 0;
@@ -382,7 +382,7 @@ line level    source
  356   1              i = 0;
  357   1              delay();
  358   1              Role[5]= role;
-C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 7   
+C51 COMPILER V8.08   MAIN                                                                  07/29/2021 18:45:11 PAGE 7   
 
  359   1              send(Role, (sizeof(Role)));
  360   1              receive(6);
@@ -446,7 +446,7 @@ line level    source
  418   1         c = 0;
  419   1         flag = 1;
  420   1         _WS_Timer_Config(0x05);
-C51 COMPILER V8.08   MAIN                                                                  07/26/2021 17:41:09 PAGE 8   
+C51 COMPILER V8.08   MAIN                                                                  07/29/2021 18:45:11 PAGE 8   
 
  421   1         _WS_ADC_Config();
  422   1         _WSN_UART841_config();
@@ -474,7 +474,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   4692    ----
    CONSTANT SIZE    =    143    ----
-   XDATA SIZE       =    880     641
+   XDATA SIZE       =    938     641
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

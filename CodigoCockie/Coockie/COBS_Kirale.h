@@ -18,16 +18,15 @@
 **                         TYPEDEFS AND STRUCTURES                         **
 **                                                                         **
 ****************************************************************************/
- uint8_t returned;
 
-
-/* Encodd byte output function. */
+/* Encoded byte output function. */
 typedef void (*cobs_byteOut_t)(uint8_t c);
 
-/* Encodd byte input function. */
+/* Encoded byte input function. */
 typedef char ( *cobs_byteIn_t )( uint8_t *c);
 typedef char ( *cobs_byteIn_t2 )( uint8_t *c , uint8_t *m);
-	
+
+//Estructuras utilizadas por las funciones de la codificación COBS	
 
 struct cobs_tx_s
 {
@@ -73,7 +72,18 @@ static struct usart_rx_s usart_rxPkt;
 **                      PROTOTYPES OF LOCAL FUNCTIONS                      **
 **                                                                         **
 ****************************************************************************/
-static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last);	   
+
+/*
+Funcion Debug de los diferentes bytes que se transmiten o reciben
+
+* _Bool tx --> Valor para diferenciar si es byte transmitido o recibido, Input
+* uint8_t --> Byte que se envía o se recibe, Input
+* _Bool first --> Valor para indicar el primer byte, Input
+* _Bool last --> Valor para indicar el último byte, Input
+
+*/
+static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last);
+	   
 void  *memset (void *dest, int val, size_t len); 
 
 
@@ -86,12 +96,26 @@ void debug_rx( uint8_t byte, _Bool first, _Bool last ) {debug(0, byte, first,  l
 //#endif
 
 
+
+/*
+*Funcion para leer los bytes recibidos
+* uint8_t byte --> Puntero a dirección de memoria donde se guardará el valor recicibdo y leido por puerto UART, IN/OUTPUT
+*/
 uint8_t uart_recvChar(uint8_t *byte) 
 {	   	
 	uint8_t leido = _getkey();
 	byte[0] = leido;
 	return sizeof(byte)/sizeof(byte[0]);
 }
+
+/*
+* Función de Codificación COBS. Se utiliza función de librería "PacketSerial.h" para Arduino.
+
+* const uint8_t* buffer --> Buffer que se desea codificar, Input
+* size_t size --> Valor del tamaño del buffer, Input
+* uint8_t* encoddBuffer	--> Buffer donde se guarda lo codificado, Output
+
+*/
 static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
 {
 		size_t read_index  = 0;
@@ -169,11 +193,21 @@ int finished(uint8_t inByte)
 
 */
 
+/* Función llamada por la codificación de Kirale, para enviar los datos por puerto UART
+* uint8_t byte --> Valor a enviar
+*/
+
 void sendChar(uint8_t byte)
 {
 	printf("%c",byte);
 }
 
+/*
+* Función para la codificación creada por KIRALE. Actualmente NO esta 100% implantada, no esta adptada al código utlizado en el resto de la Coockie
+* uint8_t *buff --> Buffer a codificar
+* uint16_t len --> Tamaño en bytes del Buffer
+* cobs_byteOut_t output --> Función llamada para el envío de los bytes codificados. En este caso "sendChar"
+*/
 int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 {
 	struct usart_tx_s usart_txPkt;
