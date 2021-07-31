@@ -458,7 +458,15 @@ int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 }
 
 
+/*
 
+* Función que implementa la decodificación de los carácteres que se reciben por puerto UART
+* PARAMETROS
+*	uint8_t *buff -->  Buffer donde se almacena la cadena decodificada
+*   uint16_t len  -->  Longitud máxima que se espera decodificar.
+*   uint8_t input -->  Es el byte a codificar
+
+*/
 
 
 int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)

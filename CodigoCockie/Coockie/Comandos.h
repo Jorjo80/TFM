@@ -23,7 +23,16 @@ uint8_t CKS_POS=4;
 // Valor a enviar para indicar al módulo KTWM102 que se va a enviar un comando.
 uint8_t PacketMarker = 0;
 
-// Lista de comandos
+/*
+ 
+* Lista de comandos más usados
+* En algunos casos son comandos ya fijos y no deberán modificarse, como casos como ComClear, IfUp, IfDown, etc.
+* En unos casos solo debe cambiarse el 3er byte, dependiendo si quiere escribir o borrar una configuración.
+* En otros comandos deberá añadirse o cambiar la PAYLOAD Correspondiente
+* Para más información, leerse el manual KBI de Kirale.	En este manual se indica con detalle la funcionalidad de todos los comandos y sus respectivas Payload en caso de necesitarlas.
+
+*/
+
 uint8_t ifup[] = {0x00, 0x00, CMD_WRITE, 0x08, 0x18};
 uint8_t ifdown[] = {0x00, 0x00, CMD_WRITE, 0x07, 0x17};
 uint8_t ComClear[] = {0x00, 0x00, CMD_WRITE, 0x00, 0x10};
