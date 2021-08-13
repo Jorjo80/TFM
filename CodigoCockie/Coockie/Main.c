@@ -14,11 +14,12 @@ sbit SelTrigger	 = P0^3;
 sbit reset_fpga  = P0^0;
 /**************************************************************/
 
+
+/**************** Variables Globales **************************/
 unsigned char DATA_L;
 unsigned char DATA_H;
 unsigned int sizeRpl;
 unsigned int i,f , p;
-
 
 uint8_t cadena[256];
 uint8_t decoded[256];
@@ -26,8 +27,8 @@ uint8_t dato;
 unsigned char flag, c;
 
 unsigned int result,Temp,Hum, LDR, cuenta_temp, cuenta_hum; 
+/**************************************************************/
 
-unsigned int resulti[2];
 
 /***************** Timer Configuration: **************************/
 void _WS_Timer_Config(uint8_t value)
@@ -256,6 +257,18 @@ void _WSN_message_detect()
 /*********** FUNCIONES PROPIAS***************/
 
 
+
+/*
+*
+* Función utilizada para calcular el byte de Checksum de cada comando mediante el calculo del XOR del resto de bytes
+*
+* PARAMETROS
+*	uint8_t *frame --> Comando del que calcular el Checksum
+*	size_t  size   --> Tamaño en bytes del comando.
+*
+* Se retorna el valor del Checksum
+* 
+*/
 static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 {
 	uint8_t cks = 0;
@@ -276,6 +289,16 @@ static uint8_t XOR_CKS(uint8_t *frame, size_t size)
 	
 }
 
+
+/*
+*
+* Se modifica la función putchar para no enviar el carácter con valor 0x0d delante de cada 0x0a.
+* Esto se debe a que el 0x0a es el carácter utilizado para el "\n"
+*
+* PARAMETROS
+*	char c --> Byte o caracter a Enviar
+*
+*/
 char putchar (char c)
 {
 	#if 0                  // Con un 0 no se expande el LF, con un 1 se expande	a CR+LF
@@ -289,6 +312,17 @@ char putchar (char c)
 	  TI = 0;
 	  return (SBUF = c);
 }
+
+/*
+*
+* Funcíon que gestiona el envío de los comandos deseados incluyendo
+* el calculo del Checksum y la codificación previos al envío
+*
+* PARAMETROS
+*	uint8_t *buffer --> Comando a enviar
+*   short   size    --> Tamaño del Comando
+*
+*/
 
 static void send(uint8_t *buffer, short size)
 {
@@ -311,6 +345,16 @@ static void send(uint8_t *buffer, short size)
 		
 }
 
+
+/*
+*
+* Funcíon que gestiona la recepcioón de las respuestas de los comandos 
+* enviados incluyendo la decodificación
+*
+* PARAMETROS
+*	int len --> Tamaño de bytes a leer esperados para cada comando.
+*
+*/
 
 static void receive(int len)
 {
@@ -338,6 +382,14 @@ static void receive(int len)
 	}
 }
 
+
+/*
+*
+* Funcíon para generar tiempos de espera entre los comandos cada X tiempo.
+* Se utiliza la interrupción del temporizador configurado
+*
+*/
+
 void delay()
 {
 	if(flag == 1)
@@ -349,6 +401,17 @@ void delay()
 		;
 	}
 }
+
+
+/*
+*
+* Funcíon con la secuencia de comandos a enviar para conectar a la red cada nodo
+*
+* PARAMETROS
+*	uint8_t role --> Indicamos el rol deseado para el nodo.
+*	**Ver "Comandos.h" para ver los valores posibles.
+*
+*/
 void InicioRed(uint8_t role)
 {
    	send(OOB, (sizeof(OOB)));

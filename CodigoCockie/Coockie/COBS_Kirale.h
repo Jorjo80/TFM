@@ -465,6 +465,11 @@ int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 *	uint8_t *buff -->  Buffer donde se almacena la cadena decodificada
 *   uint16_t len  -->  Longitud máxima que se espera decodificar.
 *   uint8_t input -->  Es el byte a codificar
+*
+* Se retorna:
+* 0 si aún no ha terminado de decodificar
+* -1 si ha dado un error
+* Número >0 cuando ha finalizado la decodificación indicando el número de bytes decodificados
 
 */
 
@@ -593,6 +598,7 @@ int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
 
 
 }
+
 
  static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last)
 {
