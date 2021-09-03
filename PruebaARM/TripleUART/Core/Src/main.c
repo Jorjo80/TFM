@@ -560,7 +560,7 @@ static  void InicioLeader(void)
 	HAL_Delay(1000);
 	//printf("Role\n\r");		
 	size_t size1 = sizeof(WriteRole);
-	size_t size2 = sizeof(fed);
+	size_t size2 = sizeof(reed);
 	uint8_t cmdRole[size1+size2];
 	for(int i = 0; i<size1;i++)
 	{

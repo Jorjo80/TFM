@@ -366,7 +366,7 @@ static void receive(int len)
 	}
 	for(p=1;p<len;p++)
 		printf("%c",cadena[p]);
-	printf("\n");
+	printf(" \n");
 	for(p=0;p<len;p++)
 	{
 		cobs_decod(decoded, len, cadena[p]);
