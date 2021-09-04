@@ -29,7 +29,7 @@ uart\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_flash_ramfunc.h
 uart\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr.h
 uart\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h
 uart\main.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
-uart\main.o: F:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS_Kirale.h
+uart\main.o: F:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS.h
 uart\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 uart\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 uart\main.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

@@ -22,7 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#include "F:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS_Kirale.h"
+#include "F:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\COBS.h"
 #include "F:\Jorge\UPM\master\TFM\PruebaARM\TripleUART\MDK-ARM\Comandos.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,12 +50,13 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
 
 /* USER CODE BEGIN PV */
-uint8_t a = 0x32;
+
 
 #define RX_SIZE 512
 uint8_t cadena[3];

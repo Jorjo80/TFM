@@ -418,14 +418,9 @@
               <FilePath>../Core/Src/stm32f4xx_hal_msp.c</FilePath>
             </File>
             <File>
-              <FileName>COBS_propio.h</FileName>
+              <FileName>COBS.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\COBS_propio.h</FilePath>
-            </File>
-            <File>
-              <FileName>COBS_Kirale.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\COBS_Kirale.h</FilePath>
+              <FilePath>.\COBS.h</FilePath>
             </File>
           </Files>
         </Group>
