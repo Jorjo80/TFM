@@ -328,7 +328,6 @@ finished:
 }
 
 
-
 static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last)
 {
 	if (first)

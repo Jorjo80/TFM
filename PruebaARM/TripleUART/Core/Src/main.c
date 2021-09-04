@@ -51,39 +51,24 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart2;
-UART_HandleTypeDef huart3;
+//Variables para los puertos UART a utilizar
+
+UART_HandleTypeDef huart1; // Puerto UART dedicado para comunicación con un Dongle KTDG102
+
+UART_HandleTypeDef huart2; // Puerto UART dedicado para comunicación con PC, debugueo de lo enviado a los Dongles y lo recibido de sus respuestas
+
+UART_HandleTypeDef huart3; // Puerto UART dedicado para comunicación con un Dongle KTDG102
 
 /* USER CODE BEGIN PV */
 
 
+
+//Variable definida para el tamaño máximo de las respuestas esperadas de los Dongles
 #define RX_SIZE 512
-uint8_t cadena[3];
-uint8_t receiveFed[RX_SIZE];
-uint8_t receiveLeader[RX_SIZE];
-
-uint8_t sizeInterrupt1=5;
-uint8_t sizeInterrupt2=5;
-
-volatile int indice1 = 0;
-volatile int indice2 = 0;
-size_t CMD_Len;
-//NETWORK CONFIG
-
-//uint8_t IPFed[]= {0xab, 0xcd, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x34, 0x12};
-
-/*int __io_putchar(int ch)
-{
-	HAL_UART_Transmit(&huart2,(uint8_t*)&ch, 1,100);
-	return ch;
-}*/
-	
-#define FRAME_HEADER_LEN 5
-#define FRAME_PAYLOAD_MAX_LEN 1268
 
 
 	
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,9 +79,16 @@ static void MX_USART2_UART_Init(void);
 static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
+
+/******* Cabecera Funciones Propias *******/
+/*
+* Se explican junto a la definición propia de la función
+*/
+/******************************************/
+
 static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef *modulo);
 static void receive(UART_HandleTypeDef *modulo);
-static void InicioLeader(void);
+static void InicioReed(void);
 static void InicioFed(void);
 void unite( uint8_t buff1[], uint8_t buff2[], uint8_t out[], size_t size1, size_t doble);
 static uint8_t XOR_CKS(uint8_t *frame,size_t size);
@@ -107,6 +99,13 @@ static void hextobin( const char *str, uint8_t *dst, size_t len );
 
 
 /// NET CONFIG VARIABLES ///
+
+/*
+* Estas variables se utilizan como payload de los comandos de configuración de red
+* Se sacan para una fácil modificación más directa, sin entrar a fichero Comandos.h de estos parámetros
+* Esta facilitación se debe al entorno de pruebas formado entre los Dongles y el módulo de STM, 
+* Al estar en un entorno de pruebas se ha preferido tener las variables a configurar de manera más accesible
+*/
 
 uint8_t channel = 0x0B;
 uint8_t PANID[] = {0x12, 0x34}; // PAN ID = 0x1234
@@ -156,21 +155,27 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-//HAL_UART_Receive_IT(&huart1, cadena, 1);
+
 	
 
   /* USER CODE END 2 */
-	InicioLeader();
+	InicioReed();
   InicioFed();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	HAL_Delay(1000);
-	send(WriteIPLeader, sizeof(WriteIPLeader)/sizeof(WriteIPLeader[0]),&huart3);
+	
+	//Una vez dentro de la red
+	
+	send(WriteIPReed, sizeof(WriteIPReed)/sizeof(WriteIPReed[0]),&huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
 	send(WriteIP, sizeof(WriteIP)/sizeof(WriteIP[0]),&huart1);
 	receive(&huart1);
-	HAL_Delay(1000);	
+	HAL_Delay(1000);
+
+  // Abrimos socket en un puerto UDP de cada módulo Dongle
+	
 	send(OpenSocket2, (sizeof(OpenSocket2)/sizeof(OpenSocket2[0])),&huart3);
 	receive(&huart3);
 	HAL_Delay(1000);
@@ -180,12 +185,14 @@ int main(void)
 	
 	
 	HAL_Delay(1000);
-
+  
+	// Generamos un bucle para enviar mensajes UDP desde ambos Dongles a los nodos formados por la plataforma de Coockies 
+	// Dejando 1 segundo entre mensaje y mensaje y 5 segundos al final de la secuencia
+	// A su vez, 
+	
   while (1)
   {
     // USER CODE END WHILE 
-		send(Status,(sizeof(Status)/sizeof(Status[0])), &huart1);
-		receive(&huart1);
 		HAL_Delay(5000);
 		send(SendHello,(sizeof(SendHello)/sizeof(SendHello[0])), &huart1);
 		HAL_Delay(1000);
@@ -547,7 +554,7 @@ size1 = sizeof(WriteComCred);
 }
 
 
-static  void InicioLeader(void)
+static  void InicioReed(void)
 {
 	//Clear
 	send(ComClear, (sizeof(ComClear)/sizeof(ComClear[0])), &huart3);
@@ -761,21 +768,21 @@ static void send(uint8_t *buffer, size_t size, UART_HandleTypeDef *modulo)
 
 //////////////////////////////
 
-// RECEIVE
-// Receiving the response from the Kirale Module via UART to the HOST
-
-
-//////////////////////////////
-
+/* RECEIVE
+*
+* Se gestiona la recepción de las respuestas del dongle correspondiente, desde su lectura hasta su decodificación
+* Posteriormente a su decodificación se envía la respuesta decodificada al ordenador por puerto UART a través de huart2
+* 
+*/
 static void receive(UART_HandleTypeDef *modulo)
 {
 	
 	int16_t result; // The variable result will stored the num of bytes decoded by the cobs_decode function
-	uint8_t decodedbuffer[512]; //The variable where the decoded buffer will be stored. If bigger responses are expected increment its size.
+	uint8_t decodedbuffer[RX_SIZE]; //The variable where the decoded buffer will be stored. If bigger responses are expected increment its size.
 	do
 	{
 		//Receiving the Response and decoding byte to byte.
-		result=cobs_decode(decodedbuffer,512,uart_recvChar, modulo);
+		result=cobs_decode(decodedbuffer,RX_SIZE,uart_recvChar, modulo);
 	}while(result == 0);
 	
 	//decode(receivebuffer,RXSIZE,decodedbuffer);
@@ -802,11 +809,6 @@ void uart_sendChar(uint8_t byte, UART_HandleTypeDef *modulo)
 }
 
 
-uint8_t uart_recvChar2(uint8_t *byte, uint8_t *m) 
-{
-	byte = m;
-	return 1;
-}
 
 // RX interruptions
 
@@ -815,53 +817,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
   /* Prevent unused argument(s) compilation warning */
   //UNUSED(huart);
 	
-	uint8_t decoded1[512];
-	uint8_t decoded3[512];
-	int16_t result;
-	
-	if(huart->Instance == USART1)
-	{
-		uint8_t datoA = cadena[0];
-		uint8_t datoTamano	= cadena[0];
-		if(indice1 == 1)
-		{
-			cobs_decodeInt(&datoTamano,1,uart_recvChar2, &datoTamano);
-			sizeInterrupt1 = 5+ datoTamano;
-		}
-		receiveFed[indice1++] = datoA;
-		if(indice1 >= sizeInterrupt1)
-		{
-			for(int i = 0; i<sizeInterrupt1;i++)
-			{
-				result=cobs_decodeInt(decoded1,512, uart_recvChar2, receiveFed);
-			}
-			HAL_UART_Transmit(&huart2, decoded1,sizeInterrupt1,1);
-			indice1 = 0;
-			for(int p = 0; p>=sizeInterrupt1;p++)
-			{
-				decoded1[p] = 0;
-				receiveFed[p] = 0;
-			}
-		}
-
-		HAL_UART_Receive_IT(&huart1, cadena, 1);
-	}
-	if(huart->Instance == USART3)
-	{
-		uint8_t datoB = cadena[0];
-		if(indice1 == 1)
-		{
-			sizeInterrupt2 = 5 + datoB;
-		}
-		receiveLeader[indice2++] = datoB;
-		if(indice2 >= sizeInterrupt2)
-		{
-			indice2 = 0;
-			
-		}
-		
-		HAL_UART_Receive_IT(&huart3, cadena, 1);
-	}  
 }
 
 
