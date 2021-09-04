@@ -1,7 +1,7 @@
 #include <ADuC841.h>
 #include <stdio.h>
 
-#include "COBS_Kirale.h"
+#include "COBS.h"
 
 
 
@@ -354,6 +354,9 @@ static void send(uint8_t *buffer, short size)
 * PARAMETROS
 *	int len --> Tamaño de bytes a leer esperados para cada comando.
 *
+* Debido a la falta de un Final de Carro o de mensaje en las respuestas,  no es posible parar la lectura al detectar este final.
+* Se usa el tamaño de respuesta que se ha visto para cada comando utilizado	como vía de una primer software para una primera implantación de la tecnología
+* 
 */
 
 static void receive(int len)
@@ -473,6 +476,14 @@ void InicioRed(uint8_t role)
 	delay();
 }
 /******************* Main Function: *****************************/
+/*
+* Se configura el temporizador de uC alrededor de 5 segundos
+* Se inician la configuración de los periféricos del uC
+* Se inicia la FPGA
+* Se inica el proceso de unión a la red Thread
+* Se manda un mensaje UDP cada 5 segundos
+
+/*****************************************************************/
 void main()
 {
   

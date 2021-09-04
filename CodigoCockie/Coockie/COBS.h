@@ -74,13 +74,17 @@ static struct usart_rx_s usart_rxPkt;
 ****************************************************************************/
 
 /*
-Funcion Debug de los diferentes bytes que se transmiten o reciben
-
+* Funcion Debug de los diferentes bytes que se transmiten o reciben.
+* Se muestran por pantalla a la vez que se transmiten o se reciben.
+* 
 * _Bool tx --> Valor para diferenciar si es byte transmitido o recibido, Input
 * uint8_t --> Byte que se envía o se recibe, Input
 * _Bool first --> Valor para indicar el primer byte, Input
 * _Bool last --> Valor para indicar el último byte, Input
-
+*
+* Al utilizarse el mismo puerto UART en la Coockie para comunicación con el ordenador como con el KTWM102
+* se ha comentado/eliminado las llamadas a esta función para evitar el envío de mensajes inadecuados al módulo KTWM102
+*
 */
 static void debug(_Bool tx, uint8_t byte, _Bool first, _Bool last);
 	   
@@ -114,6 +118,7 @@ uint8_t uart_recvChar(uint8_t *byte)
 * const uint8_t* buffer --> Buffer que se desea codificar, Input
 * size_t size --> Valor del tamaño del buffer, Input
 * uint8_t* encoddBuffer	--> Buffer donde se guarda lo codificado, Output
+* Se retorna el tamaño de buffer resultante de la codificacion
 
 */
 static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
@@ -199,15 +204,25 @@ int finished(uint8_t inByte)
 
 void sendChar(uint8_t byte)
 {
-	printf("%c",byte);
+	putchar(byte);
 }
 
 /*
-* Función para la codificación creada por KIRALE. Actualmente NO esta 100% implantada, no esta adptada al código utlizado en el resto de la Coockie
+* Función para la codificación creada por KIRALE. Actualmente NO esta 100% implantada, no esta adptada al código utlizado en el resto de la Coockie.
+* Al utilizarla, el envío de los datos no funciona correctamente y las comunicaciones con el módulo KTWM102 empiezan a fallar.
+* El error puede estar relacionado con el manejo de los punteros y posiciones de memoria de los bytes enviados.
+*
+*
+* *** VARIABLES ***
+*
 * uint8_t *buff --> Buffer a codificar
 * uint16_t len --> Tamaño en bytes del Buffer
 * cobs_byteOut_t output --> Función llamada para el envío de los bytes codificados. En este caso "sendChar"
+* Se retorna el número de bytes codificados.
+
 */
+
+
 int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 {
 	struct usart_tx_s usart_txPkt;
@@ -460,7 +475,13 @@ int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 
 /*
 
-* Función que implementa la decodificación de los carácteres que se reciben por puerto UART
+* Función realizada por Kirale que implementa la decodificación de los carácteres que se reciben por puerto UART
+* Se ha debido adaptar. Inicialmente, decodificaba en tiempo real, según recibe un byte, lo decodifica. 
+* Pyesto que la Coockie no era capaz de procesar y decodificar los bytes a la velocidad que llegaban los bytes
+* Se ha adaptado para ser llamada una vez se ha leido la respuesta del KTWM102.
+* 
+* Decodificación byte a byte
+* 
 * PARAMETROS
 *	uint8_t *buff -->  Buffer donde se almacena la cadena decodificada
 *   uint16_t len  -->  Longitud máxima que se espera decodificar.
@@ -474,7 +495,7 @@ int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 */
 
 
-int16_t cobs_decod(uint8_t *buff, uint16_t len, char input)
+int16_t cobs_decod(uint8_t *buff, uint16_t len, uint8_t input)
 {
 	uint8_t inByte = 0;
 	uint8_t numChar = 0;

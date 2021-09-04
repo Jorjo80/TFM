@@ -8,7 +8,7 @@ Group (New Group)
 
 File 1,2,<.\START_AD.A51><START_AD.A51> 0x0 
 File 1,1,<.\Main.c><Main.c> 0x0 
-File 1,5,<.\COBS_Kirale.h><COBS_Kirale.h> 0x0 
+File 1,5,<.\COBS.h><COBS.h> 0x0 
 
 
 Options 1,0,0  // Target 'Target 1'

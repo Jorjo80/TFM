@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -10,10 +10,10 @@ line level    source
    1          #include <ADuC841.h>
    2          #include <stdio.h>
    3          
-   4          #include "COBS_Kirale.h"
-*** WARNING C280 IN LINE 603 OF COBS_KIRALE.H: 'tx': unreferenced local variable
-*** WARNING C280 IN LINE 603 OF COBS_KIRALE.H: 'byte': unreferenced local variable
-*** WARNING C231 IN LINE 625 OF COBS_KIRALE.H: '_memset': attempt to redefine intrinsic function
+   4          #include "COBS.h"
+*** WARNING C280 IN LINE 624 OF COBS.H: 'tx': unreferenced local variable
+*** WARNING C280 IN LINE 624 OF COBS.H: 'byte': unreferenced local variable
+*** WARNING C231 IN LINE 646 OF COBS.H: '_memset': attempt to redefine intrinsic function
    5          
    6          
    7          
@@ -62,7 +62,7 @@ line level    source
              -                                                       
   50   1              ADCCON2  = 0x03;     // Selects channel 3 & on demand conversion.  (LDR is connected to the ADC3)
   51   1      }
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 2   
 
   52          /*****************************************************************/
   53          
@@ -126,7 +126,7 @@ line level    source
  109   1          
  110   1         TrigByte2N = 0;         //Trigger second data byte
  111   1         while (Ack2N == 1){};
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 3   
 
  112   1         
  113   1         DATA_H = P2;           // MSB
@@ -190,7 +190,7 @@ line level    source
  171   2              Hum =  ( (result[1]*127.0)/100 );  
  172   2                      printf("Hay una humedad del %.2f %c\n", ((float)Hum)/100,37);   
  173   2              }
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 4   
 
  174   1      
  175   1      
@@ -254,7 +254,7 @@ line level    source
  233   1              printf("ATS02=0003\r");
  234   1              _WSN_wait_answer('O',0);
  235   1              _WSN_wait_answer('K',0);
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 5   
 
  236   1      
  237   1              printf("ATS03=0000000000000003\r");
@@ -318,7 +318,7 @@ line level    source
  293          /*
  294          *
  295          * Se modifica la función putchar para no enviar el carácter con valor 0x0d delante de cada 0x0a.
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 6   
 
  296          * Esto se debe a que el 0x0a es el carácter utilizado para el "\n"
  297          *
@@ -382,7 +382,7 @@ line level    source
  355          *       int len --> Tamaño de bytes a leer esperados para cada comando.
  356          *
  357          */
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 7   
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 7   
 
  358          
  359          static void receive(int len)
@@ -446,7 +446,7 @@ line level    source
  417   1              send(OOB, (sizeof(OOB)));
  418   1              receive(6);
  419   1              i = 0;
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 8   
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 8   
 
  420   1              delay();
  421   1              Role[5]= role;
@@ -504,41 +504,49 @@ line level    source
  473   1              delay();
  474   1      }
  475          /******************* Main Function: *****************************/
- 476          void main()
- 477          {
- 478   1        
- 479   1         //---- Peripheral Configurations: -------------
- 480   1              //fflush();
- 481   1         c = 0;
-C51 COMPILER V8.08   MAIN                                                                  08/30/2021 17:17:21 PAGE 9   
+ 476          /*
+ 477          * Se configura el temporizador de uC alrededor de 5 segundos
+ 478          * Se inician la configuración de los periféricos del uC
+ 479          * Se inicia la FPGA
+ 480          * Se inica el proceso de unión a la red Thread
+ 481          * Se manda un mensaje UDP cada 5 segundos
+C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 9   
 
- 482   1         flag = 1;
- 483   1         _WS_Timer_Config(0x05);
- 484   1         _WS_ADC_Config();
- 485   1         _WSN_UART841_config();
- 486   1         _WSN_ini_FPGA();
- 487   1         //entrada cuenta humedad y temperatura por defecto
- 488   1              //delay();
- 489   1              InicioRed(med);
- 490   1              printf ("\nConnected\n\r");                                
- 491   1              while (1)
- 492   1              {
- 493   2                 if (flag == 1){
- 494   3      
- 495   3                      send(SendHello, (sizeof(SendHello)));   
- 496   3      
- 497   3                      flag = 0;
- 498   3      
- 499   3                      }                               
- 500   2                                                        
- 501   2              }
- 502   1      
- 503   1      }
- 504          /****************************************************************/
+ 482          
+ 483          /*****************************************************************/
+ 484          void main()
+ 485          {
+ 486   1        
+ 487   1         //---- Peripheral Configurations: -------------
+ 488   1              //fflush();
+ 489   1         c = 0;
+ 490   1         flag = 1;
+ 491   1         _WS_Timer_Config(0x05);
+ 492   1         _WS_ADC_Config();
+ 493   1         _WSN_UART841_config();
+ 494   1         _WSN_ini_FPGA();
+ 495   1         //entrada cuenta humedad y temperatura por defecto
+ 496   1              //delay();
+ 497   1              InicioRed(med);
+ 498   1              printf ("\nConnected\n\r");                                
+ 499   1              while (1)
+ 500   1              {
+ 501   2                 if (flag == 1){
+ 502   3      
+ 503   3                      send(SendHello, (sizeof(SendHello)));   
+ 504   3      
+ 505   3                      flag = 0;
+ 506   3      
+ 507   3                      }                               
+ 508   2                                                        
+ 509   2              }
+ 510   1      
+ 511   1      }
+ 512          /****************************************************************/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   4692    ----
+   CODE SIZE        =   4681    ----
    CONSTANT SIZE    =    144    ----
    XDATA SIZE       =    933     641
    PDATA SIZE       =   ----    ----
