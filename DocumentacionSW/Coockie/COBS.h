@@ -76,7 +76,9 @@ static struct usart_rx_s usart_rxPkt;
 /*
 * Funcion Debug de los diferentes bytes que se transmiten o reciben.
 * Se muestran por pantalla a la vez que se transmiten o se reciben.
-* 
+*
+*  *** Argumentos ***
+*
 * _Bool tx --> Valor para diferenciar si es byte transmitido o recibido, Input
 * uint8_t --> Byte que se envía o se recibe, Input
 * _Bool first --> Valor para indicar el primer byte, Input
@@ -102,8 +104,13 @@ void debug_rx( uint8_t byte, _Bool first, _Bool last ) {debug(0, byte, first,  l
 
 
 /*
-*Funcion para leer los bytes recibidos
+* Funcion para leer los bytes recibidos
+* *** Argumentos ***
+*
 * uint8_t byte --> Puntero a dirección de memoria donde se guardará el valor recicibdo y leido por puerto UART, IN/OUTPUT
+* 
+* Se retorna el número de bytes leidos (Siempre será 1).
+*
 */
 uint8_t uart_recvChar(uint8_t *byte) 
 {	   	
@@ -114,12 +121,15 @@ uint8_t uart_recvChar(uint8_t *byte)
 
 /*
 * Función de Codificación COBS. Se utiliza función de librería "PacketSerial.h" para Arduino.
-
+*
+* *** Argumentos ***
 * const uint8_t* buffer --> Buffer que se desea codificar, Input
 * size_t size --> Valor del tamaño del buffer, Input
 * uint8_t* encoddBuffer	--> Buffer donde se guarda lo codificado, Output
+*
+*
 * Se retorna el tamaño de buffer resultante de la codificacion
-
+*
 */
 static size_t encod(const uint8_t* buffer, size_t size, uint8_t* encoddBuffer)
 {
@@ -214,7 +224,7 @@ void sendChar(uint8_t byte)
 * El error puede estar relacionado con el manejo de los punteros y posiciones de memoria de los bytes enviados.
 *
 *
-* *** VARIABLES ***
+* *** Argumentos ***
 *
 * uint8_t *buff --> Buffer a codificar
 * uint16_t len --> Tamaño en bytes del Buffer
@@ -483,7 +493,8 @@ int16_t cobs_encod(uint8_t *buff, uint16_t len, cobs_byteOut_t output)
 * 
 * Decodificación byte a byte
 * 
-* PARAMETROS
+* *** Argumentos ***
+* 
 *	uint8_t *buff -->  Buffer donde se almacena la cadena decodificada
 *   uint16_t len  -->  Longitud máxima que se espera decodificar.
 *   uint8_t input -->  Es el byte a codificar

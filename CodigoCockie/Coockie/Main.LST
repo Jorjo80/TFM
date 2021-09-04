@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -11,9 +11,9 @@ line level    source
    2          #include <stdio.h>
    3          
    4          #include "COBS.h"
-*** WARNING C280 IN LINE 624 OF COBS.H: 'tx': unreferenced local variable
-*** WARNING C280 IN LINE 624 OF COBS.H: 'byte': unreferenced local variable
-*** WARNING C231 IN LINE 646 OF COBS.H: '_memset': attempt to redefine intrinsic function
+*** WARNING C280 IN LINE 636 OF COBS.H: 'tx': unreferenced local variable
+*** WARNING C280 IN LINE 636 OF COBS.H: 'byte': unreferenced local variable
+*** WARNING C231 IN LINE 658 OF COBS.H: '_memset': attempt to redefine intrinsic function
    5          
    6          
    7          
@@ -62,7 +62,7 @@ line level    source
              -                                                       
   50   1              ADCCON2  = 0x03;     // Selects channel 3 & on demand conversion.  (LDR is connected to the ADC3)
   51   1      }
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 2   
 
   52          /*****************************************************************/
   53          
@@ -126,7 +126,7 @@ line level    source
  109   1          
  110   1         TrigByte2N = 0;         //Trigger second data byte
  111   1         while (Ack2N == 1){};
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 3   
 
  112   1         
  113   1         DATA_H = P2;           // MSB
@@ -190,7 +190,7 @@ line level    source
  171   2              Hum =  ( (result[1]*127.0)/100 );  
  172   2                      printf("Hay una humedad del %.2f %c\n", ((float)Hum)/100,37);   
  173   2              }
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 4   
 
  174   1      
  175   1      
@@ -254,7 +254,7 @@ line level    source
  233   1              printf("ATS02=0003\r");
  234   1              _WSN_wait_answer('O',0);
  235   1              _WSN_wait_answer('K',0);
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 5   
 
  236   1      
  237   1              printf("ATS03=0000000000000003\r");
@@ -318,7 +318,7 @@ line level    source
  293          /*
  294          *
  295          * Se modifica la función putchar para no enviar el carácter con valor 0x0d delante de cada 0x0a.
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 6   
 
  296          * Esto se debe a que el 0x0a es el carácter utilizado para el "\n"
  297          *
@@ -381,168 +381,173 @@ line level    source
  354          * PARAMETROS
  355          *       int len --> Tamaño de bytes a leer esperados para cada comando.
  356          *
- 357          */
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 7   
+ 357          * Debido a la falta de un Final de Carro o de mensaje en las respuestas,  no es posible parar la lectura a
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 7   
 
- 358          
- 359          static void receive(int len)
- 360          {
- 361   1              int payload;
- 362   1              while(i<len)
- 363   1              {
- 364   2                      cadena[i]= _getkey();
- 365   2                      i++;
- 366   2              }
- 367   1              for(p=1;p<len;p++)
- 368   1                      printf("%c",cadena[p]);
- 369   1              printf(" \n");
- 370   1              for(p=0;p<len;p++)
- 371   1              {
- 372   2                      cobs_decod(decoded, len, cadena[p]);
- 373   2              }
- 374   1              payload= (int) decoded[1];
- 375   1      
- 376   1              for(p=0;p<(5+payload);p++)
- 377   1              {
- 378   2                      if(decoded[p]==0x00)
- 379   2                              printf("%c", decoded[p]+0x0E);
- 380   2                      else
- 381   2                              printf("%c",decoded[p]);
- 382   2              }
- 383   1      }
- 384          
- 385          
- 386          /*
- 387          *
- 388          * Funcíon para generar tiempos de espera entre los comandos cada X tiempo.
- 389          * Se utiliza la interrupción del temporizador configurado
+             -l detectar este final.
+ 358          * Se usa el tamaño de respuesta que se ha visto para cada comando utilizado     como vía de una primer softwar
+             -e para una primera implantación de la tecnología
+ 359          * 
+ 360          */
+ 361          
+ 362          static void receive(int len)
+ 363          {
+ 364   1              int payload;
+ 365   1              while(i<len)
+ 366   1              {
+ 367   2                      cadena[i]= _getkey();
+ 368   2                      i++;
+ 369   2              }
+ 370   1              for(p=1;p<len;p++)
+ 371   1                      printf("%c",cadena[p]);
+ 372   1              printf(" \n");
+ 373   1              for(p=0;p<len;p++)
+ 374   1              {
+ 375   2                      cobs_decod(decoded, len, cadena[p]);
+ 376   2              }
+ 377   1              payload= (int) decoded[1];
+ 378   1      
+ 379   1              for(p=0;p<(5+payload);p++)
+ 380   1              {
+ 381   2                      if(decoded[p]==0x00)
+ 382   2                              printf("%c", decoded[p]+0x0E);
+ 383   2                      else
+ 384   2                              printf("%c",decoded[p]);
+ 385   2              }
+ 386   1      }
+ 387          
+ 388          
+ 389          /*
  390          *
- 391          */
- 392          
- 393          void delay()
- 394          {
- 395   1              if(flag == 1)
- 396   1              {
- 397   2                      flag = 0;
- 398   2              }
- 399   1              while(flag == 0)
- 400   1              {
- 401   2                      ;
- 402   2              }
- 403   1      }
- 404          
- 405          
- 406          /*
- 407          *
- 408          * Funcíon con la secuencia de comandos a enviar para conectar a la red cada nodo
- 409          *
- 410          * PARAMETROS
- 411          *       uint8_t role --> Indicamos el rol deseado para el nodo.
- 412          *       **Ver "Comandos.h" para ver los valores posibles.
- 413          *
- 414          */
- 415          void InicioRed(uint8_t role)
- 416          {
- 417   1              send(OOB, (sizeof(OOB)));
- 418   1              receive(6);
- 419   1              i = 0;
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 8   
+ 391          * Funcíon para generar tiempos de espera entre los comandos cada X tiempo.
+ 392          * Se utiliza la interrupción del temporizador configurado
+ 393          *
+ 394          */
+ 395          
+ 396          void delay()
+ 397          {
+ 398   1              if(flag == 1)
+ 399   1              {
+ 400   2                      flag = 0;
+ 401   2              }
+ 402   1              while(flag == 0)
+ 403   1              {
+ 404   2                      ;
+ 405   2              }
+ 406   1      }
+ 407          
+ 408          
+ 409          /*
+ 410          *
+ 411          * Funcíon con la secuencia de comandos a enviar para conectar a la red cada nodo
+ 412          *
+ 413          * PARAMETROS
+ 414          *       uint8_t role --> Indicamos el rol deseado para el nodo.
+ 415          *       **Ver "Comandos.h" para ver los valores posibles.
+ 416          *
+ 417          */
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 8   
 
- 420   1              delay();
- 421   1              Role[5]= role;
- 422   1              send(Role, (sizeof(Role)));
- 423   1              receive(6);
- 424   1              i=0;
- 425   1      
- 426   1              delay();
- 427   1              send(WriteChannel, (sizeof(WriteChannel)));
- 428   1              receive(6);     
- 429   1              i = 0;
- 430   1              delay();
- 431   1              send(WritePANID, sizeof(WritePANID));
- 432   1              receive(6);
- 433   1      
- 434   1              delay();
- 435   1              i = 0;
- 436   1              send(WriteNetName, sizeof(WriteNetName));
- 437   1              receive(6);
+ 418          void InicioRed(uint8_t role)
+ 419          {
+ 420   1              send(OOB, (sizeof(OOB)));
+ 421   1              receive(6);
+ 422   1              i = 0;
+ 423   1              delay();
+ 424   1              Role[5]= role;
+ 425   1              send(Role, (sizeof(Role)));
+ 426   1              receive(6);
+ 427   1              i=0;
+ 428   1      
+ 429   1              delay();
+ 430   1              send(WriteChannel, (sizeof(WriteChannel)));
+ 431   1              receive(6);     
+ 432   1              i = 0;
+ 433   1              delay();
+ 434   1              send(WritePANID, sizeof(WritePANID));
+ 435   1              receive(6);
+ 436   1      
+ 437   1              delay();
  438   1              i = 0;
- 439   1              delay();
- 440   1              send(WriteMLocPref, sizeof(WriteMLocPref));
- 441   1              receive(6);
- 442   1              i = 0;
- 443   1              delay();
- 444   1              send(WriteMK, sizeof(WriteMK));
- 445   1              receive(6);
- 446   1              i = 0;
- 447   1              delay();
- 448   1              send(WriteExtPID, sizeof(WriteExtPID));
- 449   1              receive(6);
- 450   1              i = 0;
- 451   1              delay();
- 452   1              send(WriteComCred, sizeof(WriteComCred));
- 453   1              receive(6);
- 454   1              i = 0;
- 455   1              delay();
- 456   1              send(WriteJoinCred, sizeof(WriteJoinCred));
- 457   1              receive(6);
+ 439   1              send(WriteNetName, sizeof(WriteNetName));
+ 440   1              receive(6);
+ 441   1              i = 0;
+ 442   1              delay();
+ 443   1              send(WriteMLocPref, sizeof(WriteMLocPref));
+ 444   1              receive(6);
+ 445   1              i = 0;
+ 446   1              delay();
+ 447   1              send(WriteMK, sizeof(WriteMK));
+ 448   1              receive(6);
+ 449   1              i = 0;
+ 450   1              delay();
+ 451   1              send(WriteExtPID, sizeof(WriteExtPID));
+ 452   1              receive(6);
+ 453   1              i = 0;
+ 454   1              delay();
+ 455   1              send(WriteComCred, sizeof(WriteComCred));
+ 456   1              receive(6);
+ 457   1              i = 0;
  458   1              delay();
- 459   1              i=0;
- 460   1              send(WriteTxPower, sizeof(WriteTxPower));
+ 459   1              send(WriteJoinCred, sizeof(WriteJoinCred));
+ 460   1              receive(6);
  461   1              delay();
  462   1              i=0;
- 463   1              send(ifup,sizeof(ifup));
- 464   1              receive(6);
- 465   1              delay();
- 466   1              i=0;
- 467   1              send(WriteIP, (sizeof(WriteIP)));
- 468   1              receive(5);
- 469   1              delay();
- 470   1              i=0;
- 471   1              send(OpenSocket, (sizeof(OpenSocket)));
- 472   1              receive(9);
- 473   1              delay();
- 474   1      }
- 475          /******************* Main Function: *****************************/
- 476          /*
- 477          * Se configura el temporizador de uC alrededor de 5 segundos
- 478          * Se inician la configuración de los periféricos del uC
- 479          * Se inicia la FPGA
- 480          * Se inica el proceso de unión a la red Thread
- 481          * Se manda un mensaje UDP cada 5 segundos
-C51 COMPILER V8.08   MAIN                                                                  09/04/2021 17:43:43 PAGE 9   
+ 463   1              send(WriteTxPower, sizeof(WriteTxPower));
+ 464   1              delay();
+ 465   1              i=0;
+ 466   1              send(ifup,sizeof(ifup));
+ 467   1              receive(6);
+ 468   1              delay();
+ 469   1              i=0;
+ 470   1              send(WriteIP, (sizeof(WriteIP)));
+ 471   1              receive(5);
+ 472   1              delay();
+ 473   1              i=0;
+ 474   1              send(OpenSocket, (sizeof(OpenSocket)));
+ 475   1              receive(9);
+ 476   1              delay();
+ 477   1      }
+ 478          /******************* Main Function: *****************************/
+ 479          /*
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 9   
 
- 482          
- 483          /*****************************************************************/
- 484          void main()
- 485          {
- 486   1        
- 487   1         //---- Peripheral Configurations: -------------
- 488   1              //fflush();
- 489   1         c = 0;
- 490   1         flag = 1;
- 491   1         _WS_Timer_Config(0x05);
- 492   1         _WS_ADC_Config();
- 493   1         _WSN_UART841_config();
- 494   1         _WSN_ini_FPGA();
- 495   1         //entrada cuenta humedad y temperatura por defecto
- 496   1              //delay();
- 497   1              InicioRed(med);
- 498   1              printf ("\nConnected\n\r");                                
- 499   1              while (1)
- 500   1              {
- 501   2                 if (flag == 1){
- 502   3      
- 503   3                      send(SendHello, (sizeof(SendHello)));   
- 504   3      
- 505   3                      flag = 0;
- 506   3      
- 507   3                      }                               
- 508   2                                                        
- 509   2              }
- 510   1      
- 511   1      }
- 512          /****************************************************************/
+ 480          * Se configura el temporizador de uC alrededor de 5 segundos
+ 481          * Se inician la configuración de los periféricos del uC
+ 482          * Se inicia la FPGA
+ 483          * Se inica el proceso de unión a la red Thread
+ 484          * Se manda un mensaje UDP cada 5 segundos
+ 485          
+ 486          /*****************************************************************/
+ 487          void main()
+ 488          {
+ 489   1        
+ 490   1         //---- Peripheral Configurations: -------------
+ 491   1              //fflush();
+ 492   1         c = 0;
+ 493   1         flag = 1;
+ 494   1         _WS_Timer_Config(0x05);
+ 495   1         _WS_ADC_Config();
+ 496   1         _WSN_UART841_config();
+ 497   1         _WSN_ini_FPGA();
+ 498   1         //entrada cuenta humedad y temperatura por defecto
+ 499   1              //delay();
+ 500   1              InicioRed(med);
+ 501   1              printf ("\nConnected\n\r");                                
+ 502   1              while (1)
+ 503   1              {
+ 504   2                 if (flag == 1){
+ 505   3      
+ 506   3                      send(SendHello, (sizeof(SendHello)));   
+ 507   3      
+ 508   3                      flag = 0;
+ 509   3      
+ 510   3                      }                               
+ 511   2                                                        
+ 512   2              }
+ 513   1      
+ 514   1      }
+ 515          /****************************************************************/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
