@@ -104,22 +104,6 @@ void debug_rx( uint8_t byte, _Bool first, _Bool last ) {debug(0, byte, first,  l
 
 
 /*
-* Funcion para leer los bytes recibidos
-* *** Argumentos ***
-*
-* uint8_t byte --> Puntero a dirección de memoria donde se guardará el valor recicibdo y leido por puerto UART, IN/OUTPUT
-* 
-* Se retorna el número de bytes leidos (Siempre será 1).
-*
-*/
-uint8_t uart_recvChar(uint8_t *byte) 
-{	   	
-	uint8_t leido = _getkey();
-	byte[0] = leido;
-	return sizeof(byte)/sizeof(byte[0]);
-}
-
-/*
 * Función de Codificación COBS. Se utiliza función de librería "PacketSerial.h" para Arduino.
 *
 * *** Argumentos ***

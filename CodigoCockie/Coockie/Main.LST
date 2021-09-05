@@ -1,4 +1,4 @@
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 1   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 1   
 
 
 C51 COMPILER V8.08, COMPILATION OF MODULE MAIN
@@ -11,9 +11,9 @@ line level    source
    2          #include <stdio.h>
    3          
    4          #include "COBS.h"
-*** WARNING C280 IN LINE 636 OF COBS.H: 'tx': unreferenced local variable
-*** WARNING C280 IN LINE 636 OF COBS.H: 'byte': unreferenced local variable
-*** WARNING C231 IN LINE 658 OF COBS.H: '_memset': attempt to redefine intrinsic function
+*** WARNING C280 IN LINE 620 OF COBS.H: 'tx': unreferenced local variable
+*** WARNING C280 IN LINE 620 OF COBS.H: 'byte': unreferenced local variable
+*** WARNING C231 IN LINE 642 OF COBS.H: '_memset': attempt to redefine intrinsic function
    5          
    6          
    7          
@@ -62,7 +62,7 @@ line level    source
              -                                                       
   50   1              ADCCON2  = 0x03;     // Selects channel 3 & on demand conversion.  (LDR is connected to the ADC3)
   51   1      }
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 2   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 2   
 
   52          /*****************************************************************/
   53          
@@ -126,7 +126,7 @@ line level    source
  109   1          
  110   1         TrigByte2N = 0;         //Trigger second data byte
  111   1         while (Ack2N == 1){};
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 3   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 3   
 
  112   1         
  113   1         DATA_H = P2;           // MSB
@@ -190,7 +190,7 @@ line level    source
  171   2              Hum =  ( (result[1]*127.0)/100 );  
  172   2                      printf("Hay una humedad del %.2f %c\n", ((float)Hum)/100,37);   
  173   2              }
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 4   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 4   
 
  174   1      
  175   1      
@@ -254,7 +254,7 @@ line level    source
  233   1              printf("ATS02=0003\r");
  234   1              _WSN_wait_answer('O',0);
  235   1              _WSN_wait_answer('K',0);
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 5   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 5   
 
  236   1      
  237   1              printf("ATS03=0000000000000003\r");
@@ -318,7 +318,7 @@ line level    source
  293          /*
  294          *
  295          * Se modifica la función putchar para no enviar el carácter con valor 0x0d delante de cada 0x0a.
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 6   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 6   
 
  296          * Esto se debe a que el 0x0a es el carácter utilizado para el "\n"
  297          *
@@ -382,7 +382,7 @@ line level    source
  355          *       int len --> Tamaño de bytes a leer esperados para cada comando.
  356          *
  357          * Debido a la falta de un Final de Carro o de mensaje en las respuestas,  no es posible parar la lectura a
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 7   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 7   
 
              -l detectar este final.
  358          * Se usa el tamaño de respuesta que se ha visto para cada comando utilizado     como vía de una primer softwar
@@ -446,7 +446,7 @@ line level    source
  415          *       **Ver "Comandos.h" para ver los valores posibles.
  416          *
  417          */
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 8   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 8   
 
  418          void InicioRed(uint8_t role)
  419          {
@@ -510,7 +510,7 @@ line level    source
  477   1      }
  478          /******************* Main Function: *****************************/
  479          /*
-C51 COMPILER V8.08   MAIN                                                                  09/05/2021 01:14:26 PAGE 9   
+C51 COMPILER V8.08   MAIN                                                                  09/05/2021 09:54:50 PAGE 9   
 
  480          * Se configura el temporizador de uC alrededor de 5 segundos
  481          * Se inician la configuración de los periféricos del uC
@@ -551,9 +551,9 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   4681    ----
+   CODE SIZE        =   4649    ----
    CONSTANT SIZE    =    144    ----
-   XDATA SIZE       =    933     641
+   XDATA SIZE       =    933     638
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
