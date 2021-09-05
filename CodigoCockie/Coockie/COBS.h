@@ -4,8 +4,14 @@
 **                                                                         **
 ****************************************************************************/
 
+//En este documento se definen las funciones de codificación y decodificación COBS utilizadas
+
+// Se incluye comandos.h para integrar las variables uint8_t y uint16_t.
+
 #include "comandos.h"
 
+
+// Variables definidas por Kirale para sus funciones de codificación COBS
 
 #define COBS_SIZE_codS_ARRAY 10
 

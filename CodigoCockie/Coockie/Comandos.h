@@ -25,7 +25,7 @@ uint8_t PacketMarker = 0;
 
 /*
  
-* Lista de comandos más usados
+* Lista y definición de los comandos más usados
 * En algunos casos son comandos ya fijos y no deberán modificarse, como casos como ComClear, IfUp, IfDown, etc.
 * En unos casos solo debe cambiarse el 3er byte, dependiendo si quiere escribir o borrar una configuración.
 * En otros comandos deberá añadirse o cambiar la PAYLOAD Correspondiente

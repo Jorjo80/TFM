@@ -1,6 +1,18 @@
+/*
+* Fichero principal donde se describen las funciones no relacionadas con COBS y se ejecuta el programa principal, incluyendo las llamada a las librerías comandos.h y COBS.h
+* 
+* Funcionamiento de Main.c
+*
+* Primero se inicializará el microcontrolador y posteriormente la FPGA.
+* Se inica la secuencia de configuración del nodo, enviando los correspondientes comandos y esperando sus respuestas.
+* Una vez configurado el nodo y unido a la red se procede a transmitir mensajes UDP cada 5 segundos.
+*/
+
+
 #include <ADuC841.h>
 #include <stdio.h>
 
+//Al incluir COBS.h estamos incluyendo tambíén comandos.h.
 #include "COBS.h"
 
 
